@@ -11,15 +11,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20230720014415_AddUser")]
-    partial class AddUser
+    [Migration("20231219054309_voucher")]
+    partial class voucher
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.9")
+                .HasAnnotation("ProductVersion", "7.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("LearningAPI.Models.Tutorial", b =>
@@ -36,6 +36,10 @@ namespace LearningAPI.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
 
+                    b.Property<string>("ImageFile")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -44,7 +48,12 @@ namespace LearningAPI.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Tutorials");
                 });
@@ -79,6 +88,68 @@ namespace LearningAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.Voucher", b =>
+                {
+                    b.Property<int>("Voucher_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("Discount_In_percentage")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Discount_In_value")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("End_Date")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("Start_Date")
+                        .HasColumnType("datetime");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Voucher_Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("member_type")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Voucher_ID");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Vouchers");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.Tutorial", b =>
+                {
+                    b.HasOne("LearningAPI.Models.User", "User")
+                        .WithMany("Tutorials")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.Voucher", b =>
+                {
+                    b.HasOne("LearningAPI.Models.User", null)
+                        .WithMany("Vouchers")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.User", b =>
+                {
+                    b.Navigation("Tutorials");
+
+                    b.Navigation("Vouchers");
                 });
 #pragma warning restore 612, 618
         }

@@ -71,7 +71,7 @@ namespace LearningAPI.Controllers
         [HttpPost, Authorize]
         [ProducesResponseType(typeof(TutorialDTO), StatusCodes.Status200OK)]
         public IActionResult AddTutorial(AddTutorialRequest tutorial)
-        {
+        {   
             try
             {
                 int userId = GetUserId();

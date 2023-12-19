@@ -24,5 +24,7 @@ namespace LearningAPI
         public DbSet<Tutorial> Tutorials { get; set; }
 
         public DbSet<User> Users { get; set; }
-    }
+
+		public DbSet<Voucher> Vouchers { get; set; }
+	}
 }

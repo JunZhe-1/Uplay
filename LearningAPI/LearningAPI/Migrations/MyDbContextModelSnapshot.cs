@@ -16,7 +16,7 @@ namespace LearningAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.9")
+                .HasAnnotation("ProductVersion", "7.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("LearningAPI.Models.Tutorial", b =>
@@ -87,6 +87,43 @@ namespace LearningAPI.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("LearningAPI.Models.Voucher", b =>
+                {
+                    b.Property<int>("Voucher_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("Discount_In_percentage")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Discount_In_value")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("End_Date")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("Start_Date")
+                        .HasColumnType("datetime");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Voucher_Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("member_type")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Voucher_ID");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Vouchers");
+                });
+
             modelBuilder.Entity("LearningAPI.Models.Tutorial", b =>
                 {
                     b.HasOne("LearningAPI.Models.User", "User")
@@ -98,9 +135,18 @@ namespace LearningAPI.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("LearningAPI.Models.Voucher", b =>
+                {
+                    b.HasOne("LearningAPI.Models.User", null)
+                        .WithMany("Vouchers")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("LearningAPI.Models.User", b =>
                 {
                     b.Navigation("Tutorials");
+
+                    b.Navigation("Vouchers");
                 });
 #pragma warning restore 612, 618
         }

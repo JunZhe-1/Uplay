@@ -27,5 +27,11 @@ namespace LearningAPI.Models
         // Navigation property to represent the one-to-many relationship
         [JsonIgnore]
         public List<Tutorial>? Tutorials { get; set; }
-    }
+
+
+
+        [JsonIgnore]
+		public List<Voucher>? Vouchers { get; set; }
+
+	}
 }
