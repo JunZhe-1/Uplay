@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
-namespace AssignmentAPI.Models
+namespace LearningAPI.Models
 {
     public class Member
     {
@@ -10,15 +12,16 @@ namespace AssignmentAPI.Models
 
         [Required, StringLength(9)]
         public string NRIC { get; set; } = string.Empty;
-        [Required,MinLength(2),MaxLength(50)]
+
+        [Required, MinLength(2), MaxLength(50)]
         public string Name { get; set; } = string.Empty;
+
         [Column(TypeName = "datetime")]
         public DateTime LastSubscriptionDate { get; set; }
 
         [Column(TypeName = "datetime")]
         public DateTime ExpiredDate { get; set; }
 
-
-
+    
     }
 }
