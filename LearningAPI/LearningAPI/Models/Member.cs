@@ -22,6 +22,6 @@ namespace LearningAPI.Models
         [Column(TypeName = "datetime")]
         public DateTime ExpiredDate { get; set; }
 
-    
+
     }
 }

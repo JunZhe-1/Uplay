@@ -18,6 +18,13 @@ namespace AssignmentAPI.Controllers
         {
             return Ok(list);
         }
+        [HttpGet("{id}")]
+        public IActionResult GetMember(int id)
+        {
+            Member? member = _context.Members.Find(id);
+            return Ok(member);
+        }
+
 
         [HttpPost]
         public IActionResult AddUser(Member member)
@@ -34,5 +41,21 @@ namespace AssignmentAPI.Controllers
             _context.SaveChanges();
             return Ok(myMember);
         }
+
+        [HttpPut("{id}")]
+
+        public IActionResult UpdateMember(int id, Member member)
+        {
+            var mymember = _context.Members.Find(id);
+            if (mymember == null)
+            {
+                return NotFound();
+            }
+            mymember.ExpiredDate = member.ExpiredDate.AddYears(1);
+            _context.SaveChanges();
+            return Ok(mymember);
+
+        }
+
     }
 }
