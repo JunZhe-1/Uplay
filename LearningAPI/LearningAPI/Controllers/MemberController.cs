@@ -1,6 +1,8 @@
 ﻿using LearningAPI;
 using LearningAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using MySqlX.XDevAPI.Relational;
+
 namespace AssignmentAPI.Controllers
 {
     [ApiController]
@@ -52,7 +54,8 @@ namespace AssignmentAPI.Controllers
             {
                 return NotFound();
             }
-            mymember.ExpiredDate = member.ExpiredDate.AddYears(1);
+            mymember.LastSubscriptionDate = DateTime.Now;
+            mymember.ExpiredDate = mymember.ExpiredDate.AddYears(1);
             _context.SaveChanges();
             return Ok(mymember);
 
