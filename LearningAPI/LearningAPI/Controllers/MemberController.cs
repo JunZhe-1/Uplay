@@ -61,5 +61,29 @@ namespace AssignmentAPI.Controllers
 
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult DeleteMember(int id)
+        {
+
+            var member = _context.Members.Find(id);
+            if (member == null)
+            {
+                return NotFound();
+            }
+
+            if (member.ExpiredDate >= DateTime.Now)
+            {
+                return BadRequest("Membership has not expired yet.");
+            }
+            else
+            {
+                _context.Members.Remove(member);
+                _context.SaveChanges();
+                return Ok();
+
+            }
+
+        }
+
     }
 }
