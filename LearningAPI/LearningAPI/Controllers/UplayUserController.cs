@@ -22,11 +22,12 @@ namespace AssignmentAPI.Controllers
         public IActionResult AddUser(UplayUser user)
         {
             var now = DateTime.Now;
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(user.Password);
             var myUplayUser = new UplayUser()
             {
                 EmailAddress = user.EmailAddress.Trim(),
                 UserName = user.UserName.Trim(),
-                Password = user.Password.Trim(),
+                Password = passwordHash,
                 CreatedAt = now,
                 UpdatedAt = now
             };
