@@ -31,6 +31,14 @@ namespace AssignmentAPI.Controllers
                 CreatedAt = now,
                 UpdatedAt = now
             };
+            // Check email
+            var foundUser = _context.UplayUsers.Where(
+            x => x.EmailAddress == user.EmailAddress).FirstOrDefault();
+            if (foundUser != null)
+            {
+                string message = "Email already exists.";
+                return BadRequest(new { message });
+            }
             _context.UplayUsers.Add(myUplayUser);
             _context.SaveChanges();
             return Ok(myUplayUser);
