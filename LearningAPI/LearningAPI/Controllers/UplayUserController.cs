@@ -12,11 +12,12 @@ namespace AssignmentAPI.Controllers
         {
             _context = context;
         }
-        private static readonly List<UplayUser> list = new();
+        
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(list);
+            
+            return Ok(_context.UplayUsers.ToList());
         }
         [HttpPost]
         public IActionResult AddUser(UplayUser user)

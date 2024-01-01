@@ -14,12 +14,12 @@ namespace AssignmentAPI.Controllers
         {
             _context = context;
         }
-        private static readonly List<Member> list = new();
+        
 
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(list);
+            return Ok(_context.Members.ToList());
         }
         [HttpGet("{id}")]
         public IActionResult GetMember(int id)
