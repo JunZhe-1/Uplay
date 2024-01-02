@@ -47,12 +47,10 @@ namespace LearningAPI.Controllers
 
 
 		[HttpPost("add")]
+
 		public IActionResult AddVoucher(Voucher voucher)
 		{
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
+			
 			try
 			{
 				//int userId = GetUserId();
@@ -65,18 +63,21 @@ namespace LearningAPI.Controllers
 					Discount_In_percentage = voucher.Discount_In_percentage,
 					Start_Date = voucher.Start_Date,
 					End_Date = voucher.End_Date,
-					member_type = voucher.member_type
+					member_type = voucher.member_type,
+					Create_date = now,
+					Discount_type = voucher.Discount_type
 				};
 				_context.Vouchers.Add(myVoucher);
 				_context.SaveChanges();
 				return Ok(myVoucher);
 
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
-				_logger.LogError(ex, "Error when add tutorial");
+				_logger.LogError(ex, "Error when adding Voucher");
 				return StatusCode(500);
 			}
+
 
 		}
 

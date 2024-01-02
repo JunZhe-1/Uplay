@@ -152,11 +152,19 @@ namespace LearningAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("Create_date")
+                        .HasColumnType("datetime");
+
                     b.Property<int>("Discount_In_percentage")
                         .HasColumnType("int");
 
                     b.Property<int>("Discount_In_value")
                         .HasColumnType("int");
+
+                    b.Property<string>("Discount_type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTime>("End_Date")
                         .HasColumnType("datetime");

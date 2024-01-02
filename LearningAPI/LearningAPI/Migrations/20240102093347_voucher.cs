@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace LearningAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class voucher : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -77,8 +77,10 @@ namespace LearningAPI.Migrations
                     Voucher_Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     Start_Date = table.Column<DateTime>(type: "datetime", nullable: false),
                     End_Date = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Discount_type = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     Discount_In_percentage = table.Column<int>(type: "int", nullable: false),
                     Discount_In_value = table.Column<int>(type: "int", nullable: false),
+                    Create_date = table.Column<DateTime>(type: "datetime", nullable: false),
                     member_type = table.Column<string>(type: "longtext", nullable: false)
                 },
                 constraints: table =>

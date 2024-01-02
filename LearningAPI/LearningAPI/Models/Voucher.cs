@@ -18,12 +18,20 @@ namespace LearningAPI.Models
 		[Column(TypeName = "datetime")]
 		public DateTime End_Date { get; set; }
 
+
+		[MaxLength(50)]
+		public string Discount_type { get; set; } = string.Empty;
+
 		[Range(0, 100)]
 		public int Discount_In_percentage { get; set; } = 0;
 
 
 		[Range(0, 500)]
 		public int Discount_In_value { get; set; } = 0;
+
+		[Column(TypeName = "datetime")]
+		public DateTime Create_date { get; set; }
+
 
 
 

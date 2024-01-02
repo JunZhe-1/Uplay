@@ -48,8 +48,14 @@ function Register() {
                     navigate("/login");
                 })
                 .catch(function (err) {
-                    toast.error(`${err.response.data.message}`);
-                });
+                    if (err.response && err.response.data && err.response.data.message) {
+                        toast.error(err.response.data.message);
+                    } else if (err.message) {
+                        // Handle cases where there is an error message directly in the error object
+                        toast.error(err.message);
+                    } else {
+                        toast.error("An error occurred. Please try again later.");
+                    }                });
         }
     });
 
