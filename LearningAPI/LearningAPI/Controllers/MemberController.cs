@@ -2,14 +2,16 @@
 using LearningAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using MySqlX.XDevAPI.Relational;
+using System.Security.Claims;
 
-namespace AssignmentAPI.Controllers
+namespace LearningAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
     public class MemberController : Controller
     {
         private readonly MyDbContext _context;
+        private readonly ILogger<TutorialController> _logger;
         public MemberController(MyDbContext context)
         {
             _context = context;
@@ -33,16 +35,30 @@ namespace AssignmentAPI.Controllers
         public IActionResult AddUser(Member member)
         {
             var now = DateTime.Now;
-            var myMember = new Member()
+            try
             {
-                NRIC = member.NRIC.Trim(),
-                Name = member.Name.Trim(),
-                LastSubscriptionDate = now,
-                ExpiredDate = now.AddYears(1),
-            };
-            _context.Members.Add(myMember);
-            _context.SaveChanges();
-            return Ok(myMember);
+                int id = GetUserId();
+                var uplayuser = _context.UplayUsers.Find(id);
+                var myMember = new Member()
+                {
+                    UserId = id,
+                    NRIC = member.NRIC.Trim(),
+                    Name = member.Name.Trim(),
+                    LastSubscriptionDate = now,
+                    ExpiredDate = now.AddYears(1),
+                    UplayUser = uplayuser
+                    
+                };
+                _context.Members.Add(myMember);
+                _context.SaveChanges();
+                return Ok(myMember);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error when buying member");
+                return StatusCode(500);
+            }
+
         }
 
         [HttpPut("{id}")]
@@ -85,5 +101,11 @@ namespace AssignmentAPI.Controllers
 
         }
 
+        private int GetUserId()
+        {
+            return Convert.ToInt32(User.Claims
+                .Where(c => c.Type == ClaimTypes.NameIdentifier)
+                .Select(c => c.Value).SingleOrDefault());
+        }
     }
 }

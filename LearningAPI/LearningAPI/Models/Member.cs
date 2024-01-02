@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace LearningAPI.Models
 {
@@ -20,6 +21,8 @@ namespace LearningAPI.Models
         [Column(TypeName = "datetime")]
         public DateTime ExpiredDate { get; set; }
 
+        [JsonIgnore]
+        public UplayUser UplayUser { get; set; }
 
     }
 }

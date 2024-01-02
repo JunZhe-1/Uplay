@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using System.ComponentModel.DataAnnotations;
 
 namespace LearningAPI.Models
 {
@@ -14,9 +13,7 @@ namespace LearningAPI.Models
         [Required, EmailAddress, MaxLength(50)]
         public string EmailAddress { get; set; } = string.Empty;
 
-        [Required, MinLength(6), MaxLength(250)]
-        // Regular expression to enforce password complexity
-        [RegularExpression(@"^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$", ErrorMessage = "At least 1 letter and 1 number")]
+        [Required, MinLength(6), MaxLength(250),JsonIgnore]
         public string Password { get; set; } = string.Empty;
 
         [Required, MinLength(1), MaxLength(20)]
@@ -27,5 +24,8 @@ namespace LearningAPI.Models
 
         [Column(TypeName = "datetime")]
         public DateTime UpdatedAt { get; set; }
+
+        [JsonIgnore]
+        public Member? Member { get; set; }
     }
 }

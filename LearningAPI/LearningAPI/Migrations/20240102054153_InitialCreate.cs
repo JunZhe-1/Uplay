@@ -16,23 +16,6 @@ namespace LearningAPI.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Members",
-                columns: table => new
-                {
-                    UserId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    NRIC = table.Column<string>(type: "varchar(9)", maxLength: 9, nullable: false),
-                    Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    LastSubscriptionDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ExpiredDate = table.Column<DateTime>(type: "datetime", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Members", x => x.UserId);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "UplayUsers",
                 columns: table => new
                 {
@@ -88,6 +71,28 @@ namespace LearningAPI.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Members",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    NRIC = table.Column<string>(type: "varchar(9)", maxLength: 9, nullable: false),
+                    Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    LastSubscriptionDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    ExpiredDate = table.Column<DateTime>(type: "datetime", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Members", x => x.UserId);
+                    table.ForeignKey(
+                        name: "FK_Members_UplayUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "UplayUsers",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Tutorials",
                 columns: table => new
                 {
@@ -128,10 +133,10 @@ namespace LearningAPI.Migrations
                 name: "Tutorials");
 
             migrationBuilder.DropTable(
-                name: "UplayUsers");
+                name: "Vouchers");
 
             migrationBuilder.DropTable(
-                name: "Vouchers");
+                name: "UplayUsers");
 
             migrationBuilder.DropTable(
                 name: "Users");

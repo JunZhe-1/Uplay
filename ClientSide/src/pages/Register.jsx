@@ -12,25 +12,23 @@ function Register() {
 
     const formik = useFormik({
         initialValues: {
-            name: "",
-            email: "",
+            userName: "",
+            emailAddress: "",
             password: "",
             confirmPassword: ""
         },
         validationSchema: yup.object({
-            name: yup.string().trim()
-                .min(3, 'Name must be at least 3 characters')
+            userName: yup.string().trim()
+                .min(1, 'Name must be at least 3 characters')
                 .max(50, 'Name must be at most 50 characters')
-                .required('Name is required')
-                .matches(/^[a-zA-Z '-,.]+$/,
-                    "Only allow letters, spaces and characters: ' - , ."),
-            email: yup.string().trim()
+                .required('Name is required'),
+            emailAddress: yup.string().trim()
                 .email('Enter a valid email')
                 .max(50, 'Email must be at most 50 characters')
                 .required('Email is required'),
             password: yup.string().trim()
                 .min(8, 'Password must be at least 8 characters')
-                .max(50, 'Password must be at most 50 characters')
+                .max(250, 'Password must be at most 50 characters')
                 .required('Password is required')
                 .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/,
                     "At least 1 letter and 1 number"),
@@ -39,10 +37,10 @@ function Register() {
                 .oneOf([yup.ref('password')], 'Passwords must match')
         }),
         onSubmit: (data) => {
-            data.name = data.name.trim();
-            data.email = data.email.trim().toLowerCase();
+            data.userName = data.userName.trim();
+            data.emailAddress = dataemailAddressemail.trim().toLowerCase();
             data.password = data.password.trim();
-            http.post("/user/register", data)
+            http.post("/UplayUser/register", data)
                 .then((res) => {
                     console.log(res.data);
                     navigate("/login");

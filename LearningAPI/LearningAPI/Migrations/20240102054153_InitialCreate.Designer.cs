@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20240101143140_InitialCreate")]
+    [Migration("20240102054153_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -25,7 +25,6 @@ namespace LearningAPI.Migrations
             modelBuilder.Entity("LearningAPI.Models.Member", b =>
                 {
                     b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ExpiredDate")
@@ -181,6 +180,17 @@ namespace LearningAPI.Migrations
                     b.ToTable("Vouchers");
                 });
 
+            modelBuilder.Entity("LearningAPI.Models.Member", b =>
+                {
+                    b.HasOne("LearningAPI.Models.UplayUser", "UplayUser")
+                        .WithOne("Member")
+                        .HasForeignKey("LearningAPI.Models.Member", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UplayUser");
+                });
+
             modelBuilder.Entity("LearningAPI.Models.Tutorial", b =>
                 {
                     b.HasOne("LearningAPI.Models.User", "User")
@@ -190,6 +200,11 @@ namespace LearningAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.UplayUser", b =>
+                {
+                    b.Navigation("Member");
                 });
 
             modelBuilder.Entity("LearningAPI.Models.User", b =>

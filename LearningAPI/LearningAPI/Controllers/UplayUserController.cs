@@ -1,16 +1,26 @@
 ﻿using LearningAPI;
 using LearningAPI.Models;
 using Microsoft.AspNetCore.Mvc;
-namespace AssignmentAPI.Controllers
+using System.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
+
+
+namespace LearningAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
     public class UplayUserController : ControllerBase
     {
         private readonly MyDbContext _context;
-        public UplayUserController(MyDbContext context)
+        private readonly IConfiguration _configuration;
+        public UplayUserController(MyDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
         
         [HttpGet]
@@ -19,22 +29,24 @@ namespace AssignmentAPI.Controllers
             
             return Ok(_context.UplayUsers.ToList());
         }
-        [HttpPost]
-        public IActionResult AddUser(UplayUser user)
+        [HttpPost("register")]
+        public IActionResult AddUser(RegisterRequest request)
         {
             var now = DateTime.Now;
-            string passwordHash = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            request.EmailAddress = request.EmailAddress.Trim().ToLower();
+            request.Password = request.Password.Trim();
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
             var myUplayUser = new UplayUser()
             {
-                EmailAddress = user.EmailAddress.Trim(),
-                UserName = user.UserName.Trim(),
+                EmailAddress = request.EmailAddress,
+                UserName = request.UserName,
                 Password = passwordHash,
                 CreatedAt = now,
                 UpdatedAt = now
             };
             // Check email
             var foundUser = _context.UplayUsers.Where(
-            x => x.EmailAddress == user.EmailAddress).FirstOrDefault();
+            x => x.EmailAddress == request.EmailAddress).FirstOrDefault();
             if (foundUser != null)
             {
                 string message = "Email already exists.";
@@ -44,6 +56,86 @@ namespace AssignmentAPI.Controllers
             _context.SaveChanges();
             return Ok(myUplayUser);
         }
+        [HttpPost("login")]
+        public IActionResult Login(LoginRequest request)
+        {
+            // Trim string values
+            request.EmailAddress = request.EmailAddress.Trim().ToLower();
+            request.Password = request.Password.Trim();
+            // Check email and password
+            string message = "Email or password is not correct.";
+            var foundUser = _context.UplayUsers.Where(
+            x => x.EmailAddress == request.EmailAddress).FirstOrDefault();
+            if (foundUser == null)
+            {
+                return BadRequest(new { message });
+            }
+            bool verified = BCrypt.Net.BCrypt.Verify(
+            request.Password, foundUser.Password);
+            if (!verified)
+            {
+                return BadRequest(new { message });
+            }
+ 
+            var uplayuser = new
+            {
+                foundUser.UserId,
+                foundUser.EmailAddress,
+                foundUser.UserName
+            };
+            string accessToken = CreateToken(foundUser);
+            return Ok(new { uplayuser, accessToken });
+        }
 
+        [HttpGet("auth"), Authorize]
+        public IActionResult Auth()
+        {
+            var UserId = Convert.ToInt32(User.Claims.Where(
+            c => c.Type == ClaimTypes.NameIdentifier)
+            .Select(c => c.Value).SingleOrDefault());
+            var UserName = User.Claims.Where(c => c.Type == ClaimTypes.Name)
+            .Select(c => c.Value).SingleOrDefault();
+            var EmailAddress = User.Claims.Where(c => c.Type == ClaimTypes.Email)
+            .Select(c => c.Value).SingleOrDefault();
+            if (UserId != 0 && UserName != null && EmailAddress != null)
+            {
+                var user = new
+                {
+                    UserId,
+                    EmailAddress,
+                    UserName
+                };
+                return Ok(new { user });
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+
+        private string CreateToken(UplayUser user)
+        {
+            string secret = _configuration.GetValue<string>(
+            "Authentication:Secret");
+            int tokenExpiresDays = _configuration.GetValue<int>(
+            "Authentication:TokenExpiresDays");
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+            {
+        new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+        new Claim(ClaimTypes.Name, user.UserName),
+        new Claim(ClaimTypes.Email, user.EmailAddress)
+            }),
+                Expires = DateTime.UtcNow.AddDays(tokenExpiresDays),
+                SigningCredentials = new SigningCredentials(
+            new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var securityToken = tokenHandler.CreateToken(tokenDescriptor);
+            string token = tokenHandler.WriteToken(securityToken);
+            return token;
+        }
     }
 }
