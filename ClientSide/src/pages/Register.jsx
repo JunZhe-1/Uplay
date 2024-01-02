@@ -38,7 +38,7 @@ function Register() {
         }),
         onSubmit: (data) => {
             data.userName = data.userName.trim();
-            data.emailAddress = dataemailAddressemail.trim().toLowerCase();
+            data.emailAddress = data.emailAddress.trim().toLowerCase();
             data.password = data.password.trim();
             http.post("/UplayUser/register", data)
                 .then((res) => {
@@ -66,22 +66,22 @@ function Register() {
                 <TextField
                     fullWidth margin="dense" autoComplete="off"
                     label="Name"
-                    name="name"
-                    value={formik.values.name}
+                    name="userName"
+                    value={formik.values.userName}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={formik.touched.name && Boolean(formik.errors.name)}
-                    helperText={formik.touched.name && formik.errors.name}
+                    error={formik.touched.userName && Boolean(formik.errors.userName)}
+                    helperText={formik.touched.userName && formik.errors.userName}
                 />
                 <TextField
                     fullWidth margin="dense" autoComplete="off"
                     label="Email"
-                    name="email"
-                    value={formik.values.email}
+                    name="emailAddress"
+                    value={formik.values.emailAddress}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={formik.touched.email && Boolean(formik.errors.email)}
-                    helperText={formik.touched.email && formik.errors.email}
+                    error={formik.touched.emailAddress && Boolean(formik.errors.emailAddress)}
+                    helperText={formik.touched.emailAddress && formik.errors.emailAddress}
                 />
                 <TextField
                     fullWidth margin="dense" autoComplete="off"
