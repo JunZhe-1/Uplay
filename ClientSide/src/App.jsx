@@ -10,6 +10,7 @@ import EditTutorial from './pages/EditTutorial';
 import MyForm from './pages/MyForm';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import Profile from './pages/Profile';
 import http from './http';
 import UserContext from './contexts/UserContext';
 
@@ -38,14 +39,16 @@ function App() {
               <Toolbar disableGutters={true}>
                 <Link to="/">
                   <Typography variant="h6" component="div">
-                    Learning
+                    Uplay
                   </Typography>
                 </Link>
-                <Link to="/tutorials" ><Typography>Tutorials</Typography></Link>
+                <Link to="/tutorials" ><Typography>Home page</Typography></Link>
                 <Box sx={{ flexGrow: 1 }}></Box>
                 {user && (
                   <>
+                  <Link to="/profile">
                     <Typography>{user.userName}</Typography>
+                  </Link>
                     <Button onClick={logout}>Logout</Button>
                   </>
                 )
@@ -69,6 +72,7 @@ function App() {
               <Route path={"/register"} element={<Register />} />
               <Route path={"/login"} element={<Login />} />
               <Route path={"/form"} element={<MyForm />} />
+              <Route path={"/profile"} element={<Profile />} />
             </Routes>
           </Container>
         </ThemeProvider>

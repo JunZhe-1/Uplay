@@ -29,6 +29,14 @@ namespace LearningAPI.Controllers
             
             return Ok(_context.UplayUsers.ToList());
         }
+
+        [HttpGet("{id}")]
+        public IActionResult GetMember(int id)
+        {
+            UplayUser? user = _context.UplayUsers.Find(id);
+            return Ok(user);
+        }
+
         [HttpPost("register")]
         public IActionResult AddUser(RegisterRequest request)
         {
