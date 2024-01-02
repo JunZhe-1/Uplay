@@ -14,11 +14,11 @@ function Login() {
 
     const formik = useFormik({
         initialValues: {
-            email: "",
+            emailAddress: "",
             password: ""
         },
         validationSchema: yup.object({
-            email: yup.string().trim()
+            emailAddress: yup.string().trim()
                 .email('Enter a valid email')
                 .max(50, 'Email must be at most 50 characters')
                 .required('Email is required'),
@@ -28,12 +28,13 @@ function Login() {
                 .required('Password is required')
         }),
         onSubmit: (data) => {
-            data.email = data.email.trim().toLowerCase();
+            data.emailAddress = data.emailAddress.trim().toLowerCase();
             data.password = data.password.trim();
-            http.post("/user/login", data)
+            http.post("/UplayUser/login", data)
                 .then((res) => {
                     localStorage.setItem("accessToken", res.data.accessToken);
                     setUser(res.data.user);
+                    console.log(res.data.uplayuser);
                     navigate("/");
                 })
                 .catch(function (err) {
@@ -57,12 +58,12 @@ function Login() {
                 <TextField
                     fullWidth margin="dense" autoComplete="off"
                     label="Email"
-                    name="email"
-                    value={formik.values.email}
+                    name="emailAddress"
+                    value={formik.values.emailAddress}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={formik.touched.email && Boolean(formik.errors.email)}
-                    helperText={formik.touched.email && formik.errors.email}
+                    error={formik.touched.emailAddress && Boolean(formik.errors.emailAddress)}
+                    helperText={formik.touched.emailAddress && formik.errors.emailAddress}
                 />
                 <TextField
                     fullWidth margin="dense" autoComplete="off"

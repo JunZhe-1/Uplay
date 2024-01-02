@@ -18,7 +18,7 @@ function App() {
 
   useEffect(() => {
     if (localStorage.getItem("accessToken")) {
-      http.get('/UplayUser/auth').then((res) => {
+        http.get('/UplayUser/auth').then((res) => {
         setUser(res.data.user);
       });
     }
@@ -45,7 +45,7 @@ function App() {
                 <Box sx={{ flexGrow: 1 }}></Box>
                 {user && (
                   <>
-                    <Typography>{user.name}</Typography>
+                    <Typography>{user.userName}</Typography>
                     <Button onClick={logout}>Logout</Button>
                   </>
                 )
