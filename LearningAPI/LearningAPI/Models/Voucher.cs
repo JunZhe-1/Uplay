@@ -22,11 +22,11 @@ namespace LearningAPI.Models
 		[MaxLength(50)]
 		public string Discount_type { get; set; } = string.Empty;
 
-		[Range(0, 100)]
+		
 		public int Discount_In_percentage { get; set; } = 0;
 
 
-		[Range(0, 500)]
+	
 		public int Discount_In_value { get; set; } = 0;
 
 		[Column(TypeName = "datetime")]
@@ -37,7 +37,7 @@ namespace LearningAPI.Models
 
 		// Foreign key property
 		// use it for member type
-		public string member_type { get; set; }
+		public string member_type { get; set; } = String.Empty;
 
 		//public User? User { get; set; }	
 	}

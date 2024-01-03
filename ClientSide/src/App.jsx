@@ -11,6 +11,7 @@ import EditTutorial from './pages/EditTutorial';
 import MyForm from './pages/MyForm';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import VoucherList from './pages/VoucherList';
 import http from './http';
 import UserContext from './contexts/UserContext';
 
@@ -54,7 +55,7 @@ function App() {
                 {!user && (
                   <>
                     <Link to="/register" ><Typography>Register</Typography></Link>
-                    <Link to="/Voucher/add" ><Typography>Login</Typography></Link>
+                    <Link to="/Voucher" ><Typography>Login</Typography></Link>
                   </>
                 )}
               </Toolbar>
@@ -66,7 +67,9 @@ function App() {
               <Route path={"/"} element={<Tutorials />} />
               <Route path={"/tutorials"} element={<Tutorials />} />
               <Route path={"/addtutorial"} element={<AddTutorial />} />
-              <Route path={"/Voucher/add"} element={<VoucherAdd />} />
+                          <Route path={"/Voucher/add"} element={<VoucherAdd />} />
+                          <Route path={"/Voucher"} element={<VoucherList />} />
+
               <Route path={"/edittutorial/:id"} element={<EditTutorial />} />
               <Route path={"/register"} element={<Register />} />
               <Route path={"/login"} element={<Login />} />

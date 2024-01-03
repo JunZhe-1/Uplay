@@ -50,32 +50,52 @@ namespace LearningAPI.Controllers
 
 		public IActionResult AddVoucher(Voucher voucher)
 		{
-			
-			try
+			var now = DateTime.Now;
+			if (voucher.End_Date <= now && voucher.Start_Date <= voucher.End_Date)
 			{
-				//int userId = GetUserId();
-				var now = DateTime.Now;
 
-				var myVoucher = new Voucher()
+				try
 				{
-					Voucher_Name = voucher.Voucher_Name,
-					Discount_In_value = voucher.Discount_In_value,
-					Discount_In_percentage = voucher.Discount_In_percentage,
-					Start_Date = voucher.Start_Date,
-					End_Date = voucher.End_Date,
-					member_type = voucher.member_type,
-					Create_date = now,
-					Discount_type = voucher.Discount_type
-				};
-				_context.Vouchers.Add(myVoucher);
-				_context.SaveChanges();
-				return Ok(myVoucher);
+					//int userId = GetUserId();
 
+
+
+
+
+
+					var myVoucher = new Voucher()
+					{
+						Voucher_Name = voucher.Voucher_Name,
+						Discount_In_value = voucher.Discount_In_value,
+						Discount_In_percentage = voucher.Discount_In_percentage,
+						Start_Date = now,
+						End_Date = now,
+						member_type = voucher.member_type,
+						Create_date = now,
+						Discount_type = voucher.Discount_type
+					};
+					_context.Vouchers.Add(myVoucher);
+					_context.SaveChanges();
+					return Ok(myVoucher);
+
+
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError(ex, "Error when adding Voucher");
+					return StatusCode(500);
+				}
 			}
-			catch (Exception ex)
+			else if (voucher.Start_Date > voucher.End_Date)
 			{
-				_logger.LogError(ex, "Error when adding Voucher");
-				return StatusCode(500);
+
+				string message = "Logic Error with Start & End date";
+				return BadRequest(new { message });
+			}
+			else
+			{
+				string message = "Error in adding voucher, please try again!";
+				return BadRequest(new { message });
 			}
 
 
