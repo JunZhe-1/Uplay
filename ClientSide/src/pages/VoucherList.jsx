@@ -68,80 +68,80 @@ function VoucherList() {
 
     return (
         <Box>
-            <Typography variant="h5" sx={{ my: 2, color: 'black', fontWeight: 'bold' }}>
-                Voucher Management
-            </Typography>
+        <Typography variant="h5" sx={{ my: 2, color: 'black', fontWeight: 'bold' }}>
+            Voucher Management
+        </Typography>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Input value={search} placeholder="Search"
-                    onChange={onSearchChange}
-                    onKeyDown={onSearchKeyDown} />
-                <IconButton color="primary" onClick={onClickSearch}>
-                    <Search />
-                </IconButton>
-                <IconButton color="primary" onClick={onClickClear}>
-                    <Clear />
-                </IconButton>
-            </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <Input value={search} placeholder="Search"
+                onChange={onSearchChange}
+                onKeyDown={onSearchKeyDown} />
+            <IconButton color="primary" onClick={onClickSearch}>
+                <Search />
+            </IconButton>
+            <IconButton color="primary" onClick={onClickClear}>
+                <Clear />
+            </IconButton>
+        </Box>
 
 
 
-            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                <TableContainer sx={{ maxHeight: 440 }}>
-                    <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Voucher Name</TableCell>
-                                <TableCell>Start Date</TableCell>
-                                <TableCell>End Date</TableCell>
+        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+            <TableContainer sx={{ maxHeight: 440 }}>
+                <Table stickyHeader aria-label="sticky table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Voucher Name</TableCell>
+                            <TableCell>Start Date</TableCell>
+                            <TableCell>End Date</TableCell>
                                 <TableCell>member type</TableCell>
-                                <TableCell>Discount</TableCell>
+                            <TableCell>Discount</TableCell>
+                           
+                        </TableRow>
+                    </TableHead>
 
-                            </TableRow>
-                        </TableHead>
-
-                        <TableBody>
-                            {/* {pointList.map((data, index) => ( */}
+                    <TableBody>
+                        {/* {pointList.map((data, index) => ( */}
                             {VoucherList
-                                .sort((a, b) => new Date(a.end_Date) - new Date(b.end_Date))
+                                .sort((a, b) => new Date(a.end_Date) - new Date(b.end_Date))    
                                 .map((data, index) => (
 
 
-                                    <TableRow key={index}>
-                                        <TableCell>{data.voucher_Name}</TableCell>
+                                <TableRow key={index}>
+                                    <TableCell>{data.voucher_Name}</TableCell>
                                         <TableCell>       {dayjs(data.start_Date).format(global.datetimeFormat)}</TableCell>
                                         <TableCell>{dayjs(data.end_Date).format(global.datetimeFormat)}</TableCell>
-                                        <TableCell>{data.member_type}</TableCell>
-                                        <TableCell>
-                                            <>
-                                                {data.discount_type == "Value" ? (
-                                                    <>
-                                                        ${data.discount_In_value}
-                                                    </>
-                                                ) : (
-                                                    <>
+                                    <TableCell>{data.member_type}</TableCell>
+                                    <TableCell>
+                                        <>
+                                            {data.discount_type == "Value" ? (
+                                                <>
+                                                    ${data.discount_In_value}
+                                                </>
+                                            ) : (
+                                                <>
                                                         {data.discount_In_percentage}%
-                                                    </>
-                                                )}
-                                            </>
+                                                </>
+                                            )}
+                                        </>
 
-                                        </TableCell>
-
-
+                                    </TableCell>
 
 
-                                    </TableRow>
-                                ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+
+
+                                </TableRow>
+                            ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
             </Paper>
             <ToastContainer /> </Box>
 
 
 
 
-    );
+            );
 }
 
 export default VoucherList;
