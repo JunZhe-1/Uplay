@@ -13,7 +13,7 @@ namespace LearningAPI.Models
         [Required, EmailAddress, MaxLength(50)]
         public string EmailAddress { get; set; } = string.Empty;
 
-        [Required, MinLength(6), MaxLength(250),JsonIgnore]
+        [Required, MinLength(8), MaxLength(250),JsonIgnore]
         public string Password { get; set; } = string.Empty;
 
         [Required, MinLength(1), MaxLength(20)]

@@ -96,6 +96,27 @@ namespace LearningAPI.Controllers
             return Ok(new { uplayuser, accessToken });
         }
 
+
+        [HttpPut("{id}")]
+
+        public IActionResult UpdateUplayUser(int id, UpdateUplayUserRequest uplayuser)
+        {
+            var user = _context.UplayUsers.Find(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            user.UserName = uplayuser.UserName;
+            uplayuser.Password = uplayuser.Password.Trim();
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(uplayuser.Password);
+            user.EmailAddress = uplayuser.EmailAddress.Trim();
+            user.Password = passwordHash;
+            user.UpdatedAt = DateTime.UtcNow;
+            _context.SaveChanges();
+            return Ok(user);
+
+        }
+
         [HttpGet("auth"), Authorize]
         public IActionResult Auth()
         {

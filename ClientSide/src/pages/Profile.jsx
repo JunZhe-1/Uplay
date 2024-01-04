@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Typography, Grid, Card, CardContent, TextField, Button } from '@mui/material';
 import http from '../http';
-
-
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 function Profiles() {
     const [profileList, setProfileList] = useState([]);
     const [user, setUser] = useState(null);
     const [memberstatus, setmemberstatus] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -23,6 +25,44 @@ function Profiles() {
         }
     }, []);
 
+    const formik = useFormik({
+        initialValues: {
+            userName: profileList.userName,
+            emailAddress: profileList.emailAddress,
+            password: ""
+
+        },
+        validationSchema: yup.object({
+            userName: yup.string().trim()
+                .min(1, 'Name must be at least 3 characters')
+                .max(50, 'Name must be at most 50 characters')
+                .required('Name is required'),
+            emailAddress: yup.string().trim()
+                .email('Enter a valid email')
+                .max(50, 'Email must be at most 50 characters')
+                .required('Email is required'),
+            password: yup.string().trim()
+                .min(8, 'Password must be at least 8 characters')
+                .max(250, 'Password must be at most 50 characters')
+                .required('Password is required')
+                .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/,
+                    "At least 1 letter and 1 number")
+
+        }),
+        onSubmit: (data) => {
+
+            data.userName = data.userName.trim();
+            data.emailAddress = data.emailAddress.trim().toLowerCase();
+            data.password = data.password.trim();
+            console.log(data)
+            http.put(`/UplayUser/${user.userId}`, data)
+                .then((res) => {
+                    console.log(res.data);
+                    navigate("/");
+                });
+        }
+    });
+
     useEffect(() => {
         
         if (user) {
@@ -31,6 +71,11 @@ function Profiles() {
                     const response = await http.get(`/UplayUser/${user.userId}`);
                     setProfileList(response.data);
                     console.log(response.data);
+                    formik.setValues({
+                        userName: response.data.userName,
+                        emailAddress: response.data.emailAddress,
+                        password: ""
+                    });
                 } catch (error) {
                     console.error('Error fetching user profile:', error);
                 }
@@ -57,50 +102,77 @@ function Profiles() {
 
             getProfile();
             getMemberStatus();
+
         }
     }, [user]);
+
+
 
     return (
         <Grid container spacing={2}>
             <Grid item xs={6}>
-                <Box key={profileList.userId} marginBottom={4} marginTop={4}>
+                <Box component="form" marginBottom={4} marginTop={4} onSubmit={formik.handleSubmit}>
                     <Card>
                         <CardContent>
                             <Typography variant="h6" style={{ fontSize: '23px' }}>
                                 Member Type:
                             </Typography>
-                            <Typography variant="h6" style={{  marginBottom: '35px' }}>
+                            <Typography variant="h6" style={{ marginBottom: '20px' }}>
                                 {memberstatus}
                             </Typography>
                             <Typography variant="h6" style={{ fontSize: '23px' }}>
                                 User Name:
                             </Typography>
                             <TextField
-                                variant="outlined"
-                                value={profileList.userName}
                                 fullWidth
-                                onChange={(e) => setUserName(e.target.value)}
+                                label="User Name"
+                                name="userName"
+                                value={formik.values.userName}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={formik.touched.userName && Boolean(formik.errors.userName)}
+                                helperText={formik.touched.userName && formik.errors.userName}
+                                InputLabelProps={{ shrink: Boolean(formik.values.userName) || formik.values.userName === '' }}
+                                style={{ marginBottom: '10px' }} // Adjust spacing here
                             />
-                            <Typography variant="h6" style={{ fontSize: '23px', marginTop: '35px' }}>
+                            <Typography variant="h6" style={{ fontSize: '23px', marginTop: '20px' }}>
                                 Email Address:
                             </Typography>
                             <TextField
-                                variant="outlined"
-                                value={profileList.emailAddress}
                                 fullWidth
-                                onChange={(e) => setEmailAddress(e.target.value)}
+                                margin="dense"
+                                autoComplete="off"
+                                label="Email"
+                                name="emailAddress"
+                                value={formik.values.emailAddress}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={formik.touched.emailAddress && Boolean(formik.errors.emailAddress)}
+                                helperText={formik.touched.emailAddress && formik.errors.emailAddress}
+                                InputLabelProps={{ shrink: Boolean(formik.values.emailAddress) || formik.values.emailAddress === '' }}
+                                style={{ marginBottom: '10px' }} // Adjust spacing here
                             />
-                            <Typography variant="h6" style={{ fontSize: '23px', marginTop: '50px' }}>
+                            <Typography variant="h6" style={{ fontSize: '23px', marginTop: '20px' }}>
                                 Change Password:
                             </Typography>
                             <TextField
                                 label="New Password"
-                                type="password"
-                                fullWidth
                                 margin="normal"
+                                fullWidth
+                                margin="dense"
+                                autoComplete="off"
+                                name="password"
+                                type="password"
+                                value={formik.values.password}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={formik.touched.password && Boolean(formik.errors.password)}
+                                helperText={formik.touched.password && formik.errors.password}
+                                InputLabelProps={{ style: { marginTop: '5px' } }} // Adjust marginTop here
+                                style={{ marginBottom: '10px' }} // Adjust spacing here
                             />
 
-                            <Button variant="contained" color="primary" style={{ marginTop: '35px' }}>
+                            <Button variant="contained" color="primary" style={{ marginTop: '20px' }} type="submit">
                                 Update details
                             </Button>
                         </CardContent>

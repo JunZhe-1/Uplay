@@ -12,7 +12,6 @@ namespace LearningAPI.Controllers
     public class MemberController : Controller
     {
         private readonly MyDbContext _context;
-        private readonly ILogger<TutorialController> _logger;
         public MemberController(MyDbContext context)
         {
             _context = context;
@@ -39,7 +38,6 @@ namespace LearningAPI.Controllers
             try
             {
                 int id = GetUserId();
-                var uplayuser = _context.UplayUsers.Find(id);
                 var myMember = new Member()
                 {
                     UserId = id,
@@ -47,7 +45,6 @@ namespace LearningAPI.Controllers
                     Name = member.Name.Trim(),
                     LastSubscriptionDate = now,
                     ExpiredDate = now.AddYears(1),
-                    UplayUser = uplayuser
                     
                 };
                 _context.Members.Add(myMember);
@@ -56,7 +53,7 @@ namespace LearningAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error when buying member");
+                
                 return StatusCode(500);
             }
 
