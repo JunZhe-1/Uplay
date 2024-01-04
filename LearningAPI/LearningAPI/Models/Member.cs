@@ -15,11 +15,16 @@ namespace LearningAPI.Models
         [Required, MinLength(2), MaxLength(50)]
         public string Name { get; set; } = string.Empty;
 
+        [Required]
+        public string MemberStatus { get; set; } = string.Empty;
+
         [Column(TypeName = "datetime")]
         public DateTime LastSubscriptionDate { get; set; }
 
         [Column(TypeName = "datetime")]
         public DateTime ExpiredDate { get; set; }
+
+        
 
         [JsonIgnore]
         public UplayUser UplayUser { get; set; }

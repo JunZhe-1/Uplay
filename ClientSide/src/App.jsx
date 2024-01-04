@@ -6,6 +6,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import MyTheme from './themes/MyTheme';
 import Tutorials from './pages/Tutorials';
 import AddTutorial from './pages/AddTutorial';
+import VoucherAdd from './pages/VoucherAdd';
+import VoucherList from './pages/VoucherList';
 import EditTutorial from './pages/EditTutorial';
 import MyForm from './pages/MyForm';
 import Register from './pages/Register';
@@ -68,6 +70,8 @@ function App() {
               <Route path={"/"} element={<Tutorials />} />
               <Route path={"/tutorials"} element={<Tutorials />} />
               <Route path={"/addtutorial"} element={<AddTutorial />} />
+                          <Route path={"/Voucher/add"} element={<VoucherAdd />} />
+                          <Route path={"/Voucher"} element={<VoucherList />} />
               <Route path={"/edittutorial/:id"} element={<EditTutorial />} />
               <Route path={"/register"} element={<Register />} />
               <Route path={"/login"} element={<Login />} />

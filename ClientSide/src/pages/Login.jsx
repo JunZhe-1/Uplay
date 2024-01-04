@@ -26,6 +26,7 @@ function Login() {
                 .min(8, 'Password must be at least 8 characters')
                 .max(50, 'Password must be at most 50 characters')
                 .required('Password is required')
+                
         }),
         onSubmit: (data) => {
             data.emailAddress = data.emailAddress.trim().toLowerCase();

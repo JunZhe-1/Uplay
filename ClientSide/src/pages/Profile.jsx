@@ -5,6 +5,7 @@ import http from '../http';
 function Profiles() {
     const [profileList, setProfileList] = useState([]);
     const [user, setUser] = useState(null);
+    const [memberstatus, setmemberstatus] = useState(false);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -22,6 +23,7 @@ function Profiles() {
     }, []);
 
     useEffect(() => {
+        
         if (user) {
             const getProfile = async () => {
                 try {
@@ -32,8 +34,28 @@ function Profiles() {
                     console.error('Error fetching user profile:', error);
                 }
             };
+            const getMemberStatus = async () => {
+                try {
+                    const response1 = await http.get(`/Member/${user.userId}`)
+                    if (response1.headers['content-length'] == 0) {
+                        setmemberstatus("Non-Member")
+
+                    }
+                    else {
+                        console.log(response1)
+                        setmemberstatus(response1.data.memberStatus)
+
+                    }
+
+                } catch (error) {
+                    console.error('Error fetching memberstatus:', error);
+                }
+
+
+            };
 
             getProfile();
+            getMemberStatus();
         }
     }, [user]);
 
@@ -43,26 +65,43 @@ function Profiles() {
                 <Box key={profileList.userId} marginBottom={4} marginTop={4}>
                     <Card>
                         <CardContent>
-                     
+                            <Typography variant="h6" style={{ fontSize: '23px' }}>
+                                Member Type:
+                            </Typography>
+                            <Typography variant="h6" style={{  marginBottom: '35px' }}>
+                                {memberstatus}
+                            </Typography>
                             <Typography variant="h6" style={{ fontSize: '23px' }}>
                                 User Name:
                             </Typography>
-                            <Typography variant="body1">{profileList.userName}</Typography>
+                            <TextField
+                                variant="outlined"
+                                value={profileList.userName}
+                                fullWidth
+                                onChange={(e) => setUserName(e.target.value)}
+                            />
                             <Typography variant="h6" style={{ fontSize: '23px', marginTop: '35px' }}>
                                 Email Address:
                             </Typography>
-                            <Typography variant="body1" style={{marginBottom: '35px' }}>{profileList.emailAddress}</Typography>
+                            <TextField
+                                variant="outlined"
+                                value={profileList.emailAddress}
+                                fullWidth
+                                onChange={(e) => setEmailAddress(e.target.value)}
+                            />
+                            <Typography variant="h6" style={{ fontSize: '23px', marginTop: '50px' }}>
+                                Change Password:
+                            </Typography>
                             <TextField
                                 label="New Password"
                                 type="password"
                                 fullWidth
                                 margin="normal"
                             />
-                            <Button variant="contained" color="primary">
+
+                            <Button variant="contained" color="primary" style={{ marginTop: '35px' }}>
                                 Update details
                             </Button>
-
-
                         </CardContent>
                     </Card>
                 </Box>
