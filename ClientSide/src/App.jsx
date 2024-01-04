@@ -16,6 +16,7 @@ import Profile from './pages/Profile';
 import http from './http';
 import UserContext from './contexts/UserContext';
 
+
 function App() {
   const [user, setUser] = useState(null);
 

@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace LearningAPI.Models
 {
+
     public class Voucher
     {
         // this model is for admin to create the voucher for types of member

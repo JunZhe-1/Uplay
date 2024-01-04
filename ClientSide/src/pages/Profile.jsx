@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, Grid, Card, CardContent, TextField, Button } from '@mui/material';
 import http from '../http';
 
+
 function Profiles() {
     const [profileList, setProfileList] = useState([]);
     const [user, setUser] = useState(null);

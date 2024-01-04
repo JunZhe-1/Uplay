@@ -7,6 +7,7 @@ import http from '../http';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
 function Register() {
     const navigate = useNavigate();
 
