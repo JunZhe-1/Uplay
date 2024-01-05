@@ -49,45 +49,17 @@ namespace LearningAPI.Controllers
 
         [HttpPost("add")]
 
-<<<<<<< Updated upstream
         public IActionResult AddVoucher(Voucher voucher)
         {
             var now = DateTime.Now;
             if (voucher.End_Date >= now && voucher.Start_Date <= voucher.End_Date)
             {
-=======
-		public IActionResult AddVoucher(Voucher voucher)
-		{
-			var now = DateTime.Now;
-			if (voucher.End_Date >= now && voucher.Start_Date <= voucher.End_Date)
-			{
->>>>>>> Stashed changes
 
                 try
                 {
                     //int userId = GetUserId();
 
 
-<<<<<<< Updated upstream
-
-
-
-
-                    var myVoucher = new Voucher()
-                    {
-                        Voucher_Name = voucher.Voucher_Name,
-                        Discount_In_value = voucher.Discount_In_value,
-                        Discount_In_percentage = voucher.Discount_In_percentage,
-                        Start_Date = voucher.Start_Date,
-                        End_Date = voucher.End_Date,
-                        member_type = voucher.member_type,
-                        Create_date = now,
-                        Discount_type = voucher.Discount_type
-                    };
-                    _context.Vouchers.Add(myVoucher);
-                    _context.SaveChanges();
-                    return Ok(myVoucher);
-=======
 					var myVoucher = new Voucher()
 					{
 						Voucher_Name = voucher.Voucher_Name,
@@ -102,7 +74,6 @@ namespace LearningAPI.Controllers
 					_context.Vouchers.Add(myVoucher);
 					_context.SaveChanges();
 					return Ok(myVoucher);
->>>>>>> Stashed changes
 
 
                 }
@@ -115,16 +86,6 @@ namespace LearningAPI.Controllers
             else if (voucher.Start_Date > voucher.End_Date)
             {
 
-<<<<<<< Updated upstream
-                string message = "Logic Error with Start & End date";
-                return BadRequest(new { message });
-            }
-            else
-            {
-                string message = "Error in adding voucher, please try again!";
-                return BadRequest(new { message });
-            }
-=======
 				string message = "Logic Error with Start & End date";
 				return BadRequest(new { message });
 			}
@@ -138,7 +99,6 @@ namespace LearningAPI.Controllers
 				string message = "Error in adding voucher, please try again!";
 				return BadRequest(new { message });
 			}
->>>>>>> Stashed changes
 
 
         }
@@ -277,9 +237,16 @@ namespace LearningAPI.Controllers
 				{
 					return NotFound();
 				}
-				if(user.)
+				// check the type of member
+				return NotFound();
 			}
-			
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error when delete tutorial");
+				return StatusCode(500);
+			}
+
+
 
 
 		}
