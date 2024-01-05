@@ -30,5 +30,8 @@ namespace LearningAPI
         public DbSet<Member> Members { get; set; }
 
         public DbSet<Voucher> Vouchers { get; set; }
-    }
+
+        public Dbset<Event> Events { get; set; }
+
+	}
 }
