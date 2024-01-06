@@ -17,6 +17,9 @@ import http from './http';
 import UserContext from './contexts/UserContext';
 import BuyMember from './pages/BuyMember';
 
+import VoucherEdit from './pages/VoucherEdit';
+import EventAdd from './pages/EventAdd';
+import EventList from './pages/EventList';
 function App() {
   const [user, setUser] = useState(null);
 
@@ -73,10 +76,17 @@ function App() {
               <Route path={"/addtutorial"} element={<AddTutorial />} />
                           <Route path={"/Voucher/add"} element={<VoucherAdd />} />
                           <Route path={"/Voucher"} element={<VoucherList />} />
+
+                          <Route path={"/Voucher/update/:id"} element={<VoucherEdit />} />
+
               <Route path={"/edittutorial/:id"} element={<EditTutorial />} />
               <Route path={"/register"} element={<Register />} />
               <Route path={"/login"} element={<Login />} />
               <Route path={"/form"} element={<MyForm />} />
+                          <Route path={"/profile"} element={<Profile />} />
+                          <Route path={"/Event/add_event"} element={<EventAdd />} />
+                          <Route path={"/Event"} element={<EventList />} />
+
               <Route path={"/profile"} element={<Profile />} />
               <Route path={"/buymember"} element={<BuyMember />} />
                           

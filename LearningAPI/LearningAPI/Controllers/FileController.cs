@@ -19,9 +19,11 @@ namespace LearningAPI.Controllers
             _logger = logger;
         }
 
-        [HttpPost("upload"), Authorize]
-        [ProducesResponseType(typeof(UploadResponse), StatusCodes.Status200OK)]
-        public IActionResult Upload(IFormFile file)
+      //  [HttpPost("upload"), Authorize]
+		// [ProducesResponseType(typeof(UploadResponse), StatusCodes.Status200OK)]
+		[HttpPost("upload")]
+
+		public IActionResult Upload(IFormFile file)
         {
             try
             {

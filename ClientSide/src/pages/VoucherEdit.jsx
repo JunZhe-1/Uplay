@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+﻿import React, { useEffect, useState, useContext } from 'react';
 import {
     Box,
     Typography,
@@ -14,7 +14,7 @@ import {
     MenuItem,
     FormHelperText
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -26,80 +26,87 @@ import 'react-toastify/dist/ReactToastify.css';
 import UserContext from '../contexts/UserContext';
 import da from 'date-fns/locale/da';
 
-function VoucherAdd() {
-
+function VoucherEdit() {
+    const { id } = useParams();
     const navigate = useNavigate();
 
-    const formik = useFormik({
-        initialValues: {
-            Voucher_Name: "",
-            Start_Date: null, // Initialize as null or a default date
-            End_Date: null,   // Initialize as null or a default date
-            Discount_In_percentage: "",
-            Discount_In_value: "",
-            Member_Type: "Uplay",
-            Discount_type: "Percentage",
+    const [voucherinfo, setVoucher] = useState({
+        Voucher_Name: "",
+        Start_Date: new Date(), 
+        End_Date: new Date(),  
+        Discount_In_Percentage: "",
+        Discount_In_Value: "",
+        Member_Type: "Uplay",
+        Discount_type: "Percentage"
+    });
+    useEffect(() => {
+        http.get(`/Voucher/getOne/${id}`).then((res) => {
+            console.log(res.data.Start_Date);
 
-        },
+            setVoucher((prevVoucher) => ({
+                ...res.data,
+                Start_Date: new Date(res.data.Start_Date + 'Z'), 
+                End_Date: new Date(res.data.End_Date + 'Z'),
+            }));    
+            
+        });
+    }, []);
+
+    console.log(voucherinfo);
+
+    const formik = useFormik({
+        initialValues: voucherinfo,
+        enableReinitialize: true,
+
         validationSchema: yup.object({
             Voucher_Name: yup.string().trim()
                 .min(3, 'Voucher_Name must be at least 3 characters')
                 .max(100, 'Voucher_Name must be at most 100 characters')
                 .required('Voucher_Name is required'),
-            Discount_In_percentage: yup.number()
-                .min(0, 'Discount Percent cannot below than 0%')
+            Discount_In_Percentage: yup.number()
+                .min(1, 'Discount Percent cannot below than 0%')
                 .max(100, 'Discount Percent cannot above 100%'),
-            Discount_In_value: yup.number()
-                .min(0, 'Discount Value cannot below than $0')
+            Discount_In_Value: yup.number()
+                .min(1, 'Discount Value cannot below than $0')
                 .max(1000, 'Too Much'),
 
             Start_Date: yup.date().required('Start date is required'),
             End_Date: yup.date().required('End date is required'),
             Member_Type: yup.string()
                 .required('Member type is required')
-
         }),
         onSubmit: (voucher) => {
-            console.log("first state:", voucher);
-           
+            console.log(voucher);
+
             voucher.Voucher_Name = voucher.Voucher_Name.trim();
-          //  voucher.Start_Date = new Date(voucher.Start_Date).toISOString();
-           // voucher.End_Date = new Date(voucher.End_Date).toISOString();
+            //  voucher.Start_Date = new Date(voucher.Start_Date).toISOString();
+            // voucher.End_Date = new Date(voucher.End_Date).toISOString();
             if (voucher.Discount_type === "Value") {
-                voucher.Discount_In_value = parseInt(voucher.Discount_In_value);
-                voucher.Discount_In_percentage = 0;
+                voucher.Discount_In_Value = parseInt(voucher.Discount_In_Value);
+                voucher.Discount_In_Percentage = 0;
             } else if (voucher.Discount_type === "Percentage") {
-                voucher.Discount_In_percentage = parseInt(voucher.Discount_In_percentage);
-                voucher.Discount_In_value = 0;
+                voucher.Discount_In_Percentage = parseInt(voucher.Discount_In_Percentage);
+                voucher.Discount_In_Value = 0;
             }
-
-            console.log("second state:", voucher);
-
-            http.post("/Voucher/add", voucher)
+            http.put(`/Voucher/update/${id}`, voucher)
                 .then((res) => {
-
+                    console.log(res.voucher);
                     navigate("/Voucher");
                 })
                 .catch(function (err) {
-
                     toast.error(`${err.response.data.message}`);
                 })
-               
+
         }
     });
 
-
-
-
-    console.log(formik.values);
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
 
             <Box>
                 <Typography variant="h5" sx={{ my: 2 }}>
-                    Add Voucher
-
+                    Edit Voucher
                 </Typography>
                 <Box component="form" onSubmit={formik.handleSubmit}>
                     <Grid container spacing={2}>
@@ -125,7 +132,7 @@ function VoucherAdd() {
                                 label="Start_Date"
                                 inputVariant="outlined"
                                 format="dd/MM/yyyy"
-                                value={formik.values.Start_Date}
+                                value={formik.values.Start_Date || null}
                                 onChange={(date) => {
                                     formik.setFieldValue('Start_Date', date);
                                     formik.setFieldError('Start_Date', ''); // Clear validation error
@@ -141,7 +148,7 @@ function VoucherAdd() {
                                 label="End_Date"
                                 inputVariant="outlined"
                                 format="dd/MM/yyyy"
-                                value={formik.values.End_Date}
+                                value={formik.values.End_Date || null}
                                 onChange={(date) => {
                                     formik.setFieldValue('End_Date', date);
                                     formik.setFieldError('End_Date', ''); // Clear validation error
@@ -157,7 +164,7 @@ function VoucherAdd() {
                             >
                                 <InputLabel htmlFor="Member_Type">Type of Customer</InputLabel>
                                 <Select
-                                    name="Member_Type"  
+                                    name="Member_Type"
                                     value={formik.values.Member_Type}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
@@ -176,15 +183,15 @@ function VoucherAdd() {
                                 row
                                 aria-label="Discount_type"
                                 name="Discount_type"
-                                value={formik.values.Discount_type}
+                                value={formik.values.Discount_type || ''}
                                 onChange={(e) => {
                                     formik.handleChange(e);
                                     if (e.target.value === "Percentage") {
-                                        formik.setFieldValue("Discount_In_value", "");
-                                        formik.setFieldValue("Discount_In_percentage", 0);
+                                        formik.setFieldValue("Discount_In_Value", "");
+                                        formik.setFieldValue("Discount_In_Percentage", 0);
                                     } else if (e.target.value === "Value") {
-                                        formik.setFieldValue("Discount_In_percentage", "");
-                                        formik.setFieldValue("Discount_In_value", 0);
+                                        formik.setFieldValue("Discount_In_Percentage", "");
+                                        formik.setFieldValue("Discount_In_Value", 0);
                                     }
                                 }}
 
@@ -208,41 +215,44 @@ function VoucherAdd() {
                                     fullWidth
                                     margin="dense"
                                     autoComplete="off"
-                                    label="Discount_In_percentage"
-                                    name="Discount_In_percentage"
-                                    value={formik.values.Discount_In_percentage}
+                                    label="Discount_In_Percentage"
+                                    name="Discount_In_Percentage"
+                                    value={formik.values.Discount_In_Percentage}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                     type="number"
-                                    error={Boolean(formik.touched.Discount_In_percentage && formik.errors.Discount_In_percentage)}
-                                    helperText={formik.touched.Discount_In_percentage && formik.errors.Discount_In_percentage}
+                                    error={Boolean(formik.touched.Discount_In_Percentage && formik.errors.Discount_In_Percentage)}
+                                    helperText={formik.touched.Discount_In_Percentage && formik.errors.Discount_In_Percentage}
                                 />
                             ) : (
                                 <TextField
                                     fullWidth
                                     margin="dense"
                                     autoComplete="off"
-                                    label="Discount_In_value"
-                                    name="Discount_In_value"
-                                    value={formik.values.Discount_In_value}
+                                    label="Discount_In_Value"
+                                    name="Discount_In_Value"
+                                        value={formik.values.Discount_In_Value}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                     type="number"
-                                    error={Boolean(formik.touched.Discount_In_value && formik.errors.Discount_In_value)}
-                                    helperText={formik.touched.Discount_In_value && formik.errors.Discount_In_value}
+                                        error={Boolean(formik.touched.Discount_In_Value && formik.errors.Discount_In_Value)}
+                                        helperText={formik.touched.Discount_In_Value && formik.errors.Discount_In_Value}
                                 />
                             )}
+
+
+
 
                         </Grid>
 
 
                     </Grid>
-                    <Box sx={{ mt: 2 }}>
-                        <Button variant="contained" type="submit">
-                            Add
-                        </Button>
-                    </Box>
+                    <Button variant="contained" type="submit">
+                        Add
+                    </Button>
+
                 </Box>
+
 
                 <ToastContainer />
             </Box>
@@ -255,4 +265,4 @@ function VoucherAdd() {
 
 
 }
-export default VoucherAdd;
+export default VoucherEdit;

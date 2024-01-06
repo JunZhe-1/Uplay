@@ -16,6 +16,7 @@ function VoucherList() {
     const navigate = useNavigate();
     const [VoucherList, setVoucherList] = useState([]);
     const [search, setSearch] = useState('');
+    const [voucher_id, setid] = useState('');
 
     // get all the voucher first
     useEffect(() => {
@@ -61,9 +62,30 @@ function VoucherList() {
         }
 
     };
+    const [open, setOpen] = useState(false);
+
+    const handleOpen = (id) => {
+        setOpen(true);
+        setid(id);
+        console.log("id: " + id);
+        console.log("voucher: " + voucher_id);
+
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        setid(null)
+    };
+
+    const deleteVoucher = (id) => {
+        http.delete(`/Voucher/delete/${id}`)
+            .then((res) => {
+                setOpen(false);
+                getVoucherList();
+            });
+    };
 
 
-    console.log(VoucherList);
 
 
     return (
@@ -101,31 +123,40 @@ function VoucherList() {
                     </TableHead>
 
                     <TableBody>
-                        {/* {pointList.map((data, index) => ( */}
                             {VoucherList
                                 .sort((a, b) => new Date(a.end_Date) - new Date(b.end_Date))    
                                 .map((data, index) => (
 
 
                                 <TableRow key={index}>
-                                    <TableCell>{data.voucher_Name}</TableCell>
-                                        <TableCell>       {dayjs(data.start_Date).format(global.datetimeFormat)}</TableCell>
-                                        <TableCell>{dayjs(data.end_Date).format(global.datetimeFormat)}</TableCell>
-                                    <TableCell>{data.member_type}</TableCell>
+                                    <TableCell>{data.Voucher_Name}</TableCell>
+                                        <TableCell>       {dayjs(data.Start_Date).format(global.datetimeFormat)}</TableCell>
+                                        <TableCell>{dayjs(data.End_Date).format(global.datetimeFormat)}</TableCell>
+                                        <TableCell>{data.Member_Type}</TableCell>
                                     <TableCell>
                                         <>
-                                            {data.discount_type == "Value" ? (
+                                            {data.Discount_type == "Value" ? (
                                                 <>
-                                                    ${data.discount_In_value}
+                                                    ${data.Discount_In_Value}
                                                 </>
                                             ) : (
                                                 <>
-                                                        {data.discount_In_percentage}%
+                                                        {data.Discount_In_Percentage}%
                                                 </>
                                             )}
                                         </>
 
-                                    </TableCell>
+                                        </TableCell>
+                                        <TableCell> <IconButton color="primary"
+                                            onClick={() => handleOpen(data.Voucher_ID)}>
+                                            <Clear />
+                                        </IconButton></TableCell>
+                                        <TableCell> <Link to={`/Voucher/update/${data.Voucher_ID}`}>
+                                            <IconButton color="primary" sx={{ padding: '4px' }}>
+                                                <Edit />
+                                            </IconButton>
+                                        </Link></TableCell>
+                                       
 
 
 
@@ -136,6 +167,26 @@ function VoucherList() {
                 </Table>
             </TableContainer>
             </Paper>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>
+                    Delete Voucher
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Are you sure you want to Delete this Voucher?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="contained" color="inherit"
+                        onClick={handleClose}>
+                        Cancel
+                    </Button>
+                    <Button variant="contained" color="error"
+                        onClick={() => deleteVoucher(voucher_id)}>
+                         Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
             <ToastContainer /> </Box>
 
 

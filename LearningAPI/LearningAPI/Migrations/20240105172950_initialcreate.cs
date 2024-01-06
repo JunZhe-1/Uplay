@@ -7,12 +7,34 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace LearningAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class initialcreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Events",
+                columns: table => new
+                {
+                    Event_ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Event_Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    Event_Description = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false),
+                    Event_Fee_Guest = table.Column<int>(type: "int", nullable: false),
+                    Event_Fee_Uplay = table.Column<int>(type: "int", nullable: false),
+                    Event_Fee_NTUC = table.Column<int>(type: "int", nullable: false),
+                    Vacancies = table.Column<int>(type: "int", nullable: false),
+                    ImageFile = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Events", x => x.Event_ID);
+                })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
@@ -61,10 +83,10 @@ namespace LearningAPI.Migrations
                     Start_Date = table.Column<DateTime>(type: "datetime", nullable: false),
                     End_Date = table.Column<DateTime>(type: "datetime", nullable: false),
                     Discount_type = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    Discount_In_percentage = table.Column<int>(type: "int", nullable: false),
-                    Discount_In_value = table.Column<int>(type: "int", nullable: false),
+                    Discount_In_Percentage = table.Column<int>(type: "int", nullable: false),
+                    Discount_In_Value = table.Column<int>(type: "int", nullable: false),
                     Create_date = table.Column<DateTime>(type: "datetime", nullable: false),
-                    member_type = table.Column<string>(type: "longtext", nullable: false)
+                    Member_Type = table.Column<string>(type: "longtext", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -129,6 +151,9 @@ namespace LearningAPI.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Events");
+
             migrationBuilder.DropTable(
                 name: "Members");
 
