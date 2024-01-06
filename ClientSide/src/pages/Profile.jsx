@@ -105,7 +105,9 @@ function Profiles() {
 
         }
     }, [user]);
-
+    const handleNavigate = () => {
+        navigate("/buymember");
+    };
 
 
     return (
@@ -174,6 +176,10 @@ function Profiles() {
 
                             <Button variant="contained" color="primary" style={{ marginTop: '20px' }} type="submit">
                                 Update details
+                            </Button>
+
+                            <Button variant="contained" color="primary" style={{ marginTop: '20px', marginLeft:'20px'}}  onClick={handleNavigate}>
+                                Become a Member
                             </Button>
                         </CardContent>
                     </Card>

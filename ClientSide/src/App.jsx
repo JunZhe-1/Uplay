@@ -15,7 +15,7 @@ import Login from './pages/Login';
 import Profile from './pages/Profile';
 import http from './http';
 import UserContext from './contexts/UserContext';
-
+import BuyMember from './pages/BuyMember';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -78,6 +78,8 @@ function App() {
               <Route path={"/login"} element={<Login />} />
               <Route path={"/form"} element={<MyForm />} />
               <Route path={"/profile"} element={<Profile />} />
+              <Route path={"/buymember"} element={<BuyMember />} />
+                          
             </Routes>
           </Container>
         </ThemeProvider>
