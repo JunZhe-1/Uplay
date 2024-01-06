@@ -15,12 +15,9 @@ import Login from './pages/Login';
 import Profile from './pages/Profile';
 import http from './http';
 import UserContext from './contexts/UserContext';
-<<<<<<< Updated upstream
-
-
-=======
 import VoucherEdit from './pages/VoucherEdit';
->>>>>>> Stashed changes
+import EventAdd from './pages/EventAdd';
+
 function App() {
   const [user, setUser] = useState(null);
 
@@ -77,16 +74,16 @@ function App() {
               <Route path={"/addtutorial"} element={<AddTutorial />} />
                           <Route path={"/Voucher/add"} element={<VoucherAdd />} />
                           <Route path={"/Voucher"} element={<VoucherList />} />
-<<<<<<< Updated upstream
-=======
+
                           <Route path={"/Voucher/update/:id"} element={<VoucherEdit />} />
 
->>>>>>> Stashed changes
               <Route path={"/edittutorial/:id"} element={<EditTutorial />} />
               <Route path={"/register"} element={<Register />} />
               <Route path={"/login"} element={<Login />} />
               <Route path={"/form"} element={<MyForm />} />
-              <Route path={"/profile"} element={<Profile />} />
+                          <Route path={"/profile"} element={<Profile />} />
+                          <Route path={"/Event/add_event"} element={<EventAdd />} />
+
             </Routes>
           </Container>
         </ThemeProvider>

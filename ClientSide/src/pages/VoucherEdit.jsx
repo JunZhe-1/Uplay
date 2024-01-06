@@ -43,11 +43,11 @@ function VoucherEdit() {
         http.get(`/Voucher/getOne/${id}`).then((res) => {
             console.log(res.data.Start_Date);
 
-            setVoucher({
+            setVoucher((prevVoucher) => ({
                 ...res.data,
-                Start_Date: new Date(res.data.Start_Date),
-                End_Date: new Date(res.data.End_Date),
-            });        
+                Start_Date: new Date(res.data.Start_Date + 'Z'), 
+                End_Date: new Date(res.data.End_Date + 'Z'),
+            }));    
             
         });
     }, []);
@@ -64,10 +64,10 @@ function VoucherEdit() {
                 .max(100, 'Voucher_Name must be at most 100 characters')
                 .required('Voucher_Name is required'),
             Discount_In_Percentage: yup.number()
-                .min(0, 'Discount Percent cannot below than 0%')
+                .min(1, 'Discount Percent cannot below than 0%')
                 .max(100, 'Discount Percent cannot above 100%'),
             Discount_In_Value: yup.number()
-                .min(0, 'Discount Value cannot below than $0')
+                .min(1, 'Discount Value cannot below than $0')
                 .max(1000, 'Too Much'),
 
             Start_Date: yup.date().required('Start date is required'),

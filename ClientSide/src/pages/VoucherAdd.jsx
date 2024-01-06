@@ -37,7 +37,7 @@ function VoucherAdd() {
             End_Date: null,   // Initialize as null or a default date
             Discount_In_percentage: "",
             Discount_In_value: "",
-            member_type: "Uplay",
+            Member_Type: "Uplay",
             Discount_type: "Percentage",
 
         },
@@ -55,31 +55,9 @@ function VoucherAdd() {
 
             Start_Date: yup.date().required('Start date is required'),
             End_Date: yup.date().required('End date is required'),
-            member_type: yup.string()
+            Member_Type: yup.string()
                 .required('Member type is required')
-<<<<<<< Updated upstream
 
-
-        }),
-        onSubmit: (data) => {
-            data.Voucher_Name = data.Voucher_Name.trim();
-            // data.Start_Date = new Date(data.Start_Date).toISOString();
-            // data.End_Date = new Date(data.End_Date).toISOString();
-            if (data.Discount_type == "Percentage") {
-                data.Discount_In_value = 0
-            }
-            else if (data.Discount_type == "Value") {
-                data.Discount_In_percentage = 0
-            }
-
-            console.log(data.Voucher_Name);
-            console.log(data.Start_Date);
-            console.log(data.End_Date);
-            console.log(data.member_type);
-            console.log(data.Discount_type);
-            console.log(data.Discount_In_percentage);
-            console.log(data.Discount_In_value);
-=======
         }),
         onSubmit: (voucher) => {
             console.log("first state:", voucher);
@@ -94,17 +72,11 @@ function VoucherAdd() {
                 voucher.Discount_In_percentage = parseInt(voucher.Discount_In_percentage);
                 voucher.Discount_In_value = 0;
             }
->>>>>>> Stashed changes
 
             console.log("second state:", voucher);
 
             http.post("/Voucher/add", voucher)
                 .then((res) => {
-<<<<<<< Updated upstream
-                    console.log(res.data);
-=======
-                    console.log(res.voucher);
->>>>>>> Stashed changes
 
                     navigate("/Voucher");
                 })
@@ -124,15 +96,10 @@ function VoucherAdd() {
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
 
-<<<<<<< Updated upstream
             <Box>
                 <Typography variant="h5" sx={{ my: 2 }}>
-                    Add Tutorial
-=======
-        <Box>
-            <Typography variant="h5" sx={{ my: 2 }}>
-                Add Tutorial
->>>>>>> Stashed changes
+                    Add Voucher
+
                 </Typography>
                 <Box component="form" onSubmit={formik.handleSubmit}>
                     <Grid container spacing={2}>
@@ -186,12 +153,12 @@ function VoucherAdd() {
 
 
                             <FormControl fullWidth margin="dense"
-                                error={Boolean(formik.touched.member_type && formik.errors.member_type)}
+                                error={Boolean(formik.touched.Member_Type && formik.errors.Member_Type)}
                             >
-                                <InputLabel htmlFor="member_type">Type of Customer</InputLabel>
+                                <InputLabel htmlFor="Member_Type">Type of Customer</InputLabel>
                                 <Select
-                                    name="member_type"  
-                                    value={formik.values.member_type}
+                                    name="Member_Type"  
+                                    value={formik.values.Member_Type}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                     autoComplete="off"
@@ -200,8 +167,8 @@ function VoucherAdd() {
                                     <MenuItem value="NTUC">NTUC</MenuItem>
                                     <MenuItem value="Guess">Guess</MenuItem>
                                 </Select>
-                                {formik.touched.member_type && formik.errors.member_type && (
-                                    <FormHelperText>{formik.errors.member_type}</FormHelperText>
+                                {formik.touched.Member_Type && formik.errors.Member_Type && (
+                                    <FormHelperText>{formik.errors.Member_Type}</FormHelperText>
                                 )}
                             </FormControl>
 
@@ -265,23 +232,6 @@ function VoucherAdd() {
                                     helperText={formik.touched.Discount_In_value && formik.errors.Discount_In_value}
                                 />
                             )}
-
-
-<<<<<<< Updated upstream
-=======
-
-                       
-                    </Grid>
-                    
-                   
-                </Grid>
-                        <Button variant="contained" type="submit">
-                            Add
-                        </Button>
-
-            </Box>
-               
->>>>>>> Stashed changes
 
                         </Grid>
 

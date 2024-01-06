@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Text.Json.Serialization; // Import this namespace
 
 
 namespace LearningAPI.Models
@@ -21,13 +22,30 @@ namespace LearningAPI.Models
 		public string Event_Description { get; set; } = string.Empty;
 
 		[Range(0,1000), Required]
-		[JsonPropertyName("Event_Fee")]
-		public int Event_Fee { get; set;}
+		[JsonPropertyName("Event_Fee_Guest")]
+		public int Event_Fee_Guest { get; set;}
+
+		[Range(0, 1000), Required]
+		[JsonPropertyName("Event_Fee_Uplay")]
+		public int Event_Fee_Uplay { get; set; }
+
+		[Range(0, 1000), Required]
+		[JsonPropertyName("Event_Fee_NTUC")]
+		public int Event_Fee_NTUC { get; set; }
 
 
 		[Range(0,10000), Required]
 		[JsonPropertyName("Vacancies")]
 		public int Vacancies { get; set;}
+
+
+
+
+		[MaxLength(20)]
+		[JsonPropertyName("ImageFile")]
+
+		public string? ImageFile { get; set; }
+
 
 
 		[Column(TypeName = "datetime")]
@@ -36,12 +54,9 @@ namespace LearningAPI.Models
 
 		[Column(TypeName = "datetime")]
 		[JsonPropertyName("UpdatedAt")]
-
 		public DateTime UpdatedAt { get; set; }
 
-		// foreign key
-		[JsonPropertyName("Category_ID")]
-		public int Category_ID { get; set; }
+	
 
 	}
 }
