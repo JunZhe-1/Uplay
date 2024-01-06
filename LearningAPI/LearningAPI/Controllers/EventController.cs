@@ -29,7 +29,7 @@ namespace LearningAPI.COntrollers
 		{
 			try
 			{
-				//IQueryable<Voucher> result = _context.Vouchers.Include(t => t.Voucher_Name);
+				//IQueryable<Event> result = _context.Events.Include(t => t.Event_Name);
 				IQueryable<Event> result = _context.Events;
 
 				if (search != null)
@@ -40,7 +40,7 @@ namespace LearningAPI.COntrollers
 			}
 			catch (Exception ex)
 			{
-				_logger.LogError(ex, "Error when retrieve the vouchers");
+				_logger.LogError(ex, "Error when retrieve the Events");
 				return StatusCode(500);
 			}
 		}
@@ -81,13 +81,134 @@ namespace LearningAPI.COntrollers
 				}
 				catch (Exception ex)
 				{
-					_logger.LogError(ex, "Error when adding Voucher");
+					_logger.LogError(ex, "Error when adding Event");
 					return StatusCode(500);
 				}
 			
 
 
 		}
+
+
+
+		[HttpGet("getOne/{id}")]
+		public IActionResult Getindividual(int id)
+		{
+			try
+			{
+				Event? myvoucher = _context.Events.Find(id);
+				if (myvoucher == null)
+				{
+					return NotFound();
+				}
+				return Ok(myvoucher);
+
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error when get voucher by id");
+				return StatusCode(500);
+			}
+		}
+
+
+		[HttpPut("update/{id}")]
+		public IActionResult UpdateEvent(int id, Event Event)
+		{
+			try
+			{
+				bool check = false;
+
+
+				var myevent = _context.Events.Find(id);
+
+				// if the Event is not found, enter if statement to return NotFounf()
+				if (myevent == null)
+				{
+					return NotFound();
+				}
+
+
+				if (Event.Event_Name != null && Event.Event_Name != myevent.Event_Name)
+				{
+					myevent.Event_Name = Event.Event_Name;
+				}
+
+				var now = DateTime.Now;
+				if(Event.Event_Fee_Guest != myevent.Event_Fee_Guest)
+				{
+					myevent.Event_Fee_Guest = Event.Event_Fee_Guest;
+				}
+
+				if(Event.Event_Fee_NTUC != myevent.Event_Fee_NTUC)
+				{
+					myevent.Event_Fee_Uplay = Event.Event_Fee_NTUC;
+				}
+				if(Event.Event_Fee_NTUC != myevent.Event_Fee_NTUC)
+				{
+					myevent.Event_Fee_NTUC = Event.Event_Fee_NTUC;
+				}
+
+				if(Event.Event_Description != myevent.Event_Description)
+				{
+					myevent.Event_Description = Event.Event_Description;
+				}
+
+				if(Event.Vacancies != myevent.Vacancies) {
+					myevent.Vacancies = Event.Vacancies;
+						}
+				Event.UpdatedAt = now;
+
+
+				myevent.CreatedAt = DateTime.Now;
+
+				_context.SaveChanges();
+				return Ok(myevent);
+
+
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error when update tutorial");
+				return StatusCode(500);
+			}
+		}
+
+
+
+
+
+
+
+		[HttpDelete("delete/{id}")]
+		public IActionResult DeleteEvents(int id)
+		{
+			try
+			{
+				var myEvent = _context.Events.Find(id);
+
+				if (myEvent == null)
+				{
+					return NotFound();
+				}
+
+				_context.Events.Remove(myEvent);
+				_context.SaveChanges();
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error when delete tutorial");
+				return StatusCode(500);
+			}
+		}
+
+
+
+
+
+
+
 
 
 

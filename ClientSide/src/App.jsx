@@ -17,7 +17,7 @@ import http from './http';
 import UserContext from './contexts/UserContext';
 import VoucherEdit from './pages/VoucherEdit';
 import EventAdd from './pages/EventAdd';
-
+import EventList from './pages/EventList';
 function App() {
   const [user, setUser] = useState(null);
 
@@ -83,6 +83,7 @@ function App() {
               <Route path={"/form"} element={<MyForm />} />
                           <Route path={"/profile"} element={<Profile />} />
                           <Route path={"/Event/add_event"} element={<EventAdd />} />
+                          <Route path={"/Event"} element={<EventList />} />
 
             </Routes>
           </Container>

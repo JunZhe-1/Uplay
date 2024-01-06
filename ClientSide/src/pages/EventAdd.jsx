@@ -76,6 +76,7 @@ function EventAdd() {
         onSubmit: (data) => {
 
             data.Event_Name = data.Event_Name.trim();
+            data.Event_Fee_Guest = data.Event_Fee_Guest;
             if (imageFile) {
                 data.imageFile = imageFile;
             }
@@ -86,7 +87,7 @@ function EventAdd() {
 
             http.post("/Event/add_event", data)
                 .then((res) => {
-
+                    console.log(data);
                    // navigate("/Voucher");
                 })
                 .catch(function (err) {
