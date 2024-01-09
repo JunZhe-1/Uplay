@@ -15,6 +15,8 @@ import Login from './pages/Login';
 import Profile from './pages/Profile';
 import http from './http';
 import UserContext from './contexts/UserContext';
+import BuyMember from './pages/BuyMember';
+
 import VoucherEdit from './pages/VoucherEdit';
 import EventAdd from './pages/EventAdd';
 import EventList from './pages/EventList';
@@ -96,6 +98,9 @@ function App() {
                           <Route path={"/Event/EventClientSide"} element={<EventClientSide />} />
 
 
+              <Route path={"/profile"} element={<Profile />} />
+              <Route path={"/buymember"} element={<BuyMember />} />
+                          
             </Routes>
           </Container>
         </ThemeProvider>

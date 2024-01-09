@@ -32,7 +32,7 @@ namespace LearningAPI.Controllers
 
 
         [HttpPost]
-        public IActionResult AddUser(Member member)
+        public IActionResult AddUser(BuyMemberRequest member)
         {
             var now = DateTime.Now;
             try
@@ -43,8 +43,10 @@ namespace LearningAPI.Controllers
                     UserId = id,
                     NRIC = member.NRIC.Trim(),
                     Name = member.Name.Trim(),
+                    MemberStatus = member.MemberStatus.Trim(),
                     LastSubscriptionDate = now,
                     ExpiredDate = now.AddYears(1),
+
                     
                 };
                 _context.Members.Add(myMember);
