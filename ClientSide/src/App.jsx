@@ -23,6 +23,7 @@ import EventList from './pages/EventList';
 import VoucherListUser from './pages/VoucherListUser';
 import EventEdit from './pages/EventEdit';
 import EventClientSide from './pages/EventClientSide';
+import EventDetail from './pages/EventDetail';
 function App() {
   const [user, setUser] = useState(null);
 
@@ -95,6 +96,8 @@ function App() {
                           <Route path={"/Event/add_event"} element={<EventAdd />} />
                           <Route path={"/Event"} element={<EventList />} />
                           <Route path={"/Event/editevent/:id"} element={<EventEdit />} />
+                          <Route path={"/Event/getEvent/:id"} element={<EventDetail />} />
+
                           <Route path={"/Event/EventClientSide"} element={<EventClientSide />} />
 
 

@@ -19,7 +19,7 @@ namespace LearningAPI.Models
 
 
 
-		[Required, MaxLength(300)]
+		[Required, MaxLength(600)]
 		[JsonPropertyName("Event_Description")]
 		public string Event_Description { get; set; } = string.Empty;
 

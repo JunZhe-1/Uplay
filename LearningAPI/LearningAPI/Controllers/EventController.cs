@@ -90,6 +90,31 @@ namespace LearningAPI.COntrollers
 
 
 
+
+
+		//[HttpGet("getone/{id}")]
+		//public IActionResult getEventClient(int id)
+		//{
+
+		//	try
+		//	{
+		//		Event? myevent = _context.Events.Find(id);
+		//		if(myevent == null)
+		//		{
+		//			return NotFound();
+		//		}
+		//		return Ok(myevent);
+		//	}
+
+		//	catch (Exception ex)
+		//	{
+		//		_logger.LogError(ex, "Error when get voucher by id");
+		//		return StatusCode(500);
+		//	}
+
+		//}
+
+
 		[HttpGet("getEvent/{id}")]
 		public IActionResult Getindividual(int id)
 		{
@@ -117,13 +142,7 @@ namespace LearningAPI.COntrollers
 			try
 			{
 
-				if (Event.ImageFile == null || Event.ImageFile.Trim() == "")
-				{
-
-					string message = "Image is required for voucher";
-					return BadRequest(new { message });
-				}
-
+			
 
 				string fileExtension = Path.GetExtension(Event.ImageFile);
 				string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" }; 
@@ -140,6 +159,17 @@ namespace LearningAPI.COntrollers
 				if (myevent == null)
 				{
 					return NotFound();
+				}
+
+				if (myevent.ImageFile == null || Event.ImageFile.Trim() == "")
+				{
+
+					string message = "Image is required for voucher";
+					return BadRequest(new { message });
+				}
+				else
+				{
+					myevent.ImageFile = Event.ImageFile.Trim();
 				}
 
 
@@ -172,7 +202,7 @@ namespace LearningAPI.COntrollers
 					myevent.Event_Fee_Uplay = Event.Event_Fee_Uplay;
 				}
 
-				if(Event.Event_Description != myevent.Event_Description)
+				if(Event.Event_Description.Trim() != myevent.Event_Description)
 				{
 					myevent.Event_Description = Event.Event_Description;
 				}

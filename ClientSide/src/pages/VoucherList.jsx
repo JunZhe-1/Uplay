@@ -13,7 +13,6 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
 import global from '../global';
-import Tutorials from './Tutorials';
 
 function VoucherList() {
     const navigate = useNavigate();

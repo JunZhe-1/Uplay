@@ -42,7 +42,6 @@ function EventEdit() {
         Event_Fee_Uplay: 0,
         Event_Fee_NTUC: 0,
         Vacancies: 0,
-        imageFile: ""
     });
 
     useEffect(() => {
@@ -59,33 +58,35 @@ function EventEdit() {
         enableReinitialize: true,
         validationSchema: yup.object({
             Event_Name: yup.string().trim()
-                .min(3, 'Event_Name must be at least 3 characters')
-                .max(100, 'Event_Name must be at most 100 characters')
-                .required('Event_Name is required'),
+                .min(3, 'Event Name must be at least 3 characters')
+                .max(50, 'Event Name must be at most 50 characters')
+                .required('Event Name is required'),
             Event_Description: yup.string().trim()
-                .min(3, 'Event_Description must be at least 3 characters')
-                .max(300, 'Event_Description must be at most 100 characters')
-                .required('Event_Description is required'),
+                .min(3, 'Event Description must be at least 3 characters')
+                .max(600, 'Event Description must be at most 300 characters')
+                .required('Event Description is required'),
             Event_Location: yup.string().trim()
                 .min(3, 'Event location format error')
-                .max(50, 'Event location error')
+                .max(300, 'Event location error')
                 .required('Event location is required'),
             Event_Fee_Guest: yup.number()
-                .min(0, 'Event_Fee_Guest Percent cannot below than 0%')
-                .max(10000, 'Event_Fee_Guest Percent cannot above 100%')
-                .required('Event_Name is required'),
+                .min(0, 'Event Fee Guest Percent cannot below than 0')
+                .max(1000, 'Event Fee Guest Percent cannot above 1000')
+                .required('Event Fee Guest  is required'),
             Event_Fee_Uplay: yup.number()
-                .min(0, 'Event_Fee_Guest Percent cannot below than 0%')
-                .max(10000, 'Event_Fee_Guest Percent cannot above 100%')
-                .required('Event_Name is required'),
+                .min(0, 'Event Fee Uplay Percent cannot below than 0')
+                .max(1000, 'Event Fee Uplay Percent cannot above 1000')
+                .required('Event Fee Uplay is required'),
             Event_Fee_NTUC: yup.number()
-                .min(0, 'Event_Fee_Guest Percent cannot below than 0%')
-                .max(10000, 'Event_Fee_Guest Percent cannot above 100%')
+                .min(0, 'Event Fee Ntuc Percent cannot below than 0')
+                .max(1000, 'Event Fee Ntuc Percent cannot above 1000')
                 .required('Event_Name is required'),
 
             Vacancies: yup.number()
                 .min(1, 'Vacancies Value cannot below than $0')
-                .required('Event_Name is required')
+                .max(10000, 'too much')
+                .required('Event_Name is required'),
+
         }),
         onSubmit: (data) => {
             data.Event_Name = data.Event_Name.trim();
@@ -93,11 +94,12 @@ function EventEdit() {
             data.Event_Location = data.Event_Location.trim();
             if (imageFile) {
                 data.imageFile = imageFile;
-
+                
             }
             http.put(`/Event/update/${id}`, data)
                 .then((res) => {
                     console.log(res.data);
+                    console.log(res.data.imageFile);
                     navigate("/Event");
                 })
                 .catch(function (err) {
@@ -185,9 +187,11 @@ function EventEdit() {
                                 onBlur={formik.handleBlur}
                                 autoComplete="off"
                             >
+                                <MenuItem value="Dine & Wine">Dine & Wine</MenuItem>
+                                <MenuItem value="Family Bonding">Family Bonding</MenuItem>
+                                <MenuItem value="Hobbies & Wellness">Hobbies & Wellness</MenuItem>
                                 <MenuItem value="Sports & Wellness">Sports & Wellness</MenuItem>
-                                <MenuItem value="NTUC">NTUC</MenuItem>
-                                <MenuItem value="Guest">Guest</MenuItem>
+                                <MenuItem value="Travel">Travel</MenuItem>
                             </Select>
                             {formik.touched.Event_Category && formik.errors.Event_Category && (
                                 <FormHelperText>{formik.errors.Event_Category}</FormHelperText>
