@@ -15,18 +15,27 @@ namespace LearningAPI.Models
 		public int Voucher_ID { get; set; }
 
 		[MaxLength(50)]
+		[Required]
 		[JsonPropertyName("Voucher_Name")]
 		public string Voucher_Name { get; set; } = string.Empty;
 
+		[MaxLength(50)]
+		[Required]
+		[JsonPropertyName("Voucher_Description")]
+		public string Voucher_Description { get; set; } = string.Empty;
+
 		[Column(TypeName = "datetime")]
+		[Required]
 		[JsonPropertyName("Start_Date")]
 		public DateTime Start_Date { get; set; }
 
+		[Required]
 		[Column(TypeName = "datetime")]
 		[JsonPropertyName("End_Date")]
 		public DateTime End_Date { get; set; }
 
 		[MaxLength(50)]
+		[Required]
 		[JsonPropertyName("Discount_type")]
 		public string Discount_type { get; set; } = string.Empty;
 
@@ -39,6 +48,14 @@ namespace LearningAPI.Models
 		[Column(TypeName = "datetime")]
 		[JsonPropertyName("Create_date")]
 		public DateTime Create_date { get; set; }
+
+
+
+		[MaxLength(20)]
+
+		[JsonPropertyName("ImageFile")]
+
+		public string? ImageFile { get; set; }
 
 		// Foreign key property
 		// Use it for member type

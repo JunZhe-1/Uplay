@@ -14,7 +14,7 @@ import {
     MenuItem,
     FormHelperText
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -26,25 +26,37 @@ import 'react-toastify/dist/ReactToastify.css';
 import UserContext from '../contexts/UserContext';
 import da from 'date-fns/locale/da';
 
-
-function EventAdd() {
-
+function EventEdit() {
+    const { id } = useParams();
     const navigate = useNavigate();
     const [imageFile, setimageFile] = useState(null);
 
 
-    const formik = useFormik({
-        initialValues: {
-            Event_Name: "",
-            Event_Description: "",
-            Event_Location: "",
-            Event_Category:"Sports & Wellness",
-            Event_Fee_Guest: 0,   
-            Event_Fee_Uplay: 0, 
-            Event_Fee_NTUC: 0,
-            Vacancies: 0,
+    const [Eventinfo, setEvent] = useState({
+        Event_Name: "",
+        Event_Description: "",
+        Event_Location: "",
+        Event_Category: "Sports & Wellness",
 
-        },
+        Event_Fee_Guest: 0,  
+        Event_Fee_Uplay: 0,
+        Event_Fee_NTUC: 0,
+        Vacancies: 0,
+        imageFile: ""
+    });
+
+    useEffect(() => {
+        http.get(`/Event/getEvent/${id}`).then((res) => {
+            setimageFile(res.data.imageFile);
+            setEvent(res.data);
+
+        });
+    }, []);
+
+
+    const formik = useFormik({
+        initialValues: Eventinfo,
+        enableReinitialize: true,
         validationSchema: yup.object({
             Event_Name: yup.string().trim()
                 .min(3, 'Event_Name must be at least 3 characters')
@@ -61,53 +73,41 @@ function EventAdd() {
             Event_Fee_Guest: yup.number()
                 .min(0, 'Event_Fee_Guest Percent cannot below than 0%')
                 .max(10000, 'Event_Fee_Guest Percent cannot above 100%')
-                .required('Event_Name is required'),            
+                .required('Event_Name is required'),
             Event_Fee_Uplay: yup.number()
                 .min(0, 'Event_Fee_Guest Percent cannot below than 0%')
                 .max(10000, 'Event_Fee_Guest Percent cannot above 100%')
-                .required('Event_Name is required'),            
+                .required('Event_Name is required'),
             Event_Fee_NTUC: yup.number()
                 .min(0, 'Event_Fee_Guest Percent cannot below than 0%')
                 .max(10000, 'Event_Fee_Guest Percent cannot above 100%')
                 .required('Event_Name is required'),
-            
+
             Vacancies: yup.number()
                 .min(1, 'Vacancies Value cannot below than $0')
-                .required('Event_Name is required'),
-
-            
-
-
+                .required('Event_Name is required')
         }),
         onSubmit: (data) => {
-
             data.Event_Name = data.Event_Name.trim();
             data.Event_Description = data.Event_Description.trim();
             data.Event_Location = data.Event_Location.trim();
-            data.Event_Fee_Guest = data.Event_Fee_Guest;
             if (imageFile) {
                 data.imageFile = imageFile;
+
             }
-            console.log(data);
-            
-         
-
-
-            http.post("/Event/add_event", data)
+            http.put(`/Event/update/${id}`, data)
                 .then((res) => {
-                    console.log(data);
+                    console.log(res.data);
                     navigate("/Event");
                 })
                 .catch(function (err) {
-
-
                     toast.error(`${err.response.data.message}`);
                 })
 
         }
     });
 
-    console.log(formik);
+
 
     const onFileChange = (e) => {
         let file = e.target.files[0];
@@ -135,14 +135,12 @@ function EventAdd() {
         }
     };
 
-
-
     return (
 
-
+    
         <Box>
             <Typography variant="h5" sx={{ my: 2 }}>
-                Add Event
+                Edit Event
 
             </Typography>
             <Box component="form" onSubmit={formik.handleSubmit}>
@@ -160,10 +158,11 @@ function EventAdd() {
                             error={Boolean(formik.touched.Event_Name && formik.errors.Event_Name)}
                             helperText={formik.touched.Event_Name && formik.errors.Event_Name}
                         />
+
                         <TextField
                             fullWidth
                             multiline
-                            rows={4} 
+                            rows={4}
                             margin="dense"
                             autoComplete="off"
                             label="Event Description"
@@ -174,7 +173,6 @@ function EventAdd() {
                             error={Boolean(formik.touched.Event_Description && formik.errors.Event_Description)}
                             helperText={formik.touched.Event_Description && formik.errors.Event_Description}
                         />
-
 
                         <FormControl fullWidth margin="dense"
                             error={Boolean(formik.touched.Event_Category && formik.errors.Event_Category)}
@@ -208,6 +206,7 @@ function EventAdd() {
                             error={Boolean(formik.touched.Event_Location && formik.errors.Event_Location)}
                             helperText={formik.touched.Event_Location && formik.errors.Event_Location}
                         />
+
 
                         <Grid container spacing={2}>
                             <Grid item xs={4}>
@@ -297,7 +296,7 @@ function EventAdd() {
                     </Grid>
 
 
-               
+
 
                 </Grid>
                 <Box sx={{ mt: 5 }}>
@@ -309,7 +308,9 @@ function EventAdd() {
 
             <ToastContainer />
         </Box>
-        );
+    );
 
 }
-export default EventAdd;
+
+
+export default EventEdit;

@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace LearningAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class initialcreate : Migration
+    public partial class hello : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,6 +23,8 @@ namespace LearningAPI.Migrations
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Event_Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     Event_Description = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false),
+                    Event_Category = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    Event_Location = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false),
                     Event_Fee_Guest = table.Column<int>(type: "int", nullable: false),
                     Event_Fee_Uplay = table.Column<int>(type: "int", nullable: false),
                     Event_Fee_NTUC = table.Column<int>(type: "int", nullable: false),
@@ -80,12 +82,14 @@ namespace LearningAPI.Migrations
                     Voucher_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Voucher_Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    Voucher_Description = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     Start_Date = table.Column<DateTime>(type: "datetime", nullable: false),
                     End_Date = table.Column<DateTime>(type: "datetime", nullable: false),
                     Discount_type = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     Discount_In_Percentage = table.Column<int>(type: "int", nullable: false),
                     Discount_In_Value = table.Column<int>(type: "int", nullable: false),
                     Create_date = table.Column<DateTime>(type: "datetime", nullable: false),
+                    ImageFile = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false),
                     Member_Type = table.Column<string>(type: "longtext", nullable: false)
                 },
                 constraints: table =>

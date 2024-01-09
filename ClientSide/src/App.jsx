@@ -18,6 +18,9 @@ import UserContext from './contexts/UserContext';
 import VoucherEdit from './pages/VoucherEdit';
 import EventAdd from './pages/EventAdd';
 import EventList from './pages/EventList';
+import VoucherListUser from './pages/VoucherListUser';
+import EventEdit from './pages/EventEdit';
+import EventClientSide from './pages/EventClientSide';
 function App() {
   const [user, setUser] = useState(null);
 
@@ -53,14 +56,17 @@ function App() {
                   <Link to="/profile">
                     <Typography>{user.userName}</Typography>
                   </Link>
-                    <Button onClick={logout}>Logout</Button>
+                                      <Button onClick={logout}>Logout</Button>
+                                      <Link to="/Voucher/uservoucher/:id" ><Typography>Vouchers User</Typography></Link>
+
                   </>
                 )
                 }
                 {!user && (
                   <>
                     <Link to="/register" ><Typography>Register</Typography></Link>
-                    <Link to="/login" ><Typography>Login</Typography></Link>
+                                      <Link to="/login" ><Typography>Login</Typography></Link>
+
                   </>
                 )}
               </Toolbar>
@@ -76,14 +82,19 @@ function App() {
                           <Route path={"/Voucher"} element={<VoucherList />} />
 
                           <Route path={"/Voucher/update/:id"} element={<VoucherEdit />} />
+                          <Route path={"/Voucher/uservoucher/:id"} element={<VoucherListUser />} />
 
               <Route path={"/edittutorial/:id"} element={<EditTutorial />} />
               <Route path={"/register"} element={<Register />} />
               <Route path={"/login"} element={<Login />} />
               <Route path={"/form"} element={<MyForm />} />
+
                           <Route path={"/profile"} element={<Profile />} />
                           <Route path={"/Event/add_event"} element={<EventAdd />} />
                           <Route path={"/Event"} element={<EventList />} />
+                          <Route path={"/Event/editevent/:id"} element={<EventEdit />} />
+                          <Route path={"/Event/EventClientSide"} element={<EventClientSide />} />
+
 
             </Routes>
           </Container>

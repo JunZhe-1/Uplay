@@ -8,3 +8,52 @@
   color: inherit;
   margin-left: 12px;
 }
+
+
+
+.AppBar1 a {
+    color: #E6533F;
+    text-decoration: none;
+    margin-right: auto;
+    border-radius: 10px;
+    border: solid 2px #E6533F;
+    margin-left: auto;
+    padding: 8px 20px 8px 20px;
+    transition: transform 0.3s ease-in-out; 
+    
+}
+    .AppBar1 a:hover {
+        background-color: #E6533F;
+        color: white; 
+        transform: scale(1.1);
+    }
+.AppBar1 button {
+    color: black;
+    margin-left: auto;
+}
+
+
+.AppBar2 button {
+    color: #E6533F;
+    text-decoration: none;
+    margin-right: 30px;
+    border-radius: 10px;
+    border: solid 2px #E6533F;
+    padding: 8px 20px 8px 20px;
+    transition: transform 0.3s ease-in-out;
+}
+
+    .AppBar2 button:hover {
+        background-color: #E6533F;
+        color: white;
+        transform: scale(1.1);
+    }
+
+.AppBar2 Button {
+    margin-left: 12px;
+}
+
+
+/* Your styles.css file */
+/* VoucherListUser.css */
+

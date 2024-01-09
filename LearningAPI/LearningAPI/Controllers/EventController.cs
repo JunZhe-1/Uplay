@@ -24,27 +24,6 @@ namespace LearningAPI.COntrollers
 			_logger = logger;
 		}
 
-		[HttpGet]
-		public IActionResult GetAll(String? search)
-		{
-			try
-			{
-				//IQueryable<Event> result = _context.Events.Include(t => t.Event_Name);
-				IQueryable<Event> result = _context.Events;
-
-				if (search != null)
-				{
-					result = result.Where(x => x.Event_Name.Contains(search));
-				}
-				return Ok(result);
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError(ex, "Error when retrieve the Events");
-				return StatusCode(500);
-			}
-		}
-
 
 
 
@@ -57,16 +36,36 @@ namespace LearningAPI.COntrollers
 
 				try
 				{
-					//int userId = GetUserId();
+				//int userId = GetUserId();
 
 
-					var myEvent = new Event()
-					{
-						Event_Name = events.Event_Name,
-						Event_Description = events.Event_Description,
-						Event_Fee_Guest = events.Event_Fee_Guest,
-						Event_Fee_NTUC = events.Event_Fee_NTUC,
-						Event_Fee_Uplay = events.Event_Fee_Uplay,
+				if (events.ImageFile == null || events.ImageFile.Trim() == "")
+				{
+
+					string message = "Image is required for voucher";
+					return BadRequest(new { message });
+				}
+
+
+				string fileExtension = Path.GetExtension(events.ImageFile);
+				string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
+
+				if (!allowedExtensions.Contains(fileExtension, StringComparer.OrdinalIgnoreCase))
+				{
+					string message = "only image is allowedf";
+					return BadRequest(new { message });
+				}
+
+
+				var myEvent = new Event()
+				{
+					Event_Name = events.Event_Name,
+					Event_Description = events.Event_Description,
+					Event_Fee_Guest = events.Event_Fee_Guest,
+					Event_Fee_NTUC = events.Event_Fee_NTUC,
+					Event_Fee_Uplay = events.Event_Fee_Uplay,
+					Event_Location = events.Event_Location,
+					Event_Category = events.Event_Category,
 						Vacancies = events.Vacancies,
 						ImageFile = events.ImageFile,
 						CreatedAt = now,
@@ -91,22 +90,22 @@ namespace LearningAPI.COntrollers
 
 
 
-		[HttpGet("getOne/{id}")]
+		[HttpGet("getEvent/{id}")]
 		public IActionResult Getindividual(int id)
 		{
 			try
 			{
-				Event? myvoucher = _context.Events.Find(id);
-				if (myvoucher == null)
+				Event? myevent = _context.Events.Find(id);
+				if (myevent == null)
 				{
 					return NotFound();
 				}
-				return Ok(myvoucher);
+				return Ok(myevent);
 
 			}
 			catch (Exception ex)
 			{
-				_logger.LogError(ex, "Error when get voucher by id");
+				_logger.LogError(ex, "Error when get event by id");
 				return StatusCode(500);
 			}
 		}
@@ -117,8 +116,23 @@ namespace LearningAPI.COntrollers
 		{
 			try
 			{
-				bool check = false;
 
+				if (Event.ImageFile == null || Event.ImageFile.Trim() == "")
+				{
+
+					string message = "Image is required for voucher";
+					return BadRequest(new { message });
+				}
+
+
+				string fileExtension = Path.GetExtension(Event.ImageFile);
+				string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" }; 
+
+				if (!allowedExtensions.Contains(fileExtension, StringComparer.OrdinalIgnoreCase))
+				{
+					string message = "only image is allowedf";
+					return BadRequest(new { message });
+				}
 
 				var myevent = _context.Events.Find(id);
 
@@ -133,20 +147,29 @@ namespace LearningAPI.COntrollers
 				{
 					myevent.Event_Name = Event.Event_Name;
 				}
+				if(Event.Event_Location != null && Event.Event_Location.Trim() != myevent.Event_Location)
+				{
+					myevent.Event_Location = Event.Event_Location;
+				}
+				if(Event.Event_Category != null && Event.Event_Category != myevent.Event_Category)
+				{
+					myevent.Event_Category = Event.Event_Category;
+				}
 
 				var now = DateTime.Now;
 				if(Event.Event_Fee_Guest != myevent.Event_Fee_Guest)
 				{
 					myevent.Event_Fee_Guest = Event.Event_Fee_Guest;
 				}
+				
 
 				if(Event.Event_Fee_NTUC != myevent.Event_Fee_NTUC)
 				{
-					myevent.Event_Fee_Uplay = Event.Event_Fee_NTUC;
-				}
-				if(Event.Event_Fee_NTUC != myevent.Event_Fee_NTUC)
-				{
 					myevent.Event_Fee_NTUC = Event.Event_Fee_NTUC;
+				}
+				if(Event.Event_Fee_Uplay != myevent.Event_Fee_Uplay)
+				{
+					myevent.Event_Fee_Uplay = Event.Event_Fee_Uplay;
 				}
 
 				if(Event.Event_Description != myevent.Event_Description)
@@ -157,10 +180,10 @@ namespace LearningAPI.COntrollers
 				if(Event.Vacancies != myevent.Vacancies) {
 					myevent.Vacancies = Event.Vacancies;
 						}
-				Event.UpdatedAt = now;
+				//Event.UpdatedAt = now;
 
 
-				myevent.CreatedAt = DateTime.Now;
+				myevent.UpdatedAt = DateTime.Now;
 
 				_context.SaveChanges();
 				return Ok(myevent);
@@ -202,6 +225,55 @@ namespace LearningAPI.COntrollers
 				return StatusCode(500);
 			}
 		}
+
+
+		// get event and show in the home page
+
+		[HttpGet]
+		public IActionResult GetAll(String? search)
+		{
+			try
+			{
+				IQueryable<Event> result = _context.Events;
+
+				if (search != null)
+				{
+					result = result.Where(x => x.Event_Name.Contains(search));
+				}
+				return Ok(result);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error when retrieve the Events");
+				return StatusCode(500);
+			}
+		}
+
+		// when user click an event, enter the page and show the event in detail
+
+		[HttpGet("Event/{id}")]
+		public IActionResult GetAll(int? id)
+		{
+			try
+			{
+				Event? result = _context.Events.Find(id);
+
+				if (result == null)
+				{
+					return NotFound();
+				}
+				return Ok(result);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error when retrieve the Events");
+				return StatusCode(500);
+			}
+		}
+
+
+
+	
 
 
 

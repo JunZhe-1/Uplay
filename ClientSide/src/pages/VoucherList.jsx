@@ -9,6 +9,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import { AccountCircle, AccessTime, Search, Settings, Clear, Visibility, Edit, Delete, Block } from '@mui/icons-material';
 import http from '../http';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
+
 import global from '../global';
 import Tutorials from './Tutorials';
 
@@ -24,7 +27,7 @@ function VoucherList() {
     }, []);
 
     const getVoucherList = () => {
-        http.get('/Voucher').then((res) => {
+        http.get('/Voucher/admin').then((res) => {
             setVoucherList(res.data);
 
         })
@@ -56,7 +59,7 @@ function VoucherList() {
 
     const searchsender = () => {
         if (search.trim() !== '') {
-            http.get(`/Voucher?search=${search}`).then((res) => {
+            http.get(`/Voucher/admin?search=${search}`).then((res) => {
                 setVoucherList(res.data);
             });
         }
@@ -112,7 +115,8 @@ function VoucherList() {
             <TableContainer sx={{ maxHeight: 440 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
-                        <TableRow>
+                            <TableRow>
+                                <TableCell>imageFile</TableCell>
                             <TableCell>Voucher Name</TableCell>
                             <TableCell>Start Date</TableCell>
                             <TableCell>End Date</TableCell>
@@ -128,10 +132,22 @@ function VoucherList() {
                                 .map((data, index) => (
 
 
-                                <TableRow key={index}>
+                                    <TableRow key={index}>
+                                        <TableCell style={{ width: '20%', height: '20%' }}> {
+                                            data.ImageFile && (
+                                                <Box  >
+                                                    <img
+                                                        alt="tutorial"
+                                                        src={`${import.meta.env.VITE_FILE_BASE_URL}${data.ImageFile}`}
+                                                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px' }}
+                                                    />
+
+                                                </Box>
+                                            )
+                                        }</TableCell>
                                     <TableCell>{data.Voucher_Name}</TableCell>
-                                        <TableCell>       {dayjs(data.Start_Date).format(global.datetimeFormat)}</TableCell>
-                                        <TableCell>{dayjs(data.End_Date).format(global.datetimeFormat)}</TableCell>
+                                        <TableCell>{dayjs.utc(data.Start_Date).format(global.datetimeFormat)}</TableCell>
+                                        <TableCell>{dayjs.utc(data.End_Date).format(global.datetimeFormat)}</TableCell>
                                         <TableCell>{data.Member_Type}</TableCell>
                                     <TableCell>
                                         <>
