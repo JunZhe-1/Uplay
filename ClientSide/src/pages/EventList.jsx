@@ -114,7 +114,7 @@ function EventList() {
                 </IconButton>
                 <Box sx={{ flexGrow: 1 }} />
                 {
-                    user.userName == "admin" && (
+                        user.emailAddress.toLowerCase() === "admin@gmail.com" && (
                         <Link to="/Event/add_event" style={{ textDecoration: 'none' }}>
                             <Button variant='contained'>
                                 Add

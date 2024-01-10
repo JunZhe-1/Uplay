@@ -112,7 +112,7 @@ function VoucherList() {
                 <Box sx={{ flexGrow: 1 }} />
 
                 {
-                    user.userName == "admin" && (
+                    user.emailAddress.toLowerCase() === "admin@gmail.com" &&(
                         <Link to="/Voucher/add" style={{ textDecoration: 'none' }}>
                             <Button variant='contained'>
                                 Add

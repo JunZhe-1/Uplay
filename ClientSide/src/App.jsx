@@ -25,6 +25,7 @@ import VoucherListUser from './pages/VoucherListUser';
 import EventEdit from './pages/EventEdit';
 import EventClientSide from './pages/EventClientSide';
 import EventDetail from './pages/EventDetail';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 function App() {
     const [user, setUser] = useState(null);
 
@@ -99,8 +100,8 @@ function App() {
                                                   aria-expanded={open ? 'true' : undefined}
                                                   onClick={handleClick}
                                                   sx={{ color: '#8C1AFF' }}
-                                              >
-                                                  {user.userName}
+                                              >      <AccountCircleIcon sx={{ fontSize: '30px' }} />
+
                                               </Button>
                                               <Menu
                                                   id="fade-menu"
