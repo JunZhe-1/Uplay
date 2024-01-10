@@ -1,5 +1,5 @@
 import './App.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Container, AppBar, Toolbar, Typography, Box, Button } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
@@ -25,15 +25,17 @@ import EventEdit from './pages/EventEdit';
 import EventClientSide from './pages/EventClientSide';
 import EventDetail from './pages/EventDetail';
 function App() {
-  const [user, setUser] = useState(null);
+    const [user, setUser] = useState(null);
+
+
 
   useEffect(() => {
     if (localStorage.getItem("accessToken")) {
         http.get('/UplayUser/auth').then((res) => {
-        setUser(res.data.user);
+            setUser(res.data.user);
       });
     }
-  }, []);
+  }, []);   
 
   const logout = () => {
     localStorage.clear();
