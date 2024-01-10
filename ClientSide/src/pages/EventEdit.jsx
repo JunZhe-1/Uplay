@@ -14,6 +14,8 @@ import {
     MenuItem,
     FormHelperText
 } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+
 import { useParams, useNavigate } from 'react-router-dom';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -70,22 +72,23 @@ function EventEdit() {
                 .max(300, 'Event location error')
                 .required('Event location is required'),
             Event_Fee_Guest: yup.number()
-                .min(0, 'Event Fee Guest Percent cannot below than 0')
+                .min(1, 'Event Fee Guest Percent cannot below than 1')
                 .max(1000, 'Event Fee Guest Percent cannot above 1000')
-                .required('Event Fee Guest  is required'),
+                .required('Event Fee Guest is required'),
             Event_Fee_Uplay: yup.number()
-                .min(0, 'Event Fee Uplay Percent cannot below than 0')
+                .min(1, 'Event Fee Uplay Percent cannot below than 1')
                 .max(1000, 'Event Fee Uplay Percent cannot above 1000')
                 .required('Event Fee Uplay is required'),
             Event_Fee_NTUC: yup.number()
-                .min(0, 'Event Fee Ntuc Percent cannot below than 0')
+                .min(1, 'Event Fee Ntuc Percent cannot below than 1')
                 .max(1000, 'Event Fee Ntuc Percent cannot above 1000')
                 .required('Event_Name is required'),
 
             Vacancies: yup.number()
-                .min(1, 'Vacancies Value cannot below than $0')
-                .max(10000, 'too much')
-                .required('Event_Name is required'),
+                .min(1, 'Vacancies Value cannot below than 0')
+                .max(10000, 'maximun is 10000')
+                .required('Vacancies is required'),
+
 
         }),
         onSubmit: (data) => {
@@ -304,9 +307,17 @@ function EventEdit() {
 
                 </Grid>
                 <Box sx={{ mt: 5 }}>
-                    <Button variant="contained" type="submit">
-                        Add
+                    <Button variant="contained" type="submit" style={{ width: '100%' }}>
+                        Add Event
                     </Button>
+                </Box>
+                <Box sx={{ mt: 1 }}>
+                    <Link to="/Event" sx={{ color: 'white', textDecoration: 'none' }}>
+                        <Button variant="contained" style={{ width: '100%' }}>
+                            Cancel
+                        </Button>
+                    </Link>
+
                 </Box>
             </Box>
 

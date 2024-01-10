@@ -11,6 +11,7 @@ import http from '../http';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
+import UserContext from '../contexts/UserContext';
 
 import global from '../global';
 
@@ -19,6 +20,8 @@ function VoucherList() {
     const [VoucherList, setVoucherList] = useState([]);
     const [search, setSearch] = useState('');
     const [voucher_id, setid] = useState('');
+    const { user } = useContext(UserContext);
+
 
     // get all the voucher first
     useEffect(() => {
@@ -105,7 +108,18 @@ function VoucherList() {
             </IconButton>
             <IconButton color="primary" onClick={onClickClear}>
                 <Clear />
-            </IconButton>
+                </IconButton>
+                <Box sx={{ flexGrow: 1 }} />
+
+                {
+                    user.userName == "admin" && (
+                        <Link to="/Voucher/add" style={{ textDecoration: 'none' }}>
+                            <Button variant='contained'>
+                                Add
+                            </Button>
+                        </Link>
+                    )
+                }
         </Box>
 
 

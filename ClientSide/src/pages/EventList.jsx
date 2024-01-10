@@ -12,6 +12,7 @@ import http from '../http';
 import dayjs from 'dayjs';
 import global from '../global';
 import Tutorials from './Tutorials';
+import UserContext from '../contexts/UserContext';
 
 
 
@@ -19,6 +20,8 @@ function EventList() {
     const navigate = useNavigate();
     const [EventList, setEventList] = useState([]);
     const [search, setSearch] = useState('');
+    const { user } = useContext(UserContext);
+
     const [voucher_id, setid] = useState('');
 
 
@@ -109,9 +112,22 @@ function EventList() {
                 <IconButton color="primary" onClick={onClickClear}>
                     <Clear />
                 </IconButton>
+                <Box sx={{ flexGrow: 1 }} />
+                {
+                    user.userName == "admin" && (
+                        <Link to="/Event/add_event" style={{ textDecoration: 'none' }}>
+                            <Button variant='contained'>
+                                Add
+                            </Button>
+                        </Link>
+                    )
+                }
             </Box>
 
-               
+
+
+            
+            
 
 
             <Paper sx={{ width: '100%', overflow: 'hidden'}}>
@@ -119,14 +135,14 @@ function EventList() {
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>imageFile</TableCell>
-                                <TableCell> Name</TableCell>
-                                <TableCell>Location</TableCell>
-                                <TableCell>Category</TableCell>
-                                <TableCell style={{ textAlign: 'center' }} >GUEST / NTUC / Uplay Price</TableCell>
-                 
-                                <TableCell>Vacancy</TableCell>
-
+                                <TableCell style={{ width: '20%' }}>Image</TableCell>
+                                <TableCell style={{ width: '20%' }}>Name</TableCell>
+                                <TableCell style={{ width: '20%' }}>Location</TableCell>
+                                <TableCell style={{ width: '20%' }}>Category</TableCell>
+                                <TableCell style={{ width: '20%', textAlign: 'center' }}>GUEST / NTUC / Uplay Price</TableCell>
+                                <TableCell style={{ width: '20%' }}>Vacancy</TableCell>
+                                <TableCell style={{ width: '20%' }}></TableCell>
+                                <TableCell style={{ width: '20%' }}></TableCell>
                             </TableRow>
                         </TableHead>
 
@@ -134,47 +150,43 @@ function EventList() {
                             {EventList
                                 .sort((a, b) => new Date(a.UpdatedAt) - new Date(b.UpdatedAt))
                                 .map((data, index) => (
-
-
                                     <TableRow key={index}>
-                                        <TableCell style={{ width: '20%', height: '20%' }}> {
-                                            data.imageFile && (
-                                                <Box  >
+                                        <TableCell style={{ width: '20%' }}>
+                                            {data.imageFile && (
+                                                <Box>
                                                     <img
                                                         alt="tutorial"
                                                         src={`${import.meta.env.VITE_FILE_BASE_URL}${data.imageFile}`}
                                                         style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px' }}
                                                     />
-
                                                 </Box>
-                                            )
-                                        }</TableCell>
-                                        <TableCell>{data.Event_Name}</TableCell>
-                                        <TableCell>{data.Event_Location}</TableCell>
-                                        <TableCell>{data.Event_Category}</TableCell>
-                                        <TableCell style={{ textAlign: 'center' }}>${data.Event_Fee_Guest}&nbsp;   ${data.Event_Fee_NTUC}&nbsp;   ${data.Event_Fee_Uplay}</TableCell>
-                   
-                                        <TableCell>{data.Vacancies} Vacancies</TableCell>
-
-                                        <TableCell> <IconButton color="primary"
-                                            onClick={() => handleOpen(data.Event_ID)}>
-                                            <Clear />
-                                        </IconButton></TableCell>
-                                        <TableCell> <Link to={`/Event/editevent/${data.Event_ID}`}>
-                                            <IconButton color="primary" sx={{ padding: '4px' }}>
-                                                <Edit />
+                                            )}
+                                        </TableCell>
+                                        <TableCell style={{ width: '20%' }}>{data.Event_Name}</TableCell>
+                                        <TableCell style={{ width: '20%' }}>{data.Event_Location}</TableCell>
+                                        <TableCell style={{ width: '20%' }}>{data.Event_Category}</TableCell>
+                                        <TableCell style={{ width: '20%', textAlign: 'center' }}>
+                                            ${data.Event_Fee_Guest}&nbsp; ${data.Event_Fee_NTUC}&nbsp; ${data.Event_Fee_Uplay}
+                                        </TableCell>
+                                        <TableCell style={{ width: '20%' }}>{data.Vacancies} pax</TableCell>
+                                        <TableCell style={{ width: '20%' }}>
+                                            <IconButton color="primary" onClick={() => handleOpen(data.Event_ID)}>
+                                                <Clear />
                                             </IconButton>
-                                        </Link></TableCell>
-
-
-
-
-
+                                        </TableCell>
+                                        <TableCell style={{ width: '20%' }}>
+                                            <Link to={`/Event/editevent/${data.Event_ID}`}>
+                                                <IconButton color="primary" sx={{ padding: '4px' }}>
+                                                    <Edit />
+                                                </IconButton>
+                                            </Link>
+                                        </TableCell>
                                     </TableRow>
                                 ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
+
             </Paper>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>

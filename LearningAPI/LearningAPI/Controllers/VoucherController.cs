@@ -137,8 +137,8 @@ namespace LearningAPI.Controllers
 			DateTime start = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(voucher.Start_Date, "Singapore Standard Time");
 			DateTime end = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(voucher.End_Date, "Singapore Standard Time");
 
-			var now = DateTime.Now;
-	
+			DateTime now = DateTime.Now - TimeSpan.FromDays(1);
+
 
 			if (string.IsNullOrEmpty(voucher.ImageFile))
 			{
@@ -326,7 +326,7 @@ namespace LearningAPI.Controllers
 						check = true;
 					}
 
-					var now = DateTime.Now;
+					DateTime now = DateTime.Now - TimeSpan.FromDays(1);
 					if (end >= now && start <= end)
 					{
 						if (start != myvoucher.Start_Date)
@@ -415,13 +415,13 @@ namespace LearningAPI.Controllers
 				// search the user
 				int userId = GetUserId();
 				LearningAPI.Models.Member? member = _context.Members.Find(id);
-				DateTime now = DateTime.Now;
+				DateTime now = DateTime.Now - TimeSpan.FromDays(1);
 				if (member == null)
 				{
 					UplayUser? uplay = _context.UplayUsers.Find(id);
 					if(uplay != null)
 					{
-						IQueryable<Voucher> normal_member_voucher = _context.Vouchers.Where(x => x.Member_Type == "Guest" && x.End_Date>= now );
+						IQueryable<Voucher> normal_member_voucher = _context.Vouchers.Where(x => x.Member_Type == "Guest" && x.End_Date >= now );
 						return Ok(normal_member_voucher);
 
 					}

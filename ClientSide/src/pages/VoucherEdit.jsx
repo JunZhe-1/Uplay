@@ -14,6 +14,8 @@ import {
     MenuItem,
     FormHelperText
 } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+
 import { useParams, useNavigate } from 'react-router-dom';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -334,9 +336,16 @@ function VoucherEdit() {
                     </Grid>
                     <Box sx={{ mt: 2 }}>
                         <Button variant="contained" type="submit" style={{ width: '100%' }}>
-
-                            Add
+                            Add Voucher
                         </Button>
+                    </Box>
+                    <Box sx={{ mt: 1 }}>
+                        <Link to="/Voucher" sx={{ color: 'white', textDecoration: 'none' }}>
+                            <Button variant="contained" style={{ width: '100%' }}>
+                                Cancel
+                            </Button>
+                        </Link>
+
                     </Box>
 
                 </Box>
