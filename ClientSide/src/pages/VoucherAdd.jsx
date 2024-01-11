@@ -92,7 +92,7 @@ function VoucherAdd() {
 
             http.post("/Voucher/add", voucher)
                 .then((res) => {
-                    console.log("Sucess");
+                    console.log("Success");
                     navigate("/Voucher");
                 })
                 .catch(function (err) {

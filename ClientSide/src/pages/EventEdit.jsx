@@ -48,7 +48,6 @@ function EventEdit() {
         http.get(`/Event/getEvent/${id}`).then((res) => {
             setimageFile(res.data.imageFile);
             setEvent(res.data);
-
         });
     }, []);
 

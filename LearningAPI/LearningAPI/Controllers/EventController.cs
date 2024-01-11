@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
-namespace LearningAPI.COntrollers
+namespace LearningAPI.Controllers
 {
 	[ApiController]
 	[Route("[controller]")]

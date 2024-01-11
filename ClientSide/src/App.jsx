@@ -24,6 +24,11 @@ import VoucherListUser from './pages/VoucherListUser';
 import EventEdit from './pages/EventEdit';
 import EventClientSide from './pages/EventClientSide';
 import EventDetail from './pages/EventDetail';
+import CartAdd from './pages/CartAdd';
+import CartEdit from './pages/CartEdit';
+import CartList from './pages/CartList';
+import CartUser from './pages/CartUser';
+
 function App() {
   const [user, setUser] = useState(null);
 
@@ -52,24 +57,32 @@ function App() {
                     Uplay
                   </Typography>
                 </Link>
-                <Link to="/tutorials" ><Typography>Home page</Typography></Link>
+                <Link to="/tutorials">
+                  <Typography>Home</Typography>
+                </Link>
                 <Box sx={{ flexGrow: 1 }}></Box>
                 {user && (
                   <>
-                  <Link to="/profile">
-                    <Typography>{user.userName}</Typography>
-                  </Link>
-                                      <Button onClick={logout}>Logout</Button>
-                                      <Link to="/Voucher/uservoucher/:id" ><Typography>Vouchers User</Typography></Link>
-
+                    <Link to="/profile">
+                      <Typography>{user.userName}</Typography>
+                    </Link>
+                    <Link to="/Voucher/uservoucher/:id">
+                      <Typography>My Vouchers</Typography>
+                    </Link>
+                    <Link to="/Cart/getuser/:id">
+                      <Typography>Cart</Typography>
+                    </Link>
+                    <Button onClick={logout}>Logout</Button>
                   </>
-                )
-                }
+                )}
                 {!user && (
                   <>
-                    <Link to="/register" ><Typography>Register</Typography></Link>
-                                      <Link to="/login" ><Typography>Login</Typography></Link>
-
+                    <Link to="/register">
+                      <Typography>Register</Typography>
+                    </Link>
+                    <Link to="/login">
+                      <Typography>Login</Typography>
+                    </Link>
                   </>
                 )}
               </Toolbar>
@@ -81,29 +94,32 @@ function App() {
               <Route path={"/"} element={<Tutorials />} />
               <Route path={"/tutorials"} element={<Tutorials />} />
               <Route path={"/addtutorial"} element={<AddTutorial />} />
-                          <Route path={"/Voucher/add"} element={<VoucherAdd />} />
-                          <Route path={"/Voucher"} element={<VoucherList />} />
-
-                          <Route path={"/Voucher/update/:id"} element={<VoucherEdit />} />
-                          <Route path={"/Voucher/uservoucher/:id"} element={<VoucherListUser />} />
-
+              <Route path={"/Voucher/add"} element={<VoucherAdd />} />
+              <Route path={"/Voucher"} element={<VoucherList />} />
+              <Route path={"/Voucher/update/:id"} element={<VoucherEdit />} />
+              <Route
+                path={"/Voucher/uservoucher/:id"}
+                element={<VoucherListUser />}
+              />
               <Route path={"/edittutorial/:id"} element={<EditTutorial />} />
               <Route path={"/register"} element={<Register />} />
               <Route path={"/login"} element={<Login />} />
               <Route path={"/form"} element={<MyForm />} />
-
-                          <Route path={"/profile"} element={<Profile />} />
-                          <Route path={"/Event/add_event"} element={<EventAdd />} />
-                          <Route path={"/Event"} element={<EventList />} />
-                          <Route path={"/Event/editevent/:id"} element={<EventEdit />} />
-                          <Route path={"/Event/getEvent/:id"} element={<EventDetail />} />
-
-                          <Route path={"/Event/EventClientSide"} element={<EventClientSide />} />
-
-
+              <Route path={"/profile"} element={<Profile />} />
+              <Route path={"/Event/add_event"} element={<EventAdd />} />
+              <Route path={"/Event"} element={<EventList />} />
+              <Route path={"/Event/editevent/:id"} element={<EventEdit />} />
+              <Route path={"/Event/getEvent/:id"} element={<EventDetail />} />
+              <Route
+                path={"/Event/EventClientSide"}
+                element={<EventClientSide />}
+              />
               <Route path={"/profile"} element={<Profile />} />
               <Route path={"/buymember"} element={<BuyMember />} />
-                          
+              <Route path={"/Cart/add"} element={<CartAdd />} />
+              <Route path={"/Cart"} element={<CartList />} />
+              <Route path={"/Cart/update/:id"} element={<CartEdit />} />
+              <Route path={"/Cart/getuser/:id"} element={<CartUser />} />
             </Routes>
           </Container>
         </ThemeProvider>

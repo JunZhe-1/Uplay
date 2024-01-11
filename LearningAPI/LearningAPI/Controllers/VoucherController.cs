@@ -348,7 +348,7 @@ namespace LearningAPI.Controllers
 					}
 					else if (end < now)
 					{
-						string message = "End Date must set after todat's date";
+						string message = "End Date must set after today's date";
 						return BadRequest(new { message });
 					}
 					else
