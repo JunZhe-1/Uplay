@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useContext } from 'react';
+﻿import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import {
     Container, AppBar, Toolbar,
-    Box, Typography, Grid, Card, CardContent, Input, IconButton, Button
-} from '@mui/material';
+Box, Typography, Grid, Card, CardContent, Input, IconButton, Button } from '@mui/material';
 import { AccountCircle, AccessTime, Search, Clear, Edit } from '@mui/icons-material';
 import http from '../http';
 import dayjs from 'dayjs';
@@ -83,24 +82,24 @@ function EventClientSide() {
     };
     return (
 
-        <Box style={{ padding: '20px' }}>
-            <Typography variant="h5" sx={{ mb: 2, color: 'black', fontWeight: 'bold' }}>
-                Events
-            </Typography>
+<Box style={{ padding: '20px' }}>
+    <Typography variant="h5" sx={{ mb: 2, color: 'black', fontWeight: 'bold' }}>
+        Events
+    </Typography>
 
 
 
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Input value={search} placeholder="Search"
-                    onChange={onSearchChange}
-                    onKeyDown={onSearchKeyDown} />
-                <IconButton color="primary"
-                    onClick={onClickSearch}>
-                    <Search />
-                </IconButton>
-                <IconButton color="primary"
-                    onClick={onClickClear}>
-                    <Clear />
+    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+        <Input value={search} placeholder="Search"
+            onChange={onSearchChange}
+            onKeyDown={onSearchKeyDown} />
+        <IconButton color="primary"
+            onClick={onClickSearch}>
+            <Search />
+        </IconButton>
+        <IconButton color="primary"
+            onClick={onClickClear}>
+            <Clear />
                 </IconButton>
             </Box>
 
@@ -138,61 +137,61 @@ function EventClientSide() {
             <Typography variant="h5" sx={{ mb: 2, color: 'black', fontWeight: '20px' }}>
                 Results ({EventListBackup.length})
             </Typography>
-
-            <Grid container spacing={3}>
+        
+    <Grid container spacing={3}>
                 {EventListBackup.map((data) => (
-                    <Grid item xs={12} md={6} lg={4} key={data.id}>
-                        <Card
-                            sx={{
+            <Grid item xs={12} md={6} lg={4} key={data.id}>
+                <Card
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        boxShadow: '0 8px 5px rgba(0, 0, 0, 0.2)',
+                        height: '100%',
+                    }}
+                >
+                    {data.imageFile && (
+                        <Box
+                            style={{
                                 display: 'flex',
-                                flexDirection: 'column',
-                                boxShadow: '0 8px 5px rgba(0, 0, 0, 0.2)',
-                                height: '100%',
+                                alignItems: 'center',
+                                width: '100%',
+                                overflow: 'hidden',
+                                maxHeight: '200px', // Adjust the max height of the image
                             }}
                         >
-                            {data.imageFile && (
-                                <Box
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        width: '100%',
-                                        overflow: 'hidden',
-                                        maxHeight: '200px', // Adjust the max height of the image
-                                    }}
-                                >
-                                    <img
-                                        alt="data"
-                                        src={`${import.meta.env.VITE_FILE_BASE_URL}${data.imageFile}`}
-                                        style={{
-                                            width: '100%',
-                                            objectFit: 'cover',
-                                        }}
-                                    />
-                                </Box>
-                            )}
-                            <CardContent
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    flexGrow: 1,
+                            <img
+                                alt="data"
+                                src={`${import.meta.env.VITE_FILE_BASE_URL}${data.imageFile}`}
+                                style={{
+                                    width: '100%',
+                                    objectFit: 'cover',
                                 }}
-                            >
-                                <Typography variant="h6" sx={{ mb: 2, fontSize: '20px' }}>
-                                    <b> {data.Event_Name}</b>
-                                </Typography>
-                                <Typography
-                                    sx={{ color: 'text.secondary', mt: -1, fontSize: '18px' }}
-                                >
-                                    Uplay: <b>&nbsp;${data.Event_Fee_Uplay}</b><br />
-                                    NTUC: <b>${data.Event_Fee_NTUC}</b>
-                                </Typography>
-                                <Box sx={{ flexGrow: 1 }}></Box>
-                                <Link to={`/Event/getEvent/${data.Event_ID}`}>
+                            />
+                        </Box>
+                    )}
+                    <CardContent
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            flexGrow: 1,
+                        }}
+                    >
+                        <Typography variant="h6" sx={{ mb: 2, fontSize: '20px' }}>
+                            <b> {data.Event_Name}</b>
+                        </Typography>
+                        <Typography
+                            sx={{ color: 'text.secondary', mt:-1, fontSize: '18px' }}
+                        >
+                            Uplay: <b>&nbsp;${data.Event_Fee_Uplay}</b><br />
+                            NTUC: <b>${data.Event_Fee_NTUC}</b>
+                        </Typography>
+                        <Box sx={{ flexGrow: 1 }}></Box>
+                        <Link to={`/Event/getEvent/${data.Event_ID}`}>
                                     <Button className="add_btn"
                                         sx={{
                                             fontSize: '16px',
                                             padding: '1px',
-                                            width: '100%',
+                                            width:'100%',
                                             border: '1px #E6533F solid',
                                             backgroundColor: 'white',
                                             color: '#E6533F',
@@ -205,14 +204,14 @@ function EventClientSide() {
                                     >
                                         <b>See Detail</b>
                                     </Button>
-                                </Link>
-
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                ))}
+                        </Link>
+                        
+                    </CardContent>
+                </Card>
             </Grid>
-        </Box>
-    )
+        ))}
+    </Grid>
+</Box>
+)
 };
 export default EventClientSide;

@@ -17,9 +17,20 @@ namespace LearningAPI.Models
 		[JsonPropertyName("Event_Name")]
 		public string Event_Name { get; set; } = string.Empty;
 
-		[Required, MaxLength(300)]
+
+
+		[Required, MaxLength(600)]
 		[JsonPropertyName("Event_Description")]
 		public string Event_Description { get; set; } = string.Empty;
+
+		[Required, MaxLength(50)]
+		[JsonPropertyName("Event_Category")]
+		public string Event_Category { get; set; } = string.Empty;
+
+		[Required, MaxLength(300)]
+		[JsonPropertyName("Event_Location")]
+		public string Event_Location { get; set; } = string.Empty;
+
 
 		[Range(0,1000), Required]
 		[JsonPropertyName("Event_Fee_Guest")]
@@ -42,7 +53,6 @@ namespace LearningAPI.Models
 
 
 		[MaxLength(20)]
-		[JsonPropertyName("ImageFile")]
 
 		public string? ImageFile { get; set; }
 

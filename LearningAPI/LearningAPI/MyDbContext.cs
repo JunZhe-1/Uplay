@@ -27,6 +27,8 @@ namespace LearningAPI
 
         public DbSet<UplayUser> UplayUsers { get; set; }
 
+
+
         public DbSet<Member> Members { get; set; }
 
         public DbSet<Voucher> Vouchers { get; set; }

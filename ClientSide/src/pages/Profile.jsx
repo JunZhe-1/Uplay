@@ -132,72 +132,72 @@ function Profiles() {
                             </Typography>
                             {user && (
                                 <>
-                                    {user.emailAddress.toLowerCase() === "admin@gmail.com" ? (
-                                        <TextField
-                                            fullWidth
-                                            label=""
-                                            name="userName"
-                                            value={formik.values.userName}
-                                            onChange={formik.handleChange}
-                                            onBlur={formik.handleBlur}
-                                            error={formik.touched.userName && Boolean(formik.errors.userName)}
-                                            helperText={formik.touched.userName && formik.errors.userName}
-                                            InputLabelProps={{ shrink: Boolean(formik.values.userName) || formik.values.userName === '' }}
-                                            style={{ marginBottom: '10px' }}
-                                            disabled={true}
-                                        />) : <TextField
-                                        fullWidth
-                                        label=""
-                                        name="userName"
-                                        value={formik.values.userName}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        error={formik.touched.userName && Boolean(formik.errors.userName)}
-                                        helperText={formik.touched.userName && formik.errors.userName}
-                                        InputLabelProps={{ shrink: Boolean(formik.values.userName) || formik.values.userName === '' }}
-                                        style={{ marginBottom: '10px' }} // Adjust spacing here
+                            {user.emailAddress.toLowerCase() === "admin@gmail.com" ? (
+                                <TextField
+                                    fullWidth
+                                    label=""
+                                    name="userName"
+                                    value={formik.values.userName}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    error={formik.touched.userName && Boolean(formik.errors.userName)}
+                                    helperText={formik.touched.userName && formik.errors.userName}
+                                    InputLabelProps={{ shrink: Boolean(formik.values.userName) || formik.values.userName === '' }}
+                                    style={{ marginBottom: '10px' }}
+                                    disabled={true}
+                                />) : <TextField
+                                fullWidth
+                                label=""
+                                name="userName"
+                                value={formik.values.userName}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={formik.touched.userName && Boolean(formik.errors.userName)}
+                                helperText={formik.touched.userName && formik.errors.userName}
+                                InputLabelProps={{ shrink: Boolean(formik.values.userName) || formik.values.userName === '' }}
+                                style={{ marginBottom: '10px' }} // Adjust spacing here
                                     />}
                                 </>
                             )}
-
+                           
                             <Typography variant="h6" style={{ fontSize: '23px', marginTop: '20px' }}>
                                 Email Address:
                             </Typography>
 
                             {user && (
                                 <>
-                                    {user.emailAddress.toLowerCase() === "admin@gmail.com" ? (
-                                        <TextField
-                                            fullWidth
-                                            margin="dense"
-                                            autoComplete="off"
-                                            label=""
-                                            name="emailAddress"
-                                            value={formik.values.emailAddress}
-                                            onChange={formik.handleChange}
-                                            onBlur={formik.handleBlur}
-                                            error={formik.touched.emailAddress && Boolean(formik.errors.emailAddress)}
-                                            helperText={formik.touched.emailAddress && formik.errors.emailAddress}
-                                            InputLabelProps={{ shrink: Boolean(formik.values.emailAddress) || formik.values.emailAddress === '' }}
-                                            style={{ marginBottom: '10px' }} // Adjust spacing here
-                                            disabled={true}
-                                        />) : <TextField
-                                        fullWidth
-                                        margin="dense"
-                                        autoComplete="off"
-                                        label=""
-                                        name="emailAddress"
-                                        value={formik.values.emailAddress}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        error={formik.touched.emailAddress && Boolean(formik.errors.emailAddress)}
-                                        helperText={formik.touched.emailAddress && formik.errors.emailAddress}
-                                        InputLabelProps={{ shrink: Boolean(formik.values.emailAddress) || formik.values.emailAddress === '' }}
-                                        style={{ marginBottom: '10px' }} // Adjust spacing here
-                                    />
+                            {user.emailAddress.toLowerCase() === "admin@gmail.com" ? (
+                            <TextField
+                                fullWidth
+                                margin="dense"
+                                autoComplete="off"
+                                label=""
+                                name="emailAddress"
+                                value={formik.values.emailAddress}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={formik.touched.emailAddress && Boolean(formik.errors.emailAddress)}
+                                helperText={formik.touched.emailAddress && formik.errors.emailAddress}
+                                InputLabelProps={{ shrink: Boolean(formik.values.emailAddress) || formik.values.emailAddress === '' }}
+                                style={{ marginBottom: '10px' }} // Adjust spacing here
+                                disabled={true}
+                            />):<TextField
+                                fullWidth
+                                margin="dense"
+                                autoComplete="off"
+                                label=""
+                                name="emailAddress"
+                                value={formik.values.emailAddress}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={formik.touched.emailAddress && Boolean(formik.errors.emailAddress)}
+                                helperText={formik.touched.emailAddress && formik.errors.emailAddress}
+                                InputLabelProps={{ shrink: Boolean(formik.values.emailAddress) || formik.values.emailAddress === '' }}
+                                style={{ marginBottom: '10px' }} // Adjust spacing here
+                            />
 
 
-                                    }
+                            }
                                 </>
                             )}
                             <Typography variant="h6" style={{ fontSize: '23px', marginTop: '20px' }}>

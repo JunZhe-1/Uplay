@@ -91,86 +91,86 @@ function VoucherListUser() {
 
             <Grid container spacing={3}>
                 {filteredVouchers
-                    .sort((a, b) => new Date(a.end_Date) - new Date(b.end_Date))
+                    .sort((a, b) => new Date(a.end_Date) - new Date(b.end_Date))    
 
                     .map((data) => (
-                        <Grid item xs={12} md={6} lg={6} key={data.id}>
-                            <Card
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    boxShadow: '0 8px 5px rgba(0, 0, 0, 0.1)',
-                                    height: '100%',
-                                }}
-                            >
-                                {data.imageFile && (
-                                    <Box
-                                        style={{
-                                            flex: '0 0 30%',
-                                            overflow: 'hidden',
-
-                                        }}
-                                    >
-                                        <img
-                                            alt="data"
+                    <Grid item xs={12} md={6} lg={6} key={data.id}>
+                        <Card
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'row', 
+                                boxShadow: '0 8px 5px rgba(0, 0, 0, 0.1)',
+                                height: '100%',
+                            }}
+                        >
+                            {data.imageFile && (
+                                <Box
+                                    style={{
+                                        flex: '0 0 30%',
+                                        overflow: 'hidden',
+                                      
+                                    }}
+                                >
+                                    <img
+                                        alt="data"
                                             src={`${import.meta.env.VITE_FILE_BASE_URL}${data.imageFile}`}
-                                            style={{
-                                                width: '100%',
-                                                border: '1px solid grey',
-                                                objectFit: 'cover',
-                                                height: '100%',
+                                        style={{
+                                            width: '100%',
+                                            border:'1px solid grey',
+                                            objectFit: 'cover',
+                                            height: '100%',
 
-                                            }}
-                                        />
-                                    </Box>
-                                )}
-                                <CardContent
-                                    sx={{
-                                        flex: '1',
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                    }}>
-                                    <Typography variant="h6" sx={{ mb: 1 }}>
-                                        <b>{data.Voucher_Name}</b>
-                                    </Typography>
-                                    <Typography
-                                        sx={{ color: 'text.secondary', mb: 1, fontSize: '16px' }}
-                                    >
-                                        {data.Voucher_Description}
-                                    </Typography>
-                                    <Box sx={{ flexGrow: 1 }}></Box>
-                                    <Button className="add_btn"
-                                        sx={{
-                                            fontSize: '16px',
-                                            padding: '1px',
-                                            border: '1px #E6533F solid',
-                                            backgroundColor: 'white',
-                                            color: '#E6533F',
-                                            transition: 'background-color 0.2s ease-in-out, color 0.5s ease-in-out',
-                                            '&:hover': {
-                                                backgroundColor: '#E6533F',
-                                                color: 'white',
-                                            },
                                         }}
-                                    >
-                                        <b>Add</b>
-                                    </Button>
-                                    <Typography
-                                        sx={{
-                                            color: 'text.secondary',
-                                            mt: 1,
-                                            fontSize: '14px',
-                                            display: 'flex',
-                                            justifyContent: 'flex-end', // Align horizontally to the right
-                                            alignItems: 'flex-end', // Align vertically to the bottom
-                                        }}>
-                                        Till &nbsp;<b>{dayjs(data.End_Date).format(global.datetimeFormat1)}</b>
-                                    </Typography>
+                                    />
+                                </Box>
+                            )}
+                            <CardContent
+                                sx={{
+                                    flex: '1', 
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                }}>
+                                <Typography variant="h6" sx={{ mb: 1 }}>
+                                    <b>{data.Voucher_Name}</b>
+                                </Typography>
+                                <Typography
+                                    sx={{ color: 'text.secondary', mb: 1, fontSize: '16px' }}
+                                >
+                                    {data.Voucher_Description}
+                                </Typography>
+                                <Box sx={{ flexGrow: 1 }}></Box>
+                                <Button className="add_btn"
+                                    sx={{
+                                        fontSize: '16px',
+                                        padding: '1px',
+                                        border: '1px #E6533F solid',
+                                        backgroundColor: 'white',
+                                        color: '#E6533F',
+                                        transition: 'background-color 0.2s ease-in-out, color 0.5s ease-in-out',
+                                        '&:hover': {
+                                                    backgroundColor: '#E6533F',
+                                                    color: 'white',
+                                                },
+                                            }}
+                                >
+                                    <b>Add</b>
+                                </Button>
+                                <Typography
+                                    sx={{
+                                        color: 'text.secondary',
+                                        mt: 1,
+                                        fontSize: '14px',
+                                        display: 'flex',
+                                        justifyContent: 'flex-end', // Align horizontally to the right
+                                        alignItems: 'flex-end', // Align vertically to the bottom
+                                    }}>
+                                    Till &nbsp;<b>{dayjs(data.End_Date).format(global.datetimeFormat1)}</b>
+                                </Typography>
 
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    ))}
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                ))}
             </Grid>
         </Box>
     )

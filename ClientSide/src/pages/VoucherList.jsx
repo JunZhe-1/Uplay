@@ -99,20 +99,20 @@ function VoucherList() {
                 Voucher Management
             </Typography>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Input value={search} placeholder="Search"
-                    onChange={onSearchChange}
-                    onKeyDown={onSearchKeyDown} />
-                <IconButton color="primary" onClick={onClickSearch}>
-                    <Search />
-                </IconButton>
-                <IconButton color="primary" onClick={onClickClear}>
-                    <Clear />
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <Input value={search} placeholder="Search"
+                onChange={onSearchChange}
+                onKeyDown={onSearchKeyDown} />
+            <IconButton color="primary" onClick={onClickSearch}>
+                <Search />
+            </IconButton>
+            <IconButton color="primary" onClick={onClickClear}>
+                <Clear />
                 </IconButton>
                 <Box sx={{ flexGrow: 1 }} />
 
                 {
-                    user.emailAddress.toLowerCase() === "admin@gmail.com" && (
+                    user.emailAddress.toLowerCase() === "admin@gmail.com" &&(
                         <Link to="/Voucher/add" style={{ textDecoration: 'none' }}>
                             <Button variant='contained'>
                                 Add
@@ -120,19 +120,19 @@ function VoucherList() {
                         </Link>
                     )
                 }
-            </Box>
+        </Box>
 
 
 
-            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                <TableContainer sx={{ maxHeight: 440 }}>
-                    <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
+        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+            <TableContainer sx={{ maxHeight: 440 }}>
+                <Table stickyHeader aria-label="sticky table">
+                    <TableHead>
                             <TableRow>
                                 <TableCell>imageFile</TableCell>
-                                <TableCell>Voucher Name</TableCell>
-                                <TableCell>Start Date</TableCell>
-                                <TableCell>End Date</TableCell>
+                            <TableCell>Voucher Name</TableCell>
+                            <TableCell>Start Date</TableCell>
+                            <TableCell>End Date</TableCell>
                                 <TableCell>member type</TableCell>
                                 <TableCell>Discount</TableCell>
 
@@ -158,7 +158,7 @@ function VoucherList() {
                                                 </Box>
                                             )
                                         }</TableCell>
-                                        <TableCell>{data.Voucher_Name}</TableCell>
+                                    <TableCell>{data.Voucher_Name}</TableCell>
                                         <TableCell>{dayjs.utc(data.Start_Date).format(global.datetimeFormat)}</TableCell>
                                         <TableCell>{dayjs.utc(data.End_Date).format(global.datetimeFormat)}</TableCell>
                                         <TableCell>{data.Member_Type}</TableCell>

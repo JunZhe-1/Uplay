@@ -5,33 +5,35 @@ using NanoidDotNet;
 
 namespace LearningAPI.Controllers
 {
-    [Route("[controller]")]
-    [ApiController]
-    public class FileController : ControllerBase
-    {
-        private readonly IWebHostEnvironment _environment;
-        private readonly ILogger<FileController> _logger;
+	[Route("[controller]")]
+	[ApiController]
+	public class FileController : ControllerBase
+	{
+		private readonly IWebHostEnvironment _environment;
+		private readonly ILogger<FileController> _logger;
 
-        public FileController(IWebHostEnvironment environment,
-            ILogger<FileController> logger)
-        {
-            _environment = environment;
-            _logger = logger;
-        }
+		public FileController(IWebHostEnvironment environment,
+			ILogger<FileController> logger)
+		{
+			_environment = environment;
+			_logger = logger;
+		}
 
+		//  [HttpPost("upload"), Authorize]
+		// [ProducesResponseType(typeof(UploadResponse), StatusCodes.Status200OK)]
         //  [HttpPost("upload"), Authorize]
         // [ProducesResponseType(typeof(UploadResponse), StatusCodes.Status200OK)]
 
         [HttpPost("upload")]
         public IActionResult Upload(IFormFile file)
-        {
-            try
-            {
-                if (file.Length > 1024 * 1024)
-                {
-                    var message = "Maximum file size is 1MB";
-                    return BadRequest(new { message });
-                }
+		{
+			try
+			{
+				if (file.Length > 1024 * 1024)
+				{
+					var message = "Maximum file size is 1MB";
+					return BadRequest(new { message });
+				}
 
                 // Check if the file has a valid image extension
                 if (!IsImageWithValidExtension(file))

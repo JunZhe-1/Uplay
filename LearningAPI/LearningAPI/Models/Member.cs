@@ -17,6 +17,7 @@ namespace LearningAPI.Models
         public string Name { get; set; } = string.Empty;
 
         [Required]
+        // either NTUC or Uplay member
         public string MemberStatus { get; set; } = string.Empty;
 
         [Column(TypeName = "datetime")]

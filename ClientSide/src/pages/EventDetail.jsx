@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+﻿import React, { useEffect, useState, useContext } from 'react';
 import {
     Box, Typography, Grid, Card, CardContent, Input, IconButton, Button,
     Paper, TableContainer, Table, TableHead, TableBody, TableRow, TableCell
@@ -63,7 +63,7 @@ function EventDetail() {
 
                     {/* this row is for showing event description */}
                     <TableRow>
-                        <TableCell sx={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', maxWidth: '100%', width: '65%', padding: '30px' }}>
+                        <TableCell sx={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', maxWidth: '100%', width:'65%', padding:'30px' }}>
                             <Typography variant="h6" sx={{ color: 'black', fontWeight: 'bold' }}>Description</Typography>
                             <Typography variant="body1">
                                 {EventDetail.Event_Description}
@@ -71,22 +71,22 @@ function EventDetail() {
                         </TableCell>
 
                         <TableCell rowSpan={2} sx={{ borderLeft: '1px #E0E0E0 solid' }}>
-                            <Typography variant="h5" sx={{ padding: '12px', color: '#F9F6EE', fontWeight: 'bold', textAlign: 'center', borderRadius: '8px 8px 0px 0px', background: '#E6533F' }}>Event Price</Typography>
+                            <Typography variant="h5" sx={{padding:'12px', color: '#F9F6EE', fontWeight: 'bold', textAlign: 'center', borderRadius: '8px 8px 0px 0px', background: '#E6533F' }}>Event Price</Typography>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '0 20px' }}>
-                                <TableCell sx={{ borderRight: 'solid 1px #E0E0E0', textAlign: 'center', padding: '5px 30px 5px 30px', marginLeft: '-2vh' }}>
+                                <TableCell sx={{ borderRight: 'solid 1px #E0E0E0', textAlign: 'center', padding: '5px 30px 5px 30px', marginLeft:'-2vh' }}>
                                     <Typography>Guest <br /> $ {EventDetail.Event_Fee_Guest} </Typography>
                                 </TableCell>
                                 <TableCell sx={{ textAlign: 'center', padding: '5px 30px 5px 30px' }}>
                                     <Typography sx={{}}>Uplay <br />$ {EventDetail.Event_Fee_Uplay}</Typography>
                                 </TableCell>
-                                <TableCell sx={{ borderLeft: 'solid 1px #E0E0E0', textAlign: 'center', padding: '5px 30px 5px 30px', marginRight: '-2vh' }}>
+                                <TableCell sx={{ borderLeft: 'solid 1px #E0E0E0', textAlign: 'center', padding: '5px 30px 5px 30px', marginRight:'-2vh' }}>
                                     <Typography sx={{}}>NTUC <br /> $ {EventDetail.Event_Fee_NTUC}</Typography>
                                 </TableCell>
 
                             </Box>
                             <br />
                             <Typography variant="h5" sx={{
-                                cursor: 'pointer', color: '#F9F6EE', fontSize: '18px', padding: '8px', textAlign: 'center', borderRadius: '5px', background: '#E6533F', transition: 'background 0.3s ease', // Add transition for smooth hover effect
+                                cursor: 'pointer', color: '#F9F6EE',fontSize:'18px',padding:'8px', textAlign: 'center', borderRadius: '5px', background: '#E6533F',  transition: 'background 0.3s ease', // Add transition for smooth hover effect
                                 '&:hover': {
                                     background: '#FF8C5E', // Change to the desired hover background color
                                 },

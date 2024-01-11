@@ -30,6 +30,12 @@ namespace LearningAPI.Migrations
                         .HasColumnType("datetime")
                         .HasAnnotation("Relational:JsonPropertyName", "CreatedAt");
 
+                    b.Property<string>("Event_Category")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("Relational:JsonPropertyName", "Event_Category");
+
                     b.Property<string>("Event_Description")
                         .IsRequired()
                         .HasMaxLength(300)
@@ -48,6 +54,12 @@ namespace LearningAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("Relational:JsonPropertyName", "Event_Fee_Uplay");
 
+                    b.Property<string>("Event_Location")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300)")
+                        .HasAnnotation("Relational:JsonPropertyName", "Event_Location");
+
                     b.Property<string>("Event_Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -56,8 +68,7 @@ namespace LearningAPI.Migrations
 
                     b.Property<string>("ImageFile")
                         .HasMaxLength(20)
-                        .HasColumnType("varchar(20)")
-                        .HasAnnotation("Relational:JsonPropertyName", "ImageFile");
+                        .HasColumnType("varchar(20)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime")
@@ -231,6 +242,12 @@ namespace LearningAPI.Migrations
                         .HasColumnType("datetime")
                         .HasAnnotation("Relational:JsonPropertyName", "End_Date");
 
+                    b.Property<string>("ImageFile")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasAnnotation("Relational:JsonPropertyName", "ImageFile");
+
                     b.Property<string>("Member_Type")
                         .IsRequired()
                         .HasColumnType("longtext")
@@ -239,6 +256,12 @@ namespace LearningAPI.Migrations
                     b.Property<DateTime>("Start_Date")
                         .HasColumnType("datetime")
                         .HasAnnotation("Relational:JsonPropertyName", "Start_Date");
+
+                    b.Property<string>("Voucher_Description")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("Relational:JsonPropertyName", "Voucher_Description");
 
                     b.Property<string>("Voucher_Name")
                         .IsRequired()

@@ -37,7 +37,7 @@ function VoucherAdd() {
             Start_Date: "", // Initialize as null or a default date
             End_Date: "",   // Initialize as null or a default date
             Discount_In_Percentage: 0,
-            Voucher_Description: "",
+            Voucher_Description:"",
             Discount_In_Value: 0,
             Member_Type: "Uplay",
             Discount_type: "Percentage",
@@ -57,7 +57,7 @@ function VoucherAdd() {
                 .required('Number is required'),
             Discount_In_Value: yup.number()
                 .min(0, 'Discount Value cannot below than $1')
-                .max(1000, 'Too Much')
+            .max(1000, 'Too Much')
                 .required('Number is required'),
 
 
@@ -69,14 +69,14 @@ function VoucherAdd() {
 
         }),
         onSubmit: (voucher) => {
-
+            
             if (imageFile) {
                 voucher.ImageFile = imageFile;
             }
-
+           
             voucher.Voucher_Name = voucher.Voucher_Name.trim();
             voucher.Voucher_Description = voucher.Voucher_Description.trim();
-
+   
             console.log("onsubmit:", voucher);
 
 
@@ -123,7 +123,7 @@ function VoucherAdd() {
             })
                 .then((res) => {
                     setImageFile(res.data.filename);
-
+                    
                 })
                 .catch(function (error) {
                     console.log(error.response);
@@ -313,7 +313,7 @@ function VoucherAdd() {
                             </Grid>
 
                         </Grid>
-
+                   
 
                     </Grid>
                     <Box sx={{ mt: 2 }}>

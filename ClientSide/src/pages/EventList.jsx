@@ -114,7 +114,7 @@ function EventList() {
                 </IconButton>
                 <Box sx={{ flexGrow: 1 }} />
                 {
-                    user.emailAddress.toLowerCase() === "admin@gmail.com" && (
+                        user.emailAddress.toLowerCase() === "admin@gmail.com" && (
                         <Link to="/Event/add_event" style={{ textDecoration: 'none' }}>
                             <Button variant='contained'>
                                 Add
@@ -126,11 +126,11 @@ function EventList() {
 
 
 
+            
+            
 
 
-
-
-            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+            <Paper sx={{ width: '100%', overflow: 'hidden'}}>
                 <TableContainer sx={{ maxHeight: 440 }}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>

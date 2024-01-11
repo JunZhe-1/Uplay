@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+﻿import React, { useEffect, useState, useContext } from 'react';
 import {
     Box,
     Typography,
@@ -40,7 +40,7 @@ function EventEdit() {
         Event_Location: "",
         Event_Category: "Sports & Wellness",
 
-        Event_Fee_Guest: 0,
+        Event_Fee_Guest: 0,  
         Event_Fee_Uplay: 0,
         Event_Fee_NTUC: 0,
         Vacancies: 0,
@@ -97,7 +97,7 @@ function EventEdit() {
             data.Event_Location = data.Event_Location.trim();
             if (imageFile) {
                 data.imageFile = imageFile;
-
+                
             }
             http.put(`/Event/update/${id}`, data)
                 .then((res) => {
@@ -142,7 +142,7 @@ function EventEdit() {
 
     return (
 
-
+    
         <Box>
             <Typography variant="h5" sx={{ my: 2 }}>
                 Edit Event

@@ -38,10 +38,10 @@ function VoucherEdit() {
     const [voucherinfo, setVoucher] = useState({
         Voucher_Name: "",
         Voucher_Description: "",
-        Start_Date: new Date(),
-        End_Date: new Date(),
+        Start_Date: new Date(), 
+        End_Date: new Date(),  
         Discount_In_Percentage: 0,
-        Voucher_Description: "",
+        Voucher_Description:"",
         Discount_In_Value: 0,
         Member_Type: "Uplay",
         Discount_type: "Percentage",
@@ -54,10 +54,10 @@ function VoucherEdit() {
             console.log(res.data.ImageFile)
             setVoucher((prevVoucher) => ({
                 ...res.data,
-                Start_Date: new Date(res.data.Start_Date),
-                End_Date: new Date(res.data.End_Date),
-            }));
-
+                Start_Date: new Date(res.data.Start_Date ), 
+                End_Date: new Date(res.data.End_Date ),
+            }));    
+            
         });
     }, []);
 
@@ -305,14 +305,14 @@ function VoucherEdit() {
                                     helperText={formik.touched.Discount_In_Value && formik.errors.Discount_In_Value}
                                 />
                             )}
-                            <Grid item xs={12} md={6} lg={4}>
+                             <Grid item xs={12} md={6} lg={4}>
                                 <Box sx={{ textAlign: 'left', mt: 2 }} >
                                     {
                                         imageFile && (
                                             <Box className="aspect-ratio-container" sx={{ mt: 3 }}>
                                                 <img alt="event"
                                                     src={`${import.meta.env.VITE_FILE_BASE_URL}${imageFile
-                                                        }`}>
+}`}>
                                                 </img>
                                             </Box>
                                         )
@@ -322,7 +322,7 @@ function VoucherEdit() {
                                         <input hidden accept="image/*" multiple type="file"
                                             onChange={onFileChange} />
                                     </Button>
-
+                                   
                                 </Box>
                             </Grid>
 

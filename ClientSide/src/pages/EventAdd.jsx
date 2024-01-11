@@ -38,9 +38,9 @@ function EventAdd() {
             Event_Name: "",
             Event_Description: "",
             Event_Location: "",
-            Event_Category: "Sports & Wellness",
-            Event_Fee_Guest: 0,
-            Event_Fee_Uplay: 0,
+            Event_Category:"Sports & Wellness",
+            Event_Fee_Guest: 0,   
+            Event_Fee_Uplay: 0, 
             Event_Fee_NTUC: 0,
             Vacancies: 0,
 
@@ -61,22 +61,22 @@ function EventAdd() {
             Event_Fee_Guest: yup.number()
                 .min(1, 'Event Fee Guest Percent cannot below than 1')
                 .max(1000, 'Event Fee Guest Percent cannot above 1000')
-                .required('Event Fee Guest is required'),
+                .required('Event Fee Guest is required'),            
             Event_Fee_Uplay: yup.number()
                 .min(1, 'Event Fee Uplay Percent cannot below than 1')
                 .max(1000, 'Event Fee Uplay Percent cannot above 1000')
-                .required('Event Fee Uplay is required'),
+                .required('Event Fee Uplay is required'),            
             Event_Fee_NTUC: yup.number()
                 .min(1, 'Event Fee Ntuc Percent cannot below than 1')
                 .max(1000, 'Event Fee Ntuc Percent cannot above 1000')
                 .required('Event_Name is required'),
-
+            
             Vacancies: yup.number()
                 .min(1, 'Vacancies Value cannot below than 0')
                 .max(10000, 'maximun is 10000')
                 .required('Vacancies is required'),
 
-
+            
 
 
         }),
@@ -90,8 +90,8 @@ function EventAdd() {
                 data.imageFile = imageFile;
             }
             console.log(data);
-
-
+            
+         
 
 
             http.post("/Event/add_event", data)
@@ -164,7 +164,7 @@ function EventAdd() {
                         <TextField
                             fullWidth
                             multiline
-                            rows={4}
+                            rows={4} 
                             margin="dense"
                             autoComplete="off"
                             label="Event Description"
@@ -301,7 +301,7 @@ function EventAdd() {
                     </Grid>
 
 
-
+               
 
                 </Grid>
                 <Box sx={{ mt: 5 }}>
@@ -313,7 +313,7 @@ function EventAdd() {
 
             <ToastContainer />
         </Box>
-    );
+        );
 
 }
 export default EventAdd;

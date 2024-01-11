@@ -37,6 +37,8 @@ function Login() {
                     localStorage.setItem("accessToken", res.data.accessToken);
                     setUser(res.data.user);
                     console.log(res.data.uplayuser);
+                    window.location.reload();
+
                     navigate("/");
                 })
                 .catch(function (err) {
