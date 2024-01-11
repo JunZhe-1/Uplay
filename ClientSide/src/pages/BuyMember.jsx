@@ -52,7 +52,7 @@ function BuyMember() {
 
             data.name = data.name.trim();
             data.nric = data.nric.trim().toLowerCase();
-            data.memberStatus = "NTUC Member";
+            data.memberStatus = "NTUC";
             console.log(data)
             http.post("/Member", data)
                 .then((res) => {

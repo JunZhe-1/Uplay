@@ -14,6 +14,8 @@ import {
     MenuItem,
     FormHelperText
 } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+
 import { useParams, useNavigate } from 'react-router-dom';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -29,30 +31,36 @@ import da from 'date-fns/locale/da';
 function VoucherEdit() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const [imageFile, setimageFile] = useState(null);
+    console.log(id);
+
 
     const [voucherinfo, setVoucher] = useState({
         Voucher_Name: "",
-        Start_Date: new Date(), 
-        End_Date: new Date(),  
-        Discount_In_Percentage: "",
-        Discount_In_Value: "",
+        Voucher_Description: "",
+        Start_Date: new Date(),
+        End_Date: new Date(),
+        Discount_In_Percentage: 0,
+        Voucher_Description: "",
+        Discount_In_Value: 0,
         Member_Type: "Uplay",
-        Discount_type: "Percentage"
+        Discount_type: "Percentage",
+
     });
     useEffect(() => {
         http.get(`/Voucher/getOne/${id}`).then((res) => {
             console.log(res.data.Start_Date);
-
+            setimageFile(res.data.ImageFile);
+            console.log(res.data.ImageFile)
             setVoucher((prevVoucher) => ({
                 ...res.data,
-                Start_Date: new Date(res.data.Start_Date + 'Z'), 
-                End_Date: new Date(res.data.End_Date + 'Z'),
-            }));    
-            
+                Start_Date: new Date(res.data.Start_Date),
+                End_Date: new Date(res.data.End_Date),
+            }));
+
         });
     }, []);
 
-    console.log(voucherinfo);
 
     const formik = useFormik({
         initialValues: voucherinfo,
@@ -63,22 +71,33 @@ function VoucherEdit() {
                 .min(3, 'Voucher_Name must be at least 3 characters')
                 .max(100, 'Voucher_Name must be at most 100 characters')
                 .required('Voucher_Name is required'),
+            Voucher_Description: yup.string().trim()
+                .min(1, 'Voucher description must be at least 3 characters')
+                .max(50, 'Voucher Dewcription must be below 100 to make it concise for user.')
+                .required('voucher Description is required'),
             Discount_In_Percentage: yup.number()
-                .min(1, 'Discount Percent cannot below than 0%')
-                .max(100, 'Discount Percent cannot above 100%'),
+                .min(0, 'Discount Percent cannot below than 1%')
+                .max(100, 'Discount Percent cannot above 100%')
+                .required('Number is required'),
             Discount_In_Value: yup.number()
-                .min(1, 'Discount Value cannot below than $0')
-                .max(1000, 'Too Much'),
+                .min(0, 'Discount Value cannot below than $1')
+                .max(1000, 'Too Much')
+                .required('Number is required'),
+
 
             Start_Date: yup.date().required('Start date is required'),
             End_Date: yup.date().required('End date is required'),
             Member_Type: yup.string()
                 .required('Member type is required')
+
         }),
         onSubmit: (voucher) => {
-            console.log(voucher);
 
             voucher.Voucher_Name = voucher.Voucher_Name.trim();
+            voucher.Voucher_Description = voucher.Voucher_Description.trim();
+            if (imageFile) {
+                voucher.ImageFile = imageFile;
+            }
             //  voucher.Start_Date = new Date(voucher.Start_Date).toISOString();
             // voucher.End_Date = new Date(voucher.End_Date).toISOString();
             if (voucher.Discount_type === "Value") {
@@ -100,11 +119,45 @@ function VoucherEdit() {
         }
     });
 
+    console.log(formik);
+
+
+    const onFileChange = (e) => {
+        let file = e.target.files[0];
+        if (file) {
+            if (file.size > 1024 * 1024) {
+                toast.error('Maximum file size is 1MB');
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append('file', file);
+            http.post('/file/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+                .then((res) => {
+                    setimageFile(res.data.filename);
+                })
+                .catch(function (error) {
+                    console.log(error.response);
+                    toast.error(`${error.response.data.message}`);
+
+                });
+        }
+    };
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
 
-            <Box>
+            <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+
+            }}>
                 <Typography variant="h5" sx={{ my: 2 }}>
                     Edit Voucher
                 </Typography>
@@ -122,6 +175,19 @@ function VoucherEdit() {
                                 onBlur={formik.handleBlur}
                                 error={Boolean(formik.touched.Voucher_Name && formik.errors.Voucher_Name)}
                                 helperText={formik.touched.Voucher_Name && formik.errors.Voucher_Name}
+                            />
+
+                            <TextField
+                                fullWidth
+                                margin="dense"
+                                autoComplete="off"
+                                label="Voucher_Description"
+                                name="Voucher_Description"
+                                value={formik.values.Voucher_Description}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={Boolean(formik.touched.Voucher_Description && formik.errors.Voucher_Description)}
+                                helperText={formik.touched.Voucher_Description && formik.errors.Voucher_Description}
                             />
 
 
@@ -172,7 +238,7 @@ function VoucherEdit() {
                                 >
                                     <MenuItem value="Uplay">Uplay</MenuItem>
                                     <MenuItem value="NTUC">NTUC</MenuItem>
-                                    <MenuItem value="Guess">Guess</MenuItem>
+                                    <MenuItem value="Guest">Guest</MenuItem>
                                 </Select>
                                 {formik.touched.Member_Type && formik.errors.Member_Type && (
                                     <FormHelperText>{formik.errors.Member_Type}</FormHelperText>
@@ -187,11 +253,11 @@ function VoucherEdit() {
                                 onChange={(e) => {
                                     formik.handleChange(e);
                                     if (e.target.value === "Percentage") {
-                                        formik.setFieldValue("Discount_In_Value", "");
-                                        formik.setFieldValue("Discount_In_Percentage", 0);
-                                    } else if (e.target.value === "Value") {
-                                        formik.setFieldValue("Discount_In_Percentage", "");
                                         formik.setFieldValue("Discount_In_Value", 0);
+                                        formik.setFieldValue("Discount_In_Percentage", 1);
+                                    } else if (e.target.value === "Value") {
+                                        formik.setFieldValue("Discount_In_Percentage", 0);
+                                        formik.setFieldValue("Discount_In_Value", 1);
                                     }
                                 }}
 
@@ -231,14 +297,35 @@ function VoucherEdit() {
                                     autoComplete="off"
                                     label="Discount_In_Value"
                                     name="Discount_In_Value"
-                                        value={formik.values.Discount_In_Value}
+                                    value={formik.values.Discount_In_Value}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                     type="number"
-                                        error={Boolean(formik.touched.Discount_In_Value && formik.errors.Discount_In_Value)}
-                                        helperText={formik.touched.Discount_In_Value && formik.errors.Discount_In_Value}
+                                    error={Boolean(formik.touched.Discount_In_Value && formik.errors.Discount_In_Value)}
+                                    helperText={formik.touched.Discount_In_Value && formik.errors.Discount_In_Value}
                                 />
                             )}
+                            <Grid item xs={12} md={6} lg={4}>
+                                <Box sx={{ textAlign: 'left', mt: 2 }} >
+                                    {
+                                        imageFile && (
+                                            <Box className="aspect-ratio-container" sx={{ mt: 3 }}>
+                                                <img alt="event"
+                                                    src={`${import.meta.env.VITE_FILE_BASE_URL}${imageFile
+                                                        }`}>
+                                                </img>
+                                            </Box>
+                                        )
+                                    }
+                                    <Button variant="contained" component="label" sx={{ mt: 3 }}>
+                                        Upload Image
+                                        <input hidden accept="image/*" multiple type="file"
+                                            onChange={onFileChange} />
+                                    </Button>
+
+                                </Box>
+                            </Grid>
+
 
 
 
@@ -247,9 +334,19 @@ function VoucherEdit() {
 
 
                     </Grid>
-                    <Button variant="contained" type="submit">
-                        Add
-                    </Button>
+                    <Box sx={{ mt: 2 }}>
+                        <Button variant="contained" type="submit" style={{ width: '100%' }}>
+                            Add Voucher
+                        </Button>
+                    </Box>
+                    <Box sx={{ mt: 1 }}>
+                        <Link to="/Voucher" sx={{ color: 'white', textDecoration: 'none' }}>
+                            <Button variant="contained" style={{ width: '100%' }}>
+                                Cancel
+                            </Button>
+                        </Link>
+
+                    </Box>
 
                 </Box>
 

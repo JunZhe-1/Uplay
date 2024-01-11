@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
     Box,
     Typography,
@@ -14,7 +14,9 @@ import {
     MenuItem,
     FormHelperText
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+
+import { useParams, useNavigate } from 'react-router-dom';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -26,25 +28,36 @@ import 'react-toastify/dist/ReactToastify.css';
 import UserContext from '../contexts/UserContext';
 import da from 'date-fns/locale/da';
 
-
-function EventAdd() {
-
+function EventEdit() {
+    const { id } = useParams();
     const navigate = useNavigate();
     const [imageFile, setimageFile] = useState(null);
 
 
-    const formik = useFormik({
-        initialValues: {
-            Event_Name: "",
-            Event_Description: "",
-            Event_Location: "",
-            Event_Category: "Sports & Wellness",
-            Event_Fee_Guest: 0,
-            Event_Fee_Uplay: 0,
-            Event_Fee_NTUC: 0,
-            Vacancies: 0,
+    const [Eventinfo, setEvent] = useState({
+        Event_Name: "",
+        Event_Description: "",
+        Event_Location: "",
+        Event_Category: "Sports & Wellness",
 
-        },
+        Event_Fee_Guest: 0,
+        Event_Fee_Uplay: 0,
+        Event_Fee_NTUC: 0,
+        Vacancies: 0,
+    });
+
+    useEffect(() => {
+        http.get(`/Event/getEvent/${id}`).then((res) => {
+            setimageFile(res.data.imageFile);
+            setEvent(res.data);
+
+        });
+    }, []);
+
+
+    const formik = useFormik({
+        initialValues: Eventinfo,
+        enableReinitialize: true,
         validationSchema: yup.object({
             Event_Name: yup.string().trim()
                 .min(3, 'Event Name must be at least 3 characters')
@@ -77,38 +90,29 @@ function EventAdd() {
                 .required('Vacancies is required'),
 
 
-
-
         }),
         onSubmit: (data) => {
-
             data.Event_Name = data.Event_Name.trim();
             data.Event_Description = data.Event_Description.trim();
             data.Event_Location = data.Event_Location.trim();
-            data.Event_Fee_Guest = data.Event_Fee_Guest;
             if (imageFile) {
                 data.imageFile = imageFile;
+
             }
-            console.log(data);
-
-
-
-
-            http.post("/Event/add_event", data)
+            http.put(`/Event/update/${id}`, data)
                 .then((res) => {
-                    console.log(data);
+                    console.log(res.data);
+                    console.log(res.data.imageFile);
                     navigate("/Event");
                 })
                 .catch(function (err) {
-
-
                     toast.error(`${err.response.data.message}`);
                 })
 
         }
     });
 
-    console.log(formik);
+
 
     const onFileChange = (e) => {
         let file = e.target.files[0];
@@ -136,14 +140,12 @@ function EventAdd() {
         }
     };
 
-
-
     return (
 
 
         <Box>
             <Typography variant="h5" sx={{ my: 2 }}>
-                Add Event
+                Edit Event
 
             </Typography>
             <Box component="form" onSubmit={formik.handleSubmit}>
@@ -161,6 +163,7 @@ function EventAdd() {
                             error={Boolean(formik.touched.Event_Name && formik.errors.Event_Name)}
                             helperText={formik.touched.Event_Name && formik.errors.Event_Name}
                         />
+
                         <TextField
                             fullWidth
                             multiline
@@ -175,7 +178,6 @@ function EventAdd() {
                             error={Boolean(formik.touched.Event_Description && formik.errors.Event_Description)}
                             helperText={formik.touched.Event_Description && formik.errors.Event_Description}
                         />
-
 
                         <FormControl fullWidth margin="dense"
                             error={Boolean(formik.touched.Event_Category && formik.errors.Event_Category)}
@@ -193,7 +195,6 @@ function EventAdd() {
                                 <MenuItem value="Hobbies & Wellness">Hobbies & Wellness</MenuItem>
                                 <MenuItem value="Sports & Wellness">Sports & Wellness</MenuItem>
                                 <MenuItem value="Travel">Travel</MenuItem>
-
                             </Select>
                             {formik.touched.Event_Category && formik.errors.Event_Category && (
                                 <FormHelperText>{formik.errors.Event_Category}</FormHelperText>
@@ -212,6 +213,7 @@ function EventAdd() {
                             error={Boolean(formik.touched.Event_Location && formik.errors.Event_Location)}
                             helperText={formik.touched.Event_Location && formik.errors.Event_Location}
                         />
+
 
                         <Grid container spacing={2}>
                             <Grid item xs={4}>
@@ -305,9 +307,17 @@ function EventAdd() {
 
                 </Grid>
                 <Box sx={{ mt: 5 }}>
-                    <Button variant="contained" type="submit">
-                        Add
+                    <Button variant="contained" type="submit" style={{ width: '100%' }}>
+                        Add Event
                     </Button>
+                </Box>
+                <Box sx={{ mt: 1 }}>
+                    <Link to="/Event" sx={{ color: 'white', textDecoration: 'none' }}>
+                        <Button variant="contained" style={{ width: '100%' }}>
+                            Cancel
+                        </Button>
+                    </Link>
+
                 </Box>
             </Box>
 
@@ -316,4 +326,6 @@ function EventAdd() {
     );
 
 }
-export default EventAdd;
+
+
+export default EventEdit;

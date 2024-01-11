@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext, navigate } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
+
     Box, Typography, Grid, Card, CardContent, Input, IconButton, Button,
     Paper, TableContainer, Table, TableHead, TableBody, TableRow, TableCell
     , Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions
@@ -11,23 +12,26 @@ import http from '../http';
 import dayjs from 'dayjs';
 import global from '../global';
 import Tutorials from './Tutorials';
+import UserContext from '../contexts/UserContext';
 
 
 
 function EventList() {
     const navigate = useNavigate();
-    const [VoucherList, setVoucherList] = useState([]);
+    const [EventList, setEventList] = useState([]);
     const [search, setSearch] = useState('');
+    const { user } = useContext(UserContext);
+
     const [voucher_id, setid] = useState('');
 
 
     useEffect(() => {
-        getVoucherList();
+        getEventList();
     }, []);
 
-    const getVoucherList = () => {
+    const getEventList = () => {
         http.get('/Event').then((res) => {
-            setVoucherList(res.data);
+            setEventList(res.data);
             console.log(res.data.Event_Fee_Guest);
             console.log(res.data);
 
@@ -57,13 +61,13 @@ function EventList() {
 
     const onClickClear = () => {
         setSearch('');
-        getVoucherList();
+        getEventList();
     };
 
     const searchsender = () => {
         if (search.trim() !== '') {
             http.get(`/Event?search=${search}`).then((res) => {
-                setVoucherList(res.data);
+                setEventList(res.data);
             });
         }
 
@@ -86,7 +90,7 @@ function EventList() {
         http.delete(`/Event/delete/${id}`)
             .then((res) => {
                 setOpen(false);
-                getVoucherList();
+                getEventList();
             });
     };
 
@@ -108,7 +112,21 @@ function EventList() {
                 <IconButton color="primary" onClick={onClickClear}>
                     <Clear />
                 </IconButton>
+                <Box sx={{ flexGrow: 1 }} />
+                {
+                    user.emailAddress.toLowerCase() === "admin@gmail.com" && (
+                        <Link to="/Event/add_event" style={{ textDecoration: 'none' }}>
+                            <Button variant='contained'>
+                                Add
+                            </Button>
+                        </Link>
+                    )
+                }
             </Box>
+
+
+
+
 
 
 
@@ -117,70 +135,66 @@ function EventList() {
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>ImageFile</TableCell>
-                                <TableCell>Event Name</TableCell>
-                                <TableCell>Event Description</TableCell>
-                                <TableCell>GUEST Fee</TableCell>
-                                <TableCell>NTUC Fee</TableCell>
-                                <TableCell>Uplay Fee</TableCell>
-                                <TableCell>Vacancy</TableCell>
-
+                                <TableCell style={{ width: '20%' }}>Image</TableCell>
+                                <TableCell style={{ width: '20%' }}>Name</TableCell>
+                                <TableCell style={{ width: '20%' }}>Location</TableCell>
+                                <TableCell style={{ width: '20%' }}>Category</TableCell>
+                                <TableCell style={{ width: '20%', textAlign: 'center' }}>GUEST / NTUC / Uplay Price</TableCell>
+                                <TableCell style={{ width: '20%' }}>Vacancy</TableCell>
+                                <TableCell style={{ width: '20%' }}></TableCell>
+                                <TableCell style={{ width: '20%' }}></TableCell>
                             </TableRow>
                         </TableHead>
 
                         <TableBody>
-                            {VoucherList
-                                .sort((a, b) => new Date(a.end_Date) - new Date(b.end_Date))
+                            {EventList
+                                .sort((a, b) => new Date(a.UpdatedAt) - new Date(b.UpdatedAt))
                                 .map((data, index) => (
-
-
                                     <TableRow key={index}>
-                                        <TableCell> {
-                                            data.ImageFile && (
-                                                <Box >
+                                        <TableCell style={{ width: '20%' }}>
+                                            {data.imageFile && (
+                                                <Box>
                                                     <img
                                                         alt="tutorial"
-                                                        src={`${import.meta.env.VITE_FILE_BASE_URL}${data.ImageFile}`}
-                                                        style={{ width: '40%', height: '40%', objectFit: 'cover' }}
+                                                        src={`${import.meta.env.VITE_FILE_BASE_URL}${data.imageFile}`}
+                                                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px' }}
                                                     />
-
                                                 </Box>
-                                            )
-                                        }</TableCell>
-                                        <TableCell>{data.Event_Name}</TableCell>
-                                        <TableCell>{data.Event_Description}</TableCell>
-                                        <TableCell>{data.Event_Fee_Guest}</TableCell>
-                                        <TableCell>{data.Event_Fee_NTUC}</TableCell>
-                                        <TableCell>{data.Event_Fee_Uplay}</TableCell>
-                                        <TableCell>{data.Vacancies}</TableCell>
-
-                                        <TableCell> <IconButton color="primary"
-                                            onClick={() => handleOpen(data.Event_ID)}>
-                                            <Clear />
-                                        </IconButton></TableCell>
-                                        <TableCell> <Link to={`/Voucher/update/${data.Event_ID}`}>
-                                            <IconButton color="primary" sx={{ padding: '4px' }}>
-                                                <Edit />
+                                            )}
+                                        </TableCell>
+                                        <TableCell style={{ width: '20%' }}>{data.Event_Name}</TableCell>
+                                        <TableCell style={{ width: '20%' }}>{data.Event_Location}</TableCell>
+                                        <TableCell style={{ width: '20%' }}>{data.Event_Category}</TableCell>
+                                        <TableCell style={{ width: '20%', textAlign: 'center' }}>
+                                            ${data.Event_Fee_Guest}&nbsp; ${data.Event_Fee_NTUC}&nbsp; ${data.Event_Fee_Uplay}
+                                        </TableCell>
+                                        <TableCell style={{ width: '20%' }}>{data.Vacancies} pax</TableCell>
+                                        <TableCell style={{ width: '20%' }}>
+                                            <IconButton color="primary" onClick={() => handleOpen(data.Event_ID)}>
+                                                <Clear />
                                             </IconButton>
-                                        </Link></TableCell>
-
-
-
-
-
+                                        </TableCell>
+                                        <TableCell style={{ width: '20%' }}>
+                                            <Link to={`/Event/editevent/${data.Event_ID}`}>
+                                                <IconButton color="primary" sx={{ padding: '4px' }}>
+                                                    <Edit />
+                                                </IconButton>
+                                            </Link>
+                                        </TableCell>
                                     </TableRow>
                                 ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
+
             </Paper>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>
-                    Delete Voucher
+                    Delete Event
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Are you sure you want to Delete this Voucher?
+                        Are you sure you want to Delete this Event?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
