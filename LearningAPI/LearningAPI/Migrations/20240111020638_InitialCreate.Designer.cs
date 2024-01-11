@@ -11,13 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-<<<<<<<< HEAD:LearningAPI/LearningAPI/Migrations/20240110013102_InitialCreate.Designer.cs
-    [Migration("20240110013102_InitialCreate")]
+    [Migration("20240111020638_InitialCreate")]
     partial class InitialCreate
-========
-    [Migration("20240109042549_hello")]
-    partial class hello
->>>>>>>> 93da817bec2223f0084a9a43f7a929ebeb982829:LearningAPI/LearningAPI/Migrations/20240109042549_hello.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,8 +41,8 @@ namespace LearningAPI.Migrations
 
                     b.Property<string>("Event_Description")
                         .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("varchar(300)")
+                        .HasMaxLength(600)
+                        .HasColumnType("varchar(600)")
                         .HasAnnotation("Relational:JsonPropertyName", "Event_Description");
 
                     b.Property<int>("Event_Fee_Guest")
@@ -251,7 +246,6 @@ namespace LearningAPI.Migrations
                         .HasAnnotation("Relational:JsonPropertyName", "End_Date");
 
                     b.Property<string>("ImageFile")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)")
                         .HasAnnotation("Relational:JsonPropertyName", "ImageFile");

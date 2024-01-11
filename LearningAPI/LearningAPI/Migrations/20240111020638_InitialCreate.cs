@@ -7,11 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace LearningAPI.Migrations
 {
     /// <inheritdoc />
-<<<<<<<< HEAD:LearningAPI/LearningAPI/Migrations/20240110013102_InitialCreate.cs
     public partial class InitialCreate : Migration
-========
-    public partial class hello : Migration
->>>>>>>> 93da817bec2223f0084a9a43f7a929ebeb982829:LearningAPI/LearningAPI/Migrations/20240109042549_hello.cs
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,7 +22,7 @@ namespace LearningAPI.Migrations
                     Event_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Event_Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    Event_Description = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false),
+                    Event_Description = table.Column<string>(type: "varchar(600)", maxLength: 600, nullable: false),
                     Event_Category = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     Event_Location = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false),
                     Event_Fee_Guest = table.Column<int>(type: "int", nullable: false),
@@ -93,7 +89,7 @@ namespace LearningAPI.Migrations
                     Discount_In_Percentage = table.Column<int>(type: "int", nullable: false),
                     Discount_In_Value = table.Column<int>(type: "int", nullable: false),
                     Create_date = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ImageFile = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false),
+                    ImageFile = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true),
                     Member_Type = table.Column<string>(type: "longtext", nullable: false)
                 },
                 constraints: table =>

@@ -38,8 +38,8 @@ namespace LearningAPI.Migrations
 
                     b.Property<string>("Event_Description")
                         .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("varchar(300)")
+                        .HasMaxLength(600)
+                        .HasColumnType("varchar(600)")
                         .HasAnnotation("Relational:JsonPropertyName", "Event_Description");
 
                     b.Property<int>("Event_Fee_Guest")
@@ -243,7 +243,6 @@ namespace LearningAPI.Migrations
                         .HasAnnotation("Relational:JsonPropertyName", "End_Date");
 
                     b.Property<string>("ImageFile")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)")
                         .HasAnnotation("Relational:JsonPropertyName", "ImageFile");
