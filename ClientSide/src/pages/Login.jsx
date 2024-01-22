@@ -20,7 +20,7 @@ function Login() {
         },
         validationSchema: yup.object({
             emailAddress: yup.string().trim()
-                .email('Enter a valid email')
+                .matches(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/, 'Enter a valid email address')
                 .max(50, 'Email must be at most 50 characters')
                 .required('Email is required'),
             password: yup.string().trim()

@@ -44,11 +44,11 @@ function VoucherAdd() {
         },
         validationSchema: yup.object({
             Voucher_Name: yup.string().trim()
-                .min(3, 'Voucher_Name must be at least 3 characters')
-                .max(50, 'Voucher_Name must be at most 100 characters')
-                .required('Voucher_Name is required'),
+                .min(1, 'Voucher Name must be at least 1 characters')
+                .max(50, 'Voucher Name must be at most 100 characters')
+                .required('Voucher Name is required'),
             Voucher_Description: yup.string().trim()
-                .min(1, 'Voucher description must be at least 3 characters')
+                .min(1, 'Voucher description must be at least 1 characters')
                 .max(50, 'Voucher Dewcription must be below 100 to make it concise for user.')
                 .required('voucher Description is required'),
             Discount_In_Percentage: yup.number()
