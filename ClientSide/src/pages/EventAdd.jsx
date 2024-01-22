@@ -1,4 +1,5 @@
-﻿import React, { useEffect, useState, useContext } from 'react';
+﻿/* eslint-disable no-unused-vars */
+import React, { useEffect, useState, useContext } from 'react';
 import {
     Box,
     Typography,
@@ -38,7 +39,8 @@ function EventAdd() {
             Event_Name: "",
             Event_Description: "",
             Event_Location: "",
-            Event_Category:"Sports & Wellness",
+            Event_Category: "Sports & Wellness",
+            Event_Launching_Date:"",
             Event_Fee_Guest: 0,   
             Event_Fee_Uplay: 0, 
             Event_Fee_NTUC: 0,
@@ -75,6 +77,7 @@ function EventAdd() {
                 .min(1, 'Vacancies Value cannot below than 0')
                 .max(10000, 'maximun is 10000')
                 .required('Vacancies is required'),
+            Event_Launching_Date: yup.date().required('Event Date is required')
 
             
 
@@ -85,7 +88,7 @@ function EventAdd() {
             data.Event_Name = data.Event_Name.trim();
             data.Event_Description = data.Event_Description.trim();
             data.Event_Location = data.Event_Location.trim();
-            data.Event_Fee_Guest = data.Event_Fee_Guest;
+            data.Event_Fee_Guest = parseInt(data.Event_Fee_Guest);
             if (imageFile) {
                 data.imageFile = imageFile;
             }
@@ -97,7 +100,7 @@ function EventAdd() {
             http.post("/Event/add_event", data)
                 .then((res) => {
                     console.log(data);
-                    navigate("/Event");
+                   // navigate("/Event");
                 })
                 .catch(function (err) {
 
@@ -140,6 +143,7 @@ function EventAdd() {
 
     return (
 
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
 
         <Box>
             <Typography variant="h5" sx={{ my: 2 }}>
@@ -276,7 +280,21 @@ function EventAdd() {
                             error={Boolean(formik.touched.Vacancies && formik.errors.Vacancies)}
                             helperText={formik.touched.Vacancies && formik.errors.Vacancies}
                         />
-
+                        <DatePicker
+                            fullWidth
+                            margin="dense"
+                            label="Event_Launching_Date"
+                            inputVariant="outlined"
+                            format="dd/MM/yyyy"
+                            value={formik.values.Event_Launching_Date}
+                            onChange={(date) => {
+                                formik.setFieldValue('Event_Launching_Date', date);
+                                formik.setFieldError('Event_Launching_Date', ''); // Clear validation error
+                            }}
+                            onBlur={formik.handleBlur}
+                            error={formik.touched.Event_Launching_Date && Boolean(formik.errors.Event_Launching_Date)}
+                            helperText={formik.touched.Event_Launching_Date && formik.errors.Event_Launching_Date}
+                        />
 
 
                         <Grid item xs={12} md={6} lg={4}>
@@ -312,7 +330,8 @@ function EventAdd() {
             </Box>
 
             <ToastContainer />
-        </Box>
+            </Box>
+        </LocalizationProvider>
         );
 
 }

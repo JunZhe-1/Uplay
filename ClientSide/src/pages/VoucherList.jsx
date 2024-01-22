@@ -114,7 +114,7 @@ function VoucherList() {
                 {
                     user.emailAddress.toLowerCase() === "admin@gmail.com" &&(
                         <Link to="/Voucher/add" style={{ textDecoration: 'none' }}>
-                            <Button variant='contained'>
+                            <Button variant='contained' style={{ background: 'grey' }}>
                                 Add
                             </Button>
                         </Link>
@@ -176,16 +176,16 @@ function VoucherList() {
                                             </>
 
                                         </TableCell>
-                                        <TableCell> <IconButton color="primary"
-                                            onClick={() => handleOpen(data.Voucher_ID)}>
-                                            <Clear />
-                                        </IconButton></TableCell>
+                                  
                                         <TableCell> <Link to={`/Voucher/update/${data.Voucher_ID}`}>
-                                            <IconButton color="primary" sx={{ padding: '4px' }}>
+                                            <IconButton color="primary" sx={{ padding: '4px', color: '#0096FF' }}>
                                                 <Edit />
                                             </IconButton>
                                         </Link></TableCell>
-
+                                        <TableCell> <IconButton color="primary"
+                                            onClick={() => handleOpen(data.Voucher_ID)} style={{ color: 'red' }}>
+                                            <Clear />
+                                        </IconButton></TableCell>
 
 
 

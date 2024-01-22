@@ -116,7 +116,7 @@ function EventList() {
                 {
                         user.emailAddress.toLowerCase() === "admin@gmail.com" && (
                         <Link to="/Event/add_event" style={{ textDecoration: 'none' }}>
-                            <Button variant='contained'>
+                            <Button variant='contained' >
                                 Add
                             </Button>
                         </Link>
@@ -137,9 +137,10 @@ function EventList() {
                             <TableRow>
                                 <TableCell style={{ width: '20%' }}>Image</TableCell>
                                 <TableCell style={{ width: '20%' }}>Name</TableCell>
+                                <TableCell style={{ width: '20%' }}>Start from</TableCell>
                                 <TableCell style={{ width: '20%' }}>Location</TableCell>
                                 <TableCell style={{ width: '20%' }}>Category</TableCell>
-                                <TableCell style={{ width: '20%', textAlign: 'center' }}>GUEST / NTUC / Uplay Price</TableCell>
+                                <TableCell style={{ width: '20%', textAlign: 'center' }}> Uplay Price</TableCell>
                                 <TableCell style={{ width: '20%' }}>Vacancy</TableCell>
                                 <TableCell style={{ width: '20%' }}></TableCell>
                                 <TableCell style={{ width: '20%' }}></TableCell>
@@ -163,23 +164,27 @@ function EventList() {
                                             )}
                                         </TableCell>
                                         <TableCell style={{ width: '20%' }}>{data.Event_Name}</TableCell>
+                                        <TableCell style={{ width: '20%' }}>{dayjs.utc(data.Event_Launching_Date).format(global.datetimeFormat1)}</TableCell>
                                         <TableCell style={{ width: '20%' }}>{data.Event_Location}</TableCell>
                                         <TableCell style={{ width: '20%' }}>{data.Event_Category}</TableCell>
                                         <TableCell style={{ width: '20%', textAlign: 'center' }}>
-                                            ${data.Event_Fee_Guest}&nbsp; ${data.Event_Fee_NTUC}&nbsp; ${data.Event_Fee_Uplay}
+${data.Event_Fee_Uplay}
                                         </TableCell>
                                         <TableCell style={{ width: '20%' }}>{data.Vacancies} pax</TableCell>
-                                        <TableCell style={{ width: '20%' }}>
-                                            <IconButton color="primary" onClick={() => handleOpen(data.Event_ID)}>
-                                                <Clear />
-                                            </IconButton>
-                                        </TableCell>
+                                       
                                         <TableCell style={{ width: '20%' }}>
                                             <Link to={`/Event/editevent/${data.Event_ID}`}>
-                                                <IconButton color="primary" sx={{ padding: '4px' }}>
+                                                <IconButton color="primary" sx={{ padding: '4px', color: '#0096FF' }}>
                                                     <Edit />
                                                 </IconButton>
+
                                             </Link>
+                                        </TableCell>
+
+                                        <TableCell style={{ width: '20%' }}>
+                                            <IconButton color="primary" onClick={() => handleOpen(data.Event_ID)} style={{ color: 'red' }}>
+                                                <Clear />
+                                            </IconButton>
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -194,7 +199,7 @@ function EventList() {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Are you sure you want to Delete this Event?
+                        Are you sure you want to Delete this Event, ID ${voucher_id} ?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

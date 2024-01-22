@@ -17,7 +17,6 @@ import Profile from './pages/Profile';
 import http from './http';
 import UserContext from './contexts/UserContext';
 import BuyMember from './pages/BuyMember';
-
 import VoucherEdit from './pages/VoucherEdit';
 import EventAdd from './pages/EventAdd';
 import EventList from './pages/EventList';
@@ -26,8 +25,11 @@ import EventEdit from './pages/EventEdit';
 import EventClientSide from './pages/EventClientSide';
 import EventDetail from './pages/EventDetail';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import HomePage from './pages/Homepage';
 function App() {
     const [user, setUser] = useState(null);
+    const imageUrl = './../image/testing.png';
+
 
 
 
@@ -66,15 +68,20 @@ function App() {
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      <Router>
+          <Router>
+            
         <ThemeProvider theme={MyTheme}>
-          <AppBar position="static" className="AppBar">
+                  <AppBar position="static" className="AppBar" sx={{ backgroundColor: 'white' }}>
             <Container>
-              <Toolbar disableGutters={true}>
-                <Link to="/">
-                  <Typography variant="h6" component="div">
-                    Uplay
-                  </Typography>
+                          <Toolbar disableGutters={true}>
+                              <Link to="/" style={{ textDecoration: 'none' } }>
+                              <img
+                                  alt="tutorial"
+                                  src={'./image/uplaylogo.png'}
+                                  style={{ width: '70%', height: '100%', objectFit: 'cover', borderRadius: '10px' }}
+                              />
+        
+                
                 </Link>
                 {/*<Link to="/tutorials" ><Typography>Home page</Typography></Link>*/}
                               <Box sx={{ flexGrow: 1 }}></Box>
@@ -82,12 +89,14 @@ function App() {
                                   <>
                                       {user.userName !== "admin" ? (
                                           <div>
-                                              <Link to={`/Event/EventClientSide`}>
+                                              <Link to={`/Event/EventClientSide`} style={{ textDecoration: 'none' }}>
                                                   <Button
                                                       className="appbarbutton"
                                                       variant="contained"
                                                       disableElevation
                                                       size="small"
+
+                                                      style={{ backgroundColor: 'white', fontSize:'14px' }}
                                                   >
                                                       All Experiences
                                                   </Button>
@@ -114,23 +123,23 @@ function App() {
                                                   TransitionComponent={Fade}
                                                   PaperProps={{
                                                       sx: {
-                                                          backgroundColor: 'green',
+                                                          backgroundColor: 'white',
                                                       },
                                                   }}
                                               >
                                                   <MenuItem onClick={handleClose}>
-                                                      <Link to="/profile">
-                                                          <Typography sx={{ color: 'white' }}>My Profile</Typography>
+                                                      <Link to="/profile" style={{ textDecoration: 'none' }}>
+                                                          <Typography sx={{ color: 'black' }}>My Profile</Typography>
                                                       </Link>
                                                   </MenuItem>
                                                   <MenuItem onClick={handleClose}>
-                                                      <Link to="/Voucher/uservoucher/:id">
-                                                          <Typography sx={{ color: 'white' }}>My Vouchers</Typography>
+                                                      <Link to="/Voucher/uservoucher/:id" style={{ textDecoration: 'none' }}>
+                                                          <Typography sx={{ color: 'black' }}>My Vouchers</Typography>
                                                       </Link>
                                                   </MenuItem>
                                                   <MenuItem onClick={handleClose}>
                                                       <Typography
-                                                          sx={{ color: 'white', cursor: 'pointer' }}
+                                                          sx={{ color: 'black', cursor: 'pointer' }}
                                                           onClick={logout}
                                                       >
                                                           Logout
@@ -167,18 +176,18 @@ function App() {
                                                   TransitionComponent={Fade}
                                                   PaperProps={{
                                                       sx: {
-                                                          backgroundColor: 'green',
+                                                          backgroundColor: '#FAD5A5',
                                                       },
                                                   }}
                                               >
                                                   <MenuItem onClick={handleClose1}>
-                                                      <Link to="/Event">
-                                                          <Typography sx={{ color: 'white' }}>Event Management</Typography>
+                                                      <Link to="/Event" style={{ textDecoration: 'none' }}>
+                                                          <Typography sx={{ color: 'black' }}>Event Management</Typography>
                                                       </Link>
                                                   </MenuItem>
                                                   <MenuItem onClick={handleClose1}>
-                                                      <Link to="/Voucher">
-                                                          <Typography sx={{ color: 'white' }}>Voucher Management</Typography>
+                                                      <Link to="/Voucher" style={{ textDecoration: 'none' }}>
+                                                          <Typography sx={{ color: 'black' }}>Voucher Management</Typography>
                                                       </Link>
                                                   </MenuItem>
                                                   {/* Add more menu items as needed */}
@@ -205,18 +214,18 @@ function App() {
                                                   TransitionComponent={Fade}
                                                   PaperProps={{
                                                       sx: {
-                                                          backgroundColor: 'green',
+                                                          backgroundColor: '#FAD5A5',
                                                       },
                                                   }}
                                               >
                                                   <MenuItem onClick={handleClose}>
-                                                      <Link to="/profile">
-                                                          <Typography sx={{ color: 'white' }}>My Profile</Typography>
+                                                      <Link to="/profile" style={{ textDecoration: 'none' } }>
+                                                          <Typography sx={{ color: 'black' }}>My Profile</Typography>
                                                       </Link>
                                                   </MenuItem>
                                                   <MenuItem onClick={handleClose}>
                                                       <Typography
-                                                          sx={{ color: 'white', cursor: 'pointer' }}
+                                                          sx={{ color: 'black', cursor: 'pointer' }}
                                                           onClick={logout}
                                                       >
                                                           Logout
@@ -242,8 +251,8 @@ function App() {
           </AppBar>
 
                     <Container>
-                        <Routes>
-                            <Route path={"/"} element={<Tutorials />} />
+                      <Routes>
+                          <Route path={"/"} element={<HomePage />} />
                             <Route path={"/tutorials"} element={<Tutorials />} />
                             <Route path={"/addtutorial"} element={<AddTutorial />} />
                             <Route path={"/Voucher/add"} element={<VoucherAdd />} />

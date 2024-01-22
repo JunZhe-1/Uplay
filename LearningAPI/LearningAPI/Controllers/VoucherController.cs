@@ -153,28 +153,26 @@ namespace LearningAPI.Controllers
 
                 if (!allowedExtensions.Contains(fileExtension, StringComparer.OrdinalIgnoreCase))
                 {
-                    string message = "only image is allowedf";
+                    string message = "only image is allowed";
                     return BadRequest(new { message });
                 }
             }
 
 
 
-            if (voucher.Discount_type == "Value" && voucher.Discount_In_Value == 0)
+            if (voucher.Discount_In_Value == 0)
             {
-                string message = "Discount should be start from $1";
+                string message = "Discount value must be more than 0";
                 return BadRequest(new { message });
 
             }
-            else if (voucher.Discount_type == "Percentage" && voucher.Discount_In_Percentage == 0)
+            else if (voucher.Limit_Value == 0)
             {
-                string message = "Discount should be start from 1%";
+                string message = "Limit Value must be more than 0";
                 return BadRequest(new { message });
             }
             else
             {
-
-
 
                 if (end >= now && start <= end)
                 {
@@ -188,14 +186,13 @@ namespace LearningAPI.Controllers
                         {
                             Voucher_Name = voucher.Voucher_Name,
                             Discount_In_Value = voucher.Discount_In_Value,
-                            Discount_In_Percentage = voucher.Discount_In_Percentage,
+                            Limit_Value = voucher.Limit_Value,
                             Start_Date = start,
                             End_Date = end,
                             ImageFile = voucher.ImageFile,
                             Voucher_Description = voucher.Voucher_Description,
                             Member_Type = voucher.Member_Type,
-                            Create_date = now,
-                            Discount_type = voucher.Discount_type
+                            Create_date = now
                         };
                         _context.Vouchers.Add(myVoucher);
                         _context.SaveChanges();
@@ -212,12 +209,12 @@ namespace LearningAPI.Controllers
                 else if (start > end)
                 {
 
-                    string message = "Logic Error with Start & End date";
+                    string message = "Voucher's End Date must set after Start Date";
                     return BadRequest(new { message });
                 }
                 else if (end < now)
                 {
-                    string message = "End Date must set after todat's date";
+                    string message = "Voucher's End date must set after today's Date";
                     return BadRequest(new { message });
                 }
                 else
@@ -282,24 +279,23 @@ namespace LearningAPI.Controllers
                 }
 
 
-                if (voucher.Discount_type == "Value" && voucher.Discount_In_Value == 0)
+                if (voucher.Discount_In_Value == 0)
                 {
-                    string message = "Discount should be start from $1";
+                    string message = "Discount value must be more than 0";
                     return BadRequest(new { message });
 
                 }
-                else if (voucher.Discount_type == "Percentage" && voucher.Discount_In_Percentage == 0)
+                else if (voucher.Limit_Value == 0)
+
                 {
-                    string message = "Discount should be start from 1%";
+                    string message = "Limit value must be more than 0";
                     return BadRequest(new { message });
                 }
                 else
                 {
-
-
                     var myvoucher = _context.Vouchers.Find(id);
 
-                    // if the voucher is not found, enter if statement to return NotFounf()
+                    // if the voucher is not found, enter if statement to return NotFound()
                     if (myvoucher == null)
                     {
                         return NotFound();
@@ -335,7 +331,7 @@ namespace LearningAPI.Controllers
                         }
                         if (end != myvoucher.End_Date)
                         {
-                            end = voucher.End_Date;
+                            myvoucher.End_Date = end;
                         }
                         check = true;
 
@@ -343,12 +339,12 @@ namespace LearningAPI.Controllers
                     else if (start > end)
                     {
 
-                        string message = "Logic Error with Start & End date";
+                        string message = "Voucher's End Date must set after Start Date ";
                         return BadRequest(new { message });
                     }
                     else if (end < now)
                     {
-                        string message = "End Date must set after todat's date";
+                        string message = "Voucher's End Date must set after today's date";
                         return BadRequest(new { message });
                     }
                     else
@@ -356,7 +352,12 @@ namespace LearningAPI.Controllers
                         string message = "Error in adding voucher, please try again!";
                         return BadRequest(new { message });
                     }
-                    myvoucher.Discount_type = voucher.Discount_type;
+
+                    if (myvoucher.Limit_Value != voucher.Limit_Value)
+                    {
+                        myvoucher.Limit_Value = voucher.Limit_Value;
+                    }
+
                     if (myvoucher.Member_Type != voucher.Member_Type)
                     {
                         myvoucher.Member_Type = voucher.Member_Type;
@@ -364,25 +365,32 @@ namespace LearningAPI.Controllers
 
                     }
 
-                    if (voucher.Discount_type == "Value")
+                    if (myvoucher.Discount_In_Value != voucher.Discount_In_Value)
                     {
-                        if (voucher.Discount_In_Value != myvoucher.Discount_In_Value && voucher.Discount_In_Value != 0)
-                        {
-                            myvoucher.Discount_In_Value = voucher.Discount_In_Value;
-                            myvoucher.Discount_In_Percentage = 0;
-                            check = true;
+                        myvoucher.Discount_In_Value = voucher.Discount_In_Value;
+                        check = true;
 
-                        }
                     }
-                    else if (voucher.Discount_type == "Percentage")
-                    {
-                        if (voucher.Discount_In_Percentage != myvoucher.Discount_In_Percentage && voucher.Discount_In_Percentage != 0)
-                        {
-                            myvoucher.Discount_In_Percentage = voucher.Discount_In_Percentage;
-                            myvoucher.Discount_In_Value = 0;
-                            check = true;
-                        }
-                    }
+
+                    /*   if (voucher.Discount_type == "Value")
+					   {
+						   if (voucher.Discount_In_Value != myvoucher.Discount_In_Value && voucher.Discount_In_Value != 0)
+						   {
+							   myvoucher.Discount_In_Value = voucher.Discount_In_Value;
+							   myvoucher.Discount_In_Percentage = 0;
+							   check = true;
+
+						   }
+					   }
+					   else if (voucher.Discount_type == "Percentage")
+					   {
+						   if (voucher.Discount_In_Percentage != myvoucher.Discount_In_Percentage && voucher.Discount_In_Percentage != 0)
+						   {
+							   myvoucher.Discount_In_Percentage = voucher.Discount_In_Percentage;
+							   myvoucher.Discount_In_Value = 0;
+							   check = true;
+						   }
+					   }*/
 
                     if (check == false)
                     {

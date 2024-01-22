@@ -54,6 +54,10 @@ namespace LearningAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("Relational:JsonPropertyName", "Event_Fee_Uplay");
 
+                    b.Property<DateTime>("Event_Launching_Date")
+                        .HasColumnType("datetime")
+                        .HasAnnotation("Relational:JsonPropertyName", "Event_Launching_Date");
+
                     b.Property<string>("Event_Location")
                         .IsRequired()
                         .HasMaxLength(300)
@@ -224,19 +228,9 @@ namespace LearningAPI.Migrations
                         .HasColumnType("datetime")
                         .HasAnnotation("Relational:JsonPropertyName", "Create_date");
 
-                    b.Property<int>("Discount_In_Percentage")
-                        .HasColumnType("int")
-                        .HasAnnotation("Relational:JsonPropertyName", "Discount_In_Percentage");
-
                     b.Property<int>("Discount_In_Value")
                         .HasColumnType("int")
                         .HasAnnotation("Relational:JsonPropertyName", "Discount_In_Value");
-
-                    b.Property<string>("Discount_type")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasAnnotation("Relational:JsonPropertyName", "Discount_type");
 
                     b.Property<DateTime>("End_Date")
                         .HasColumnType("datetime")
@@ -246,6 +240,10 @@ namespace LearningAPI.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)")
                         .HasAnnotation("Relational:JsonPropertyName", "ImageFile");
+
+                    b.Property<int>("Limit_Value")
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "Limit_Value");
 
                     b.Property<string>("Member_Type")
                         .IsRequired()

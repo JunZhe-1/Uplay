@@ -12,7 +12,8 @@ import {
     InputLabel,
     Select,
     MenuItem,
-    FormHelperText
+    FormHelperText,
+    Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions
 } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
@@ -27,6 +28,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UserContext from '../contexts/UserContext';
 import da from 'date-fns/locale/da';
+let num = 0;
+
 
 function VoucherEdit() {
     const { id } = useParams();
@@ -40,11 +43,10 @@ function VoucherEdit() {
         Voucher_Description: "",
         Start_Date: new Date(), 
         End_Date: new Date(),  
-        Discount_In_Percentage: 0,
         Voucher_Description:"",
         Discount_In_Value: 0,
+        Limit_Value:0 ,
         Member_Type: "Uplay",
-        Discount_type: "Percentage",
 
     });
     useEffect(() => {
@@ -75,18 +77,18 @@ function VoucherEdit() {
                 .min(1, 'Voucher description must be at least 3 characters')
                 .max(50, 'Voucher Dewcription must be below 100 to make it concise for user.')
                 .required('voucher Description is required'),
-            Discount_In_Percentage: yup.number()
-                .min(0, 'Discount Percent cannot below than 1%')
-                .max(100, 'Discount Percent cannot above 100%')
-                .required('Number is required'),
             Discount_In_Value: yup.number()
                 .min(0, 'Discount Value cannot below than $1')
                 .max(1000, 'Too Much')
                 .required('Number is required'),
-
-
-            Start_Date: yup.date().required('Start date is required'),
-            End_Date: yup.date().required('End date is required'),
+            Limit_Value: yup.number()
+                .min(0, 'Limit value must more than 0')
+                .max(10000, 'invalid value')
+                .required('Limit value is required'),
+            Start_Date: yup.date()
+                .required('Start date is required'),
+            End_Date: yup.date()
+                .required('End date is required'),
             Member_Type: yup.string()
                 .required('Member type is required')
 
@@ -98,26 +100,50 @@ function VoucherEdit() {
             if (imageFile) {
                 voucher.ImageFile = imageFile;
             }
-            //  voucher.Start_Date = new Date(voucher.Start_Date).toISOString();
-            // voucher.End_Date = new Date(voucher.End_Date).toISOString();
-            if (voucher.Discount_type === "Value") {
-                voucher.Discount_In_Value = parseInt(voucher.Discount_In_Value);
-                voucher.Discount_In_Percentage = 0;
-            } else if (voucher.Discount_type === "Percentage") {
-                voucher.Discount_In_Percentage = parseInt(voucher.Discount_In_Percentage);
-                voucher.Discount_In_Value = 0;
-            }
-            http.put(`/Voucher/update/${id}`, voucher)
-                .then((res) => {
-                    console.log(res.voucher);
-                    navigate("/Voucher");
-                })
-                .catch(function (err) {
-                    toast.error(`${err.response.data.message}`);
-                })
+      
+            voucher.Discount_In_Value = parseInt(voucher.Discount_In_Value);
+            voucher.Limit_Value = parseInt(voucher.Limit_Value);
+            setVoucher(voucher);
+            handleOpen1();
+
+            //http.put(`/Voucher/update/${id}`, voucher)
+            //    .then((res) => {
+            //        console.log(res.voucher);
+            //        navigate("/Voucher");
+            //    })
+            //    .catch(function (err) {
+            //        toast.error(`${err.response.data.message}`);
+            //    })
 
         }
     });
+
+    const double_confirm = () => {
+        http.put(`/Voucher/update/${id}`, voucherinfo)
+            .then((res) => {
+                console.log(res.voucherinfo);
+                navigate("/Voucher");
+            })
+            .catch(function (err) {
+                toast.error(`${err.response.data.message}`);
+            })}
+
+
+    const [open1, setOpen1] = useState(false);
+
+
+
+    const handleOpen1 = () => {
+        setOpen1(true);
+
+
+    };
+
+
+    const handleClose1 = () => {
+        setOpen1(false);
+        num--;
+    };
 
     console.log(formik);
 
@@ -349,6 +375,28 @@ function VoucherEdit() {
                     </Box>
 
                 </Box>
+
+
+                <Dialog open={open1} onClose={handleClose1}>
+                    <DialogTitle>
+                        Confirmation
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Are you sure want to update the detail of the voucher?
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button variant="contained" color="inherit"
+                            onClick={handleClose1}>
+                            Cancel
+                        </Button>
+                        <Button variant="contained" color="error"
+                            onClick={double_confirm}>
+                            Confirm
+                        </Button>
+                    </DialogActions>
+                </Dialog>
 
 
                 <ToastContainer />
