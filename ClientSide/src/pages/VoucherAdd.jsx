@@ -36,37 +36,32 @@ function VoucherAdd() {
             Voucher_Name: "",
             Start_Date: "", // Initialize as null or a default date
             End_Date: "",   // Initialize as null or a default date
-            Discount_In_Percentage: 0,
             Voucher_Description:"",
             Discount_In_Value: 0,
+            Limit_Value: 0,
             Member_Type: "Uplay",
-            Discount_type: "Percentage",
         },
         validationSchema: yup.object({
             Voucher_Name: yup.string().trim()
-                .min(1, 'Voucher Name must be at least 1 characters')
-                .max(50, 'Voucher Name must be at most 100 characters')
+                .min(3, 'Voucher Name must be at least 3 characters')
+                .max(50, 'Voucher name must be at most 50 characters')
                 .required('Voucher Name is required'),
             Voucher_Description: yup.string().trim()
-                .min(1, 'Voucher description must be at least 1 characters')
-                .max(50, 'Voucher Dewcription must be below 100 to make it concise for user.')
+                .min(1, 'Voucher description must be at least 3 characters')
+                .max(50, 'Voucher description must be at most 50 characters')
                 .required('voucher Description is required'),
-            Discount_In_Percentage: yup.number()
-                .min(0, 'Discount Percent cannot below than 1%')
-                .max(100, 'Discount Percent cannot above 100%')
-                .required('Number is required'),
             Discount_In_Value: yup.number()
-                .min(0, 'Discount Value cannot below than $1')
-            .max(1000, 'Too Much')
-                .required('Number is required'),
-
-
+                .min(1, ' Value must be at least 1')
+                .max(1000, 'value must be at most 1000')
+                .required('value is required'),
+            Limit_Value: yup.number()
+                .min(0, 'Limit value must start from 0')
+                .max(10000, 'invalid Value')
+                .required('limit value is required'),
             Start_Date: yup.date().required('Start date is required'),
             End_Date: yup.date().required('End date is required'),
             Member_Type: yup.string()
                 .required('Member type is required'),
-
-
         }),
         onSubmit: (voucher) => {
             
@@ -76,34 +71,20 @@ function VoucherAdd() {
            
             voucher.Voucher_Name = voucher.Voucher_Name.trim();
             voucher.Voucher_Description = voucher.Voucher_Description.trim();
-   
-            console.log("onsubmit:", voucher);
-
-
-
-            if (voucher.Discount_type === "Value") {
-                voucher.Discount_In_Value = parseInt(voucher.Discount_In_Value);
-                voucher.Discount_In_Percentage = 0;
-            } else if (voucher.Discount_type === "Percentage") {
-                voucher.Discount_In_Percentage = parseInt(voucher.Discount_In_Percentage);
-                voucher.Discount_In_Value = 0;
-            }
-
+            voucher.Limit_Value = parseInt(voucher.Limit_Value)
+            voucher.Discount_In_Value = parseInt(voucher.Discount_In_Value);
 
             http.post("/Voucher/add", voucher)
                 .then((res) => {
-                    console.log("Sucess");
                     navigate("/Voucher");
                 })
                 .catch(function (err) {
-                    console.log(err.response.data);
+                   
                     toast.error(`${err.response.data.message}`);
+                    console.log(err.response.data.message);
                 })
-
         }
     });
-
-    console.log(formik);
 
 
     const onFileChange = (e) => {
@@ -232,53 +213,7 @@ function VoucherAdd() {
                                     <FormHelperText>{formik.errors.Member_Type}</FormHelperText>
                                 )}
                             </FormControl>
-
-                            <RadioGroup
-                                row
-                                aria-label="Discount_type"
-                                name="Discount_type"
-                                value={formik.values.Discount_type}
-                                onChange={(e) => {
-                                    formik.handleChange(e);
-                                    if (e.target.value === "Percentage") {
-                                        formik.setFieldValue("Discount_In_Value", 0);
-                                        formik.setFieldValue("Discount_In_Percentage", 1);
-                                    } else if (e.target.value === "Value") {
-                                        formik.setFieldValue("Discount_In_Percentage", 0);
-                                        formik.setFieldValue("Discount_In_Value", 1);
-                                    }
-                                }}
-
-                                onBlur={formik.handleBlur}
-                            >
-                                <FormControlLabel
-                                    value="Percentage"
-                                    control={<Radio color="primary" />}
-                                    label="Percentage"
-                                />
-                                <FormControlLabel
-                                    value="Value"
-                                    control={<Radio color="primary" />}
-                                    label="Value"
-                                />
-                            </RadioGroup>
-
-
-                            {formik.values.Discount_type === "Percentage" ? (
-                                <TextField
-                                    fullWidth
-                                    margin="dense"
-                                    autoComplete="off"
-                                    label="Discount_In_Percentage"
-                                    name="Discount_In_Percentage"
-                                    value={formik.values.Discount_In_Percentage}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    type="number"
-                                    error={Boolean(formik.touched.Discount_In_Percentage && formik.errors.Discount_In_Percentage)}
-                                    helperText={formik.touched.Discount_In_Percentage && formik.errors.Discount_In_Percentage}
-                                />
-                            ) : (
+                           
                                 <TextField
                                     fullWidth
                                     margin="dense"
@@ -291,8 +226,22 @@ function VoucherAdd() {
                                     type="number"
                                     error={Boolean(formik.touched.Discount_In_Value && formik.errors.Discount_In_Value)}
                                     helperText={formik.touched.Discount_In_Value && formik.errors.Discount_In_Value}
-                                />
-                            )}
+                            />
+
+                            <TextField
+                                fullWidth
+                                margin="dense"
+                                autoComplete="off"
+                                label="Limit_Value"
+                                name="Limit_Value"
+                                value={formik.values.Limit_Value}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                type="number"
+                                error={Boolean(formik.touched.Limit_Value && formik.errors.Limit_Value)}
+                                helperText={formik.touched.Limit_Value && formik.errors.Limit_Value}
+                            />
+                            
                             <Grid item xs={12} md={6} lg={4}>
                                 <Box sx={{ textAlign: 'left', mt: 2 }} >
                                     <Button variant="contained" component="label">

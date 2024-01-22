@@ -4,7 +4,10 @@ using LearningAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Diagnostics.Tracing;
 using System.Security.Claims;
+using System.Security.Cryptography;
 
 namespace LearningAPI.COntrollers
 {
@@ -31,20 +34,28 @@ namespace LearningAPI.COntrollers
 
         public IActionResult AddEvent(Event events)
         {
-            var now = DateTime.Now;
 
 
             try
             {
                 //int userId = GetUserId();
 
+                DateTime event_date = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(events.Event_Launching_Date, "Singapore Standard Time");
+                DateTime now = DateTime.Now - TimeSpan.FromDays(1);
 
+                if (event_date < now)
+                {
+                    string message = "Event's date must be today onward.";
+                    return BadRequest(new { message });
+                }
                 if (events.ImageFile == null || events.ImageFile.Trim() == "")
                 {
 
                     string message = "Image is required for voucher";
                     return BadRequest(new { message });
                 }
+
+
 
 
                 string fileExtension = Path.GetExtension(events.ImageFile);
@@ -70,6 +81,7 @@ namespace LearningAPI.COntrollers
                     ImageFile = events.ImageFile,
                     CreatedAt = now,
                     UpdatedAt = now,
+                    Event_Launching_Date = event_date
 
                 };
                 _context.Events.Add(myEvent);
@@ -146,6 +158,14 @@ namespace LearningAPI.COntrollers
 
                 string fileExtension = Path.GetExtension(Event.ImageFile);
                 string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
+                DateTime event_date = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(Event.Event_Launching_Date, "Singapore Standard Time");
+                DateTime now = DateTime.Now - TimeSpan.FromDays(1);
+
+                if (event_date < now)
+                {
+                    string message = "Event's date must be today onward.";
+                    return BadRequest(new { message });
+                }
 
                 if (!allowedExtensions.Contains(fileExtension, StringComparer.OrdinalIgnoreCase))
                 {
@@ -186,7 +206,12 @@ namespace LearningAPI.COntrollers
                     myevent.Event_Category = Event.Event_Category;
                 }
 
-                var now = DateTime.Now;
+                if (Event.Event_Launching_Date != myevent.Event_Launching_Date)
+                {
+                    myevent.Event_Launching_Date = event_date;
+                }
+
+                //var now = DateTime.Now;
                 if (Event.Event_Fee_Guest != myevent.Event_Fee_Guest)
                 {
                     myevent.Event_Fee_Guest = Event.Event_Fee_Guest;
@@ -304,7 +329,7 @@ namespace LearningAPI.COntrollers
 
 
 
-	
+
 
 
 
