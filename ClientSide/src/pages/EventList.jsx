@@ -4,7 +4,7 @@ import {
 
     Box, Typography, Grid, Card, CardContent, Input, IconButton, Button,
     Paper, TableContainer, Table, TableHead, TableBody, TableRow, TableCell
-    , Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions
+    , Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Switch
 } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import { AccountCircle, AccessTime, Search, Settings, Clear, Visibility, Edit, Delete, Block } from '@mui/icons-material';
@@ -52,7 +52,23 @@ function EventList() {
     };
 
 
+    const [showSearchInput, setShowSearchInput] = useState(true); 
 
+
+    const toggleSearchInput = (id, status) => {
+        console.log("triggle points");
+        var j = !status
+        console.log(j,id);
+
+        http.put(`/Event/updateStatus/${id}`, j).then((res) => {
+            console.log("update status sucessfully");
+            getEventList();
+
+        })
+            .catch(function (err) {
+                toast.error(`${err.response.data.message}`);
+            });
+    };
 
 
     const onClickSearch = () => {
@@ -116,7 +132,7 @@ function EventList() {
                 {
                         user.emailAddress.toLowerCase() === "admin@gmail.com" && (
                         <Link to="/Event/add_event" style={{ textDecoration: 'none' }}>
-                            <Button variant='contained' >
+                            <Button variant='contained' style={{ background: 'grey' }}>
                                 Add
                             </Button>
                         </Link>
@@ -170,8 +186,16 @@ function EventList() {
                                         <TableCell style={{ width: '20%', textAlign: 'center' }}>
 ${data.Event_Fee_Uplay}
                                         </TableCell>
-                                        <TableCell style={{ width: '20%' }}>{data.Vacancies} pax</TableCell>
-                                       
+                                        <TableCell style={{ width: '20%' }}>{data.Vacancies} </TableCell>
+                                        <TableCell>
+
+                                            <Switch
+                                                checked={data.Event_Status}
+                                                onChange={() => toggleSearchInput(data.Event_ID, data.Event_Status)}
+                                            color="primary"
+                                        /></TableCell>
+
+
                                         <TableCell style={{ width: '20%' }}>
                                             <Link to={`/Event/editevent/${data.Event_ID}`}>
                                                 <IconButton color="primary" sx={{ padding: '4px', color: '#0096FF' }}>

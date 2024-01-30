@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using MySqlX.XDevAPI.Relational;
 using System.Diagnostics.Tracing;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -81,7 +82,8 @@ namespace LearningAPI.COntrollers
                     ImageFile = events.ImageFile,
                     CreatedAt = now,
                     UpdatedAt = now,
-                    Event_Launching_Date = event_date
+                    Event_Launching_Date = event_date,
+                    Event_Status = true
 
                 };
                 _context.Events.Add(myEvent);
@@ -146,6 +148,72 @@ namespace LearningAPI.COntrollers
                 return StatusCode(500);
             }
         }
+
+
+        [HttpPut("updateStatus/{id}")]
+        public IActionResult UpdateEventStatus(int id, bool status)
+        {
+            try
+            {
+              
+                var myevent = _context.Events.Find(id);
+                myevent.Event_Status = (!myevent.Event_Status);
+                _context.SaveChanges();
+                return Ok(myevent);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error when update tutorial");
+                return StatusCode(500);
+            }
+
+        }
+
+        [HttpGet("getreview/{id}")]
+        public IActionResult getreview(int id)
+        {
+            IQueryable<Review> result = _context.Reviews.Where(x => x.Event_ID == id);
+            result.Where(x => x.Event_ID == id);
+            return Ok(result);
+        }
+
+
+        [HttpPost("review")]
+        public IActionResult AddReview( Review review)
+        {
+
+          
+            LearningAPI.Models.Member? member = _context.Members.Find(review.User_ID);
+            if (member == null)
+            {
+                if (_context.UplayUsers.Find(review.User_ID) == null)
+                {
+                    string message = "Please Login Again";
+                    return BadRequest(new { message });
+
+                }
+            }
+
+            if (review.Event_Review == "" || review.Event_Review == null)
+            {
+                string message = "Reciew can't be ";
+                return BadRequest(new { message });
+
+            }
+            var myreview = new Review()
+            {
+                Event_Review = review.Event_Review,
+                Rating = review.Rating,
+                User_ID = review.User_ID,
+                Event_ID = review.Event_ID,
+            };
+
+            _context.Reviews.Add(myreview);
+            _context.SaveChanges();
+            return Ok(myreview);
+        }
+
 
 
         [HttpPut("update/{id}")]
@@ -216,7 +284,7 @@ namespace LearningAPI.COntrollers
                 {
                     myevent.Event_Fee_Guest = Event.Event_Fee_Guest;
                 }
-
+                myevent.Event_Status = true;
 
                 if (Event.Event_Fee_NTUC != myevent.Event_Fee_NTUC)
                 {

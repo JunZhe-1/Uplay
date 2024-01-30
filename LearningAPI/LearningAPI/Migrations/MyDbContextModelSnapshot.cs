@@ -54,6 +54,10 @@ namespace LearningAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("Relational:JsonPropertyName", "Event_Fee_Uplay");
 
+                    b.Property<DateTime>("Event_Launching_Date")
+                        .HasColumnType("datetime")
+                        .HasAnnotation("Relational:JsonPropertyName", "Event_Launching_Date");
+
                     b.Property<string>("Event_Location")
                         .IsRequired()
                         .HasMaxLength(300)
@@ -65,6 +69,10 @@ namespace LearningAPI.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
                         .HasAnnotation("Relational:JsonPropertyName", "Event_Name");
+
+                    b.Property<bool>("Event_Status")
+                        .HasColumnType("tinyint(1)")
+                        .HasAnnotation("Relational:JsonPropertyName", "Event_Status");
 
                     b.Property<string>("ImageFile")
                         .HasMaxLength(20)
@@ -111,6 +119,35 @@ namespace LearningAPI.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Members");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.Review", b =>
+                {
+                    b.Property<int>("Review_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "Review_ID");
+
+                    b.Property<int>("Event_ID")
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "Event_ID");
+
+                    b.Property<string>("Event_Review")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasAnnotation("Relational:JsonPropertyName", "Event_Review");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "Rating");
+
+                    b.Property<int>("User_ID")
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "User_ID");
+
+                    b.HasKey("Review_ID");
+
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("LearningAPI.Models.Tutorial", b =>
@@ -224,19 +261,9 @@ namespace LearningAPI.Migrations
                         .HasColumnType("datetime")
                         .HasAnnotation("Relational:JsonPropertyName", "Create_date");
 
-                    b.Property<int>("Discount_In_Percentage")
-                        .HasColumnType("int")
-                        .HasAnnotation("Relational:JsonPropertyName", "Discount_In_Percentage");
-
                     b.Property<int>("Discount_In_Value")
                         .HasColumnType("int")
                         .HasAnnotation("Relational:JsonPropertyName", "Discount_In_Value");
-
-                    b.Property<string>("Discount_type")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasAnnotation("Relational:JsonPropertyName", "Discount_type");
 
                     b.Property<DateTime>("End_Date")
                         .HasColumnType("datetime")
@@ -246,6 +273,10 @@ namespace LearningAPI.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)")
                         .HasAnnotation("Relational:JsonPropertyName", "ImageFile");
+
+                    b.Property<int>("Limit_Value")
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "Limit_Value");
 
                     b.Property<string>("Member_Type")
                         .IsRequired()
@@ -267,6 +298,10 @@ namespace LearningAPI.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
                         .HasAnnotation("Relational:JsonPropertyName", "Voucher_Name");
+
+                    b.Property<bool>("Voucher_Status")
+                        .HasColumnType("tinyint(1)")
+                        .HasAnnotation("Relational:JsonPropertyName", "Voucher_Status");
 
                     b.HasKey("Voucher_ID");
 

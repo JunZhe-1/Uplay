@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
     Box, Typography, Grid, Card, CardContent, Input, IconButton, Button,
     Paper, TableContainer, Table, TableHead, TableBody, TableRow, TableCell
-    , Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions
+    , Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Switch
 } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import { AccountCircle, AccessTime, Search, Settings, Clear, Visibility, Edit, Delete, Block } from '@mui/icons-material';
@@ -38,6 +38,21 @@ function VoucherList() {
             });
     };
 
+
+
+
+    const toggleSearchInput = (id) => {
+    
+
+        http.put(`/Voucher/updateStatus/${id}`).then((res) => {
+            console.log("update status sucessfully");
+            getVoucherList();
+
+        })
+            .catch(function (err) {
+                toast.error(`${err.response.data.message}`);
+            });
+    };
 
     const onSearchChange = (e) => {
         setSearch(e.target.value);
@@ -163,19 +178,20 @@ function VoucherList() {
                                         <TableCell>{dayjs.utc(data.End_Date).format(global.datetimeFormat)}</TableCell>
                                         <TableCell>{data.Member_Type}</TableCell>
                                         <TableCell>
-                                            <>
-                                                {data.Discount_type == "Value" ? (
-                                                    <>
-                                                        ${data.Discount_In_Value}
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        {data.Discount_In_Percentage}%
-                                                    </>
-                                                )}
-                                            </>
+                                            ${data.Discount_In_Value}
+                                                 
+                                              
+                                            
 
                                         </TableCell>
+
+                                        <TableCell>
+
+                                            <Switch
+                                                checked={data.Voucher_Status}
+                                                onChange={() => toggleSearchInput(data.Voucher_ID)}
+                                                color="primary"
+                                            /></TableCell>
                                   
                                         <TableCell> <Link to={`/Voucher/update/${data.Voucher_ID}`}>
                                             <IconButton color="primary" sx={{ padding: '4px', color: '#0096FF' }}>

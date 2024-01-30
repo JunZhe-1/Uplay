@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace LearningAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class today : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,12 +30,31 @@ namespace LearningAPI.Migrations
                     Event_Fee_NTUC = table.Column<int>(type: "int", nullable: false),
                     Vacancies = table.Column<int>(type: "int", nullable: false),
                     ImageFile = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true),
+                    Event_Status = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    Event_Launching_Date = table.Column<DateTime>(type: "datetime", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Events", x => x.Event_ID);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Reviews",
+                columns: table => new
+                {
+                    Review_ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Event_Review = table.Column<string>(type: "longtext", nullable: false),
+                    Rating = table.Column<int>(type: "int", nullable: false),
+                    Event_ID = table.Column<int>(type: "int", nullable: false),
+                    User_ID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reviews", x => x.Review_ID);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -85,10 +104,10 @@ namespace LearningAPI.Migrations
                     Voucher_Description = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     Start_Date = table.Column<DateTime>(type: "datetime", nullable: false),
                     End_Date = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Discount_type = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    Discount_In_Percentage = table.Column<int>(type: "int", nullable: false),
                     Discount_In_Value = table.Column<int>(type: "int", nullable: false),
+                    Limit_Value = table.Column<int>(type: "int", nullable: false),
                     Create_date = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Voucher_Status = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     ImageFile = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true),
                     Member_Type = table.Column<string>(type: "longtext", nullable: false)
                 },
@@ -160,6 +179,9 @@ namespace LearningAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Members");
+
+            migrationBuilder.DropTable(
+                name: "Reviews");
 
             migrationBuilder.DropTable(
                 name: "Tutorials");
