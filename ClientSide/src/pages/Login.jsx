@@ -18,7 +18,7 @@ function Login() {
             emailAddress: "",
             password: ""
         },
-        validationSchema: yup.object({
+        validationSchema: yup.object({  
             emailAddress: yup.string().trim()
                 .matches(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/, 'Enter a valid email address')
                 .max(50, 'Email must be at most 50 characters')
@@ -42,7 +42,7 @@ function Login() {
                     navigate("/");
                 })
                 .catch(function (err) {
-                    toast.error(`${err.response.data.message}`);
+                    toast.error(err.response.data.message);
                 });
         }
     });
