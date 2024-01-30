@@ -171,12 +171,25 @@ namespace LearningAPI.COntrollers
         }
 
         [HttpGet("getreview/{id}")]
-        public IActionResult getreview(int id)
+        public IActionResult GetReview(int id)
         {
             IQueryable<Review> result = _context.Reviews.Where(x => x.Event_ID == id);
-            result.Where(x => x.Event_ID == id);
-            return Ok(result);
+
+            var finalResult = result.Select(x => new
+            {
+                x.Review_ID,
+                x.Rating,
+                x.Event_ID,
+                x.Event_Review,
+                Name = _context.UplayUsers
+                            .Where(y => y.UserId == x.User_ID)
+                            .Select(y => y.UserName)
+                            .FirstOrDefault()
+            });
+
+            return Ok(finalResult);
         }
+
 
 
         [HttpPost("review")]

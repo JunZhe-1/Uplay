@@ -1,8 +1,9 @@
-﻿import React, { useEffect, useState, useContext } from 'react';
+﻿/* eslint-disable no-unused-vars */
+import React, { useEffect, useState, useContext } from 'react';
 import {
     Box, Typography, Grid, Card, CardContent, Input, IconButton, Button,
     Paper, TableContainer, Table, TableHead, TableBody, TableRow, TableCell
-    , TextField, Dialog, TablePagination, DialogTitle, DialogContent, DialogContentText, DialogActions,Select,MenuItem
+    , TextField, Dialog, InputLabel,TablePagination, DialogTitle, DialogContent, DialogContentText, DialogActions,Select,MenuItem
 } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -18,6 +19,8 @@ import Rating from 'react-rating-stars-component';
 
 function EventDetail() {
     const { id } = useParams();
+    const [reviewSuccess, setReviewSuccess] = useState(null);
+
     const [imageFile, setimageFile] = useState(null);
     const { user } = useContext(UserContext);
     const [EventDetail, setEvent] = useState({
@@ -39,10 +42,15 @@ function EventDetail() {
             console.log(res.data);
             setEvent(res.data);
         });
+        getReview(); 
+    }, []);
+
+
+    const getReview = () => {
         http.get(`/Event/getreview/${id}`).then((res) => {
             setreview(res.data);
         });
-    }, []);
+    };
 
     const formik = useFormik({
         initialValues: {
@@ -73,7 +81,12 @@ function EventDetail() {
             console.log(event);
             http.post("Event/review", event)
                 .then((res) => {
-                    console.log(res.data);
+                    setReviewSuccess(true);
+                    getReview();
+                    formik.setFieldValue('Event_Review', '');  
+                    formik.setFieldValue('Rating', 0); 
+
+
                 })
                 .catch(function (err) {
                     toast.error(`${err.response.data.message}`);
@@ -82,27 +95,33 @@ function EventDetail() {
         }
     });
 
-    const columns = [
-        //{ id: 'no', label: 'No', minWidth: 15 },
+  
+     const columns = [
+        //{ id: 'Name', label: 'No', minWidth: 15 },
+        { id: 'name', label: 'User', minWidth: 2 }, // Update id to 'name'
         { id: 'rating', label: 'Rating', minWidth: 2 },
         { id: 'eventReview', label: 'Event Review', minWidth: 15 },
     ];
+
+
+
 
     const [reviewData, setreview] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(4);
 
-    function createData(no, rating, eventReview) {
-        return { no, rating, eventReview };
+    function createData(rating, eventReview, name) {
+        return {  rating, eventReview, name };
     }
 
-    let num = 1;
     const rows = reviewData.map((item) => {
-        const Rating = item.Rating;
-        const Event_Review = item.Event_Review;
+        const Rating = (item.rating).toString();
+        const Event_Review = item.event_Review;
+        const User = item.name;
 
-        return createData(num++, Rating, Event_Review);
+        return createData(Rating, Event_Review, User);
     });
+
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -112,9 +131,9 @@ function EventDetail() {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
-
+    
     return (
-        <Paper sx={{ width: '100%', overflow: 'hidden', border: 0, marginTop: '3vh' }}>
+        <Paper sx={{ width: '100%', overflow: 'hidden', border: 0, marginTop: '3vh', padding:'0 0 10vh 0' }}>
             <form onSubmit={formik.handleSubmit}>
                 <TableContainer sx={{ maxHeight: '100%', border: 0 }}>
                     <TableBody>
@@ -201,19 +220,23 @@ function EventDetail() {
                                 <Typography variant="h7">
                                     <br />
                                     <b>Write Your Review</b>
+                                    &nbsp;
+                                    {reviewSuccess && <span style={{ color: 'green', fontWeight: 'bold', fontSize: '20px' }}><br /> Event Review Submitted Successfully!</span>}
                                 </Typography>
                             </TableCell>
                         </TableRow>
+
 
                         <TableRow>
                             <TableCell>
                                 <Rating
                                     count={5}
-                                    onChange={(rating) => formik.setFieldValue('Rating', rating)}
+                                    onChange={(Rating) => formik.setFieldValue('Rating', Rating)}
                                     value={formik.values.Rating}
                                     size={36}
                                     style={{ color: '#FF5733', activeColor: 'yellow' }}
                                 />
+
                             </TableCell>
                         </TableRow>
 
@@ -251,13 +274,15 @@ function EventDetail() {
                         </TableRow>
                     </TableBody>
                 </TableContainer>
+                <InputLabel htmlFor="sort">Sort</InputLabel>
+
                 <Select
                     label="Years"
-                    name="years"
+                    name="Sort"
                     value={formik.values.Sort}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={formik.touched.Sort && Boolean(formik.errors.sort)}
+                    error={formik.touched.Sort && Boolean(formik.errors.Sort)} 
                     style={{ marginBottom: '10px' }}
                 >
                     <MenuItem value={"htl"}>  Highest rating to Lowest</MenuItem>
@@ -265,49 +290,45 @@ function EventDetail() {
                     <MenuItem value={"nto"}> Newest to Oldest</MenuItem>
                 </Select>
 
+
                 <TableContainer style={{ height: '380px' }}>
                     <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell align="center" colSpan={4} style={{ fontSize: '25px', fontWeight: 'bold', color: 'black', textAlign: 'center' }}>
-                                   
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                {columns.map((column) => (
-                                    <TableCell
-                                        key={column.id}
-                                        align={column.align}
-                                        style={{ top: 20, minWidth: column.minWidth, fontWeight: 'bold' }}
-                                    >
-                                        {column.label}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody >
+                        <TableBody>
                             {rows
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row) => {
-                                    return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.no}>
-                                            {columns.map((column) => {
-                                                const value = row[column.id];
-                                                return (
-                                                    <TableCell key={column.id} align={column.align}>
-                                                        {column.format && typeof value === 'number'
-                                                            ? column.format(value)
-                                                            : value}
-                                                    </TableCell>
-                                                );
-                                            })}
-                                        </TableRow>
-                                    );
-                                })}
+                                .map((row) => (
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.no}>
+                                        <TableCell colSpan={3}>
+                                            <Box style={{ width: '7.5%', marginTop: '2vh' }}>
+                                                <img
+                                                    alt="data"
+                                                    src={`/image/dp/${Math.floor(Math.random() * 7) + 1}.png`}
+                                                    style={{
+                                                        width: '100%',
+                                                        height: '9vh',
+                                                        objectFit: 'cover',
+                                                        borderRadius: '50%'
+                                                    }}
+                                                />
+                                            </Box>
+
+                                            <span style={{ fontSize: '20px', fontWeight: 'bold' }}>{row['name']}</span>
+                                            <br />
+                                            <Rating
+                                                value={parseFloat(row['rating'])}
+                                                readOnly
+                                                size={36}
+                                                precision={1}
+                                                edit={false}
+                                            />
+                                            <br />
+                                            <span style={{ fontSize: '16px' }}>{row['eventReview']}</span>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
-
             </form>
             <ToastContainer />
             <TablePagination
