@@ -76,6 +76,7 @@ function Profiles() {
                 } catch (error) {
                     // Old password validation failed
                     console.error('Error validating old password:', error);
+                    formik.setErrors({ oldpassword: "Invalid old password." });
                     return;
                 }
 
