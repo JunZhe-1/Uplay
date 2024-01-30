@@ -53,6 +53,11 @@ namespace LearningAPI.Models
 
 
 
+        [Required]
+        [JsonPropertyName("Voucher_Status")]
+        public bool Voucher_Status { get; set; } = true;
+
+
         [MaxLength(20)]
 
         [JsonPropertyName("ImageFile")]

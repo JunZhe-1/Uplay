@@ -35,5 +35,7 @@ namespace LearningAPI
 
         public DbSet<Event> Events { get; set; }
 
-	}
+        public DbSet<Review> Reviews { get; set; }
+
+    }
 }

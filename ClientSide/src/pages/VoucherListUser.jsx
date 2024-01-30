@@ -1,6 +1,6 @@
 ﻿import React, { useEffect, useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Container, AppBar, Toolbar, Box, Typography, Grid, Card, CardContent, Input, IconButton, Button } from '@mui/material';
+import { Container, AppBar, Toolbar, Box, Typography, Grid, Card, CardContent, Input, IconButton, Button,  } from '@mui/material';
 import { AccountCircle, AccessTime, Search, Clear, Edit } from '@mui/icons-material';
 import http from '../http';
 import dayjs from 'dayjs';
@@ -103,17 +103,17 @@ function VoucherListUser() {
                                 height: '100%',
                             }}
                         >
-                            {data.imageFile && (
+                                {data.ImageFile && (
                                 <Box
                                     style={{
-                                        flex: '0 0 30%',
+                                        flex: '0 0 25%',
                                         overflow: 'hidden',
                                       
                                     }}
                                 >
                                     <img
-                                        alt="data"
-                                            src={`${import.meta.env.VITE_FILE_BASE_URL}${data.imageFile}`}
+                                            alt="data"
+                                            src={`${import.meta.env.VITE_FILE_BASE_URL}${data.ImageFile}`}
                                         style={{
                                             width: '100%',
                                             border:'1px solid grey',

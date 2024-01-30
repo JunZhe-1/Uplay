@@ -58,6 +58,13 @@ namespace LearningAPI.Models
 
 
 
+
+        [Required]
+        [JsonPropertyName("Event_Status")]
+        public bool Event_Status { get; set; } = true;
+
+
+
         [Column(TypeName = "datetime")]
         [JsonPropertyName("Event_Launching_Date")]
         public DateTime Event_Launching_Date { get; set; }

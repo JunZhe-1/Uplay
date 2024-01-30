@@ -11,8 +11,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
+<<<<<<<< HEAD:LearningAPI/LearningAPI/Migrations/20240122140339_InitialCreate.Designer.cs
     [Migration("20240122140339_InitialCreate")]
     partial class InitialCreate
+========
+    [Migration("20240129175158_today")]
+    partial class today
+>>>>>>>> 849af61894011200eb88dfa3c920686d70707751:LearningAPI/LearningAPI/Migrations/20240129175158_today.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,6 +78,10 @@ namespace LearningAPI.Migrations
                         .HasColumnType("varchar(50)")
                         .HasAnnotation("Relational:JsonPropertyName", "Event_Name");
 
+                    b.Property<bool>("Event_Status")
+                        .HasColumnType("tinyint(1)")
+                        .HasAnnotation("Relational:JsonPropertyName", "Event_Status");
+
                     b.Property<string>("ImageFile")
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
@@ -118,6 +127,35 @@ namespace LearningAPI.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Members");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.Review", b =>
+                {
+                    b.Property<int>("Review_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "Review_ID");
+
+                    b.Property<int>("Event_ID")
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "Event_ID");
+
+                    b.Property<string>("Event_Review")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasAnnotation("Relational:JsonPropertyName", "Event_Review");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "Rating");
+
+                    b.Property<int>("User_ID")
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "User_ID");
+
+                    b.HasKey("Review_ID");
+
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("LearningAPI.Models.Tutorial", b =>
@@ -268,6 +306,10 @@ namespace LearningAPI.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
                         .HasAnnotation("Relational:JsonPropertyName", "Voucher_Name");
+
+                    b.Property<bool>("Voucher_Status")
+                        .HasColumnType("tinyint(1)")
+                        .HasAnnotation("Relational:JsonPropertyName", "Voucher_Status");
 
                     b.HasKey("Voucher_ID");
 

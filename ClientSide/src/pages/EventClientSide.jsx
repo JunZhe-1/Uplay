@@ -20,11 +20,13 @@ function EventClientSide() {
 
     const getEvents = () => {
         http.get(`/Event`).then((res) => {
-            setEvent(res.data);
-            setEventBackup(res.data);
+            const userEvents = res.data.filter(event =>  event.Event_Status === true);
+            setEvent(userEvents);
+            setEventBackup(userEvents);
             console.log(res.data);
         });
     };
+
 
 
     useEffect(() => {
@@ -41,7 +43,7 @@ function EventClientSide() {
             else if (i == "upcoming") {
                 const selectedEvents = EventList.filter((x) => {
                     const eventLaunchingDate = new Date(x.Event_Launching_Date);
-                    const comparisonResult = now < eventLaunchingDate;
+                    const comparisonResult = now < eventLaunchingDate ;
 
                     return comparisonResult;
                 });
@@ -248,7 +250,9 @@ function EventClientSide() {
                     </Grid>
                 ))}
             </Grid>
+         
         </Box>
+
     )
 };
 export default EventClientSide;

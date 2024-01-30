@@ -44,7 +44,7 @@ function HomePage() {
         http.get(`/Event`).then((res) => {
             const today = new Date();
             console.log(res.data.Event_Launching_Date > today);
-            const filteredEvents = res.data.filter(event => new Date(event.Event_Launching_Date) > today);
+            const filteredEvents = res.data.filter(event => new Date(event.Event_Launching_Date) > today && event.Event_Status === true);
             const firstFourEvents = filteredEvents.slice(0, 4); // Take only the first four events
 
             setEventBackup(firstFourEvents);
@@ -150,6 +150,15 @@ function HomePage() {
                         </Grid>
                     ))}
                 </Grid>
+                <Box style={{ width: '100%', marginTop: '2vh' }}>
+                    <img
+                        alt="data"
+                        src={`./image/contact.png`}
+                        style={{
+                            width: '100%',
+                            objectFit: 'fit',
+                        }}
+                    /></Box>
 
             </Box>
         </Box>

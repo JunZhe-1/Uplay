@@ -192,7 +192,8 @@ namespace LearningAPI.Controllers
                             ImageFile = voucher.ImageFile,
                             Voucher_Description = voucher.Voucher_Description,
                             Member_Type = voucher.Member_Type,
-                            Create_date = now
+                            Create_date = now,
+                            Voucher_Status = true
                         };
                         _context.Vouchers.Add(myVoucher);
                         _context.SaveChanges();
@@ -248,6 +249,26 @@ namespace LearningAPI.Controllers
                 _logger.LogError(ex, "Error when get voucher by id");
                 return StatusCode(500);
             }
+        }
+
+        [HttpPut("updateStatus/{id}")]
+        public IActionResult UpdateVoucherStatus(int id, bool status)
+        {
+            try
+            {
+
+                var myvoucher = _context.Vouchers.Find(id);
+                myvoucher.Voucher_Status = (!myvoucher.Voucher_Status);
+                _context.SaveChanges();
+                return Ok(myvoucher);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error when update tutorial");
+                return StatusCode(500);
+            }
+
         }
 
         [HttpPut("update/{id}")]
@@ -371,6 +392,7 @@ namespace LearningAPI.Controllers
                         check = true;
 
                     }
+                    myvoucher.Voucher_Status = true;
 
                     /*   if (voucher.Discount_type == "Value")
 					   {
@@ -429,12 +451,12 @@ namespace LearningAPI.Controllers
                     UplayUser? uplay = _context.UplayUsers.Find(id);
                     if (uplay != null)
                     {
-                        IQueryable<Voucher> normal_member_voucher = _context.Vouchers.Where(x => x.Member_Type == "Guest" && x.End_Date >= now);
+                        IQueryable<Voucher> normal_member_voucher = _context.Vouchers.Where(x => x.Member_Type == "Guest" && x.End_Date >= now && x.Voucher_Status == true);
                         return Ok(normal_member_voucher);
 
                     }
                 }
-                IQueryable<Voucher> result = _context.Vouchers.Where(x => x.Member_Type == member.MemberStatus && x.End_Date >= now);
+                IQueryable<Voucher> result = _context.Vouchers.Where(x => x.Member_Type == member.MemberStatus && x.End_Date >= now && x.Voucher_Status == true);
                 return Ok(result);
 
 
