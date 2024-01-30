@@ -37,9 +37,35 @@ function Login() {
                     localStorage.setItem("accessToken", res.data.accessToken);
                     setUser(res.data.user);
                     console.log(res.data.uplayuser);
-                    window.location.reload();
-
-                    navigate("/");
+                    var id = res.data.uplayuser.userId
+                    console.log(id)
+                    try {
+                        http.get(`/Member/${id}`)  
+                            .then((respose) => {
+                                // Assuming memberStatusRes.data.status contains the user status
+                                const userStatus = respose.data.memberStatus;
+                                if (localStorage.getItem("memberStatus")) {
+                                    localStorage.removeItem("memberStatus");
+                                }
+                                localStorage.setItem("memberStatus", userStatus);
+                                console.log(localStorage.getItem("memberStatus"))
+                            })
+                            .catch((error) => {
+                                console.error("Error fetching user status:", error);
+                                if (localStorage.getItem("memberStatus")) {
+                                    localStorage.removeItem("memberStatus");
+                                }
+                                // If there is an error, set user status to "Guest"
+                                localStorage.setItem("memberStatus", "Guest");
+                            });
+                    } catch {
+                        if (localStorage.getItem("memberStatus")) {
+                            localStorage.removeItem("memberStatus");
+                        }
+                        localStorage.setItem("memberStatus", "Guest");
+                    }
+                    navigate("/")
+                    
                 })
                 .catch(function (err) {
                     toast.error(`${err.response.data.message}`);

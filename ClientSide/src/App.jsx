@@ -26,6 +26,7 @@ import EventClientSide from './pages/EventClientSide';
 import EventDetail from './pages/EventDetail';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HomePage from './pages/Homepage';
+import UserList from './pages/UserList';
 function App() {
     const [user, setUser] = useState(null);
     const imageUrl = './../image/testing.png';
@@ -87,7 +88,7 @@ function App() {
                               <Box sx={{ flexGrow: 1 }}></Box>
                               {user && (
                                   <>
-                                      {user.userName !== "admin" ? (
+                                      {user.userName != "admin" ? (
                                           <div>
                                               <Link to={`/Event/EventClientSide`} style={{ textDecoration: 'none' }}>
                                                   <Button
@@ -153,7 +154,7 @@ function App() {
 
                               {user && (
                                   <>
-                                      {user.userName === "admin" && (
+                                      {user.userName === "admin" || user.userName === "Admin" && (
                                           <div>
                                               <Button
                                                   id="admin-fade-button"
@@ -188,6 +189,11 @@ function App() {
                                                   <MenuItem onClick={handleClose1}>
                                                       <Link to="/Voucher" style={{ textDecoration: 'none' }}>
                                                           <Typography sx={{ color: 'black' }}>Voucher Management</Typography>
+                                                      </Link>
+                                                  </MenuItem>
+                                                  <MenuItem onClick={handleClose1}>
+                                                      <Link to="/userlist" style={{ textDecoration: 'none' }}>
+                                                          <Typography sx={{ color: 'black' }}>User List</Typography>
                                                       </Link>
                                                   </MenuItem>
                                                   {/* Add more menu items as needed */}
@@ -276,7 +282,8 @@ function App() {
 
 
                             <Route path={"/profile"} element={<Profile />} />
-                            <Route path={"/buymember"} element={<BuyMember />} />
+                          <Route path={"/buymember"} element={<BuyMember />} />
+                          <Route path={"/userlist"} element={<UserList />} />
 
                         </Routes>
                     </Container>

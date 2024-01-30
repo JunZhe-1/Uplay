@@ -35,9 +35,11 @@ import da from 'date-fns/locale/da';
 function HomePage() {
     const [imageFile, setimageFile] = useState(null);
     const [EventListBackup, setEventBackup] = useState([]);
+    const [reloadPage, setReloadPage] = useState(true);
 
     useEffect(() => {
         getEvents();
+        
     }, []);
 
     const getEvents = () => {
@@ -46,9 +48,11 @@ function HomePage() {
             console.log(res.data.Event_Launching_Date > today);
             const filteredEvents = res.data.filter(event => new Date(event.Event_Launching_Date) > today && event.Event_Status === true);
             const firstFourEvents = filteredEvents.slice(0, 4); // Take only the first four events
-
+            var memstat = localStorage.getItem("memberStatus")
+            console.log(memstat)
             setEventBackup(firstFourEvents);
             console.log(filteredEvents);
+           
         });
     };
 
