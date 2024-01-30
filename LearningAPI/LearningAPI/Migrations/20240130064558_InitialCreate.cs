@@ -7,11 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace LearningAPI.Migrations
 {
     /// <inheritdoc />
-<<<<<<<< HEAD:LearningAPI/LearningAPI/Migrations/20240122140339_InitialCreate.cs
     public partial class InitialCreate : Migration
-========
-    public partial class today : Migration
->>>>>>>> 849af61894011200eb88dfa3c920686d70707751:LearningAPI/LearningAPI/Migrations/20240129175158_today.cs
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -126,8 +122,9 @@ namespace LearningAPI.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    NRIC = table.Column<string>(type: "varchar(9)", maxLength: 9, nullable: false),
+                    NRIC = table.Column<string>(type: "varchar(4)", maxLength: 4, nullable: false),
                     Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "date", nullable: false),
                     MemberStatus = table.Column<string>(type: "longtext", nullable: false),
                     LastSubscriptionDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     ExpiredDate = table.Column<DateTime>(type: "datetime", nullable: false)

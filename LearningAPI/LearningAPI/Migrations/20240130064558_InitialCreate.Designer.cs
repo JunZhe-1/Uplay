@@ -11,13 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-<<<<<<<< HEAD:LearningAPI/LearningAPI/Migrations/20240122140339_InitialCreate.Designer.cs
-    [Migration("20240122140339_InitialCreate")]
+    [Migration("20240130064558_InitialCreate")]
     partial class InitialCreate
-========
-    [Migration("20240129175158_today")]
-    partial class today
->>>>>>>> 849af61894011200eb88dfa3c920686d70707751:LearningAPI/LearningAPI/Migrations/20240129175158_today.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -104,6 +99,9 @@ namespace LearningAPI.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("date");
+
                     b.Property<DateTime>("ExpiredDate")
                         .HasColumnType("datetime");
 
@@ -116,8 +114,8 @@ namespace LearningAPI.Migrations
 
                     b.Property<string>("NRIC")
                         .IsRequired()
-                        .HasMaxLength(9)
-                        .HasColumnType("varchar(9)");
+                        .HasMaxLength(4)
+                        .HasColumnType("varchar(4)");
 
                     b.Property<string>("Name")
                         .IsRequired()

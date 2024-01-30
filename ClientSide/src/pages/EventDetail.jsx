@@ -2,7 +2,7 @@
 import {
     Box, Typography, Grid, Card, CardContent, Input, IconButton, Button,
     Paper, TableContainer, Table, TableHead, TableBody, TableRow, TableCell
-    , TextField, Dialog, TablePagination, DialogTitle, DialogContent, DialogContentText, DialogActions
+    , TextField, Dialog, TablePagination, DialogTitle, DialogContent, DialogContentText, DialogActions,Select,MenuItem
 } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -49,7 +49,8 @@ function EventDetail() {
             Event_Review: "",
             Rating: 0,
             User_ID: user.userId,
-            Event_ID: EventDetail.Event_ID
+            Event_ID: EventDetail.Event_ID,
+            Sort: "htl"
         },
         validationSchema: yup.object({
             Event_Review: yup.string().trim()
@@ -59,6 +60,8 @@ function EventDetail() {
                 .min(1, 'Rating cannot be below 1')
                 .max(5, 'Rating cannot be above 5')
                 .required('Rating is required'),
+            Sort: yup.string().required('order is required')
+
         }),
         onSubmit: (event) => {
             console.log(user.userId, EventDetail.Event_ID);
@@ -185,7 +188,7 @@ function EventDetail() {
                             </TableCell>
                         </TableRow>
                     </TableBody>
-
+                   
                     <TableBody>
                         <TableRow>
                             <TableCell>
@@ -248,6 +251,19 @@ function EventDetail() {
                         </TableRow>
                     </TableBody>
                 </TableContainer>
+                <Select
+                    label="Years"
+                    name="years"
+                    value={formik.values.Sort}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.Sort && Boolean(formik.errors.sort)}
+                    style={{ marginBottom: '10px' }}
+                >
+                    <MenuItem value={"htl"}>  Highest rating to Lowest</MenuItem>
+                    <MenuItem value={"lth"}>  Lowest rating to highest</MenuItem>
+                    <MenuItem value={"nto"}> Newest to Oldest</MenuItem>
+                </Select>
 
                 <TableContainer style={{ height: '380px' }}>
                     <Table stickyHeader aria-label="sticky table">
