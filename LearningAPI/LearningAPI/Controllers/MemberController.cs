@@ -35,6 +35,8 @@ namespace LearningAPI.Controllers
         public IActionResult AddUser(BuyMemberRequest member)
         {
             var now = DateTime.Now;
+
+
             try
             {
                 int id = GetUserId();
@@ -43,9 +45,10 @@ namespace LearningAPI.Controllers
                     UserId = id,
                     NRIC = member.NRIC.Trim(),
                     Name = member.Name.Trim(),
+                    DateOfBirth = member.DateOfBirth,
                     MemberStatus = member.MemberStatus.Trim(),
                     LastSubscriptionDate = now,
-                    ExpiredDate = now.AddYears(1),
+                    ExpiredDate = now.AddYears(member.Years),
 
                     
                 };
@@ -55,22 +58,25 @@ namespace LearningAPI.Controllers
             }
             catch (Exception ex)
             {
-
-				return StatusCode(500);
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500);
             }
 
         }
+       
 
         [HttpPut("{id}")]
 
         public IActionResult UpdateMember(int id, Member member)
         {
             var mymember = _context.Members.Find(id);
+            
             if (mymember == null)
             {
                 return NotFound();
             }
             mymember.LastSubscriptionDate = DateTime.Now;
+
             mymember.ExpiredDate = mymember.ExpiredDate.AddYears(1);
             _context.SaveChanges();
             return Ok(mymember);

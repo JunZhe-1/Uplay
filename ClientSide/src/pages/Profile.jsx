@@ -33,7 +33,9 @@ function Profiles() {
         initialValues: {
             userName: profileList.userName,
             emailAddress: profileList.emailAddress,
-            password: ""
+            password: "",
+            oldpassword:""
+
 
         },
         validationSchema: yup.object({
@@ -45,25 +47,48 @@ function Profiles() {
                 .email('Enter a valid email')
                 .max(50, 'Email must be at most 50 characters')
                 .required('Email is required'),
+            oldpassword: yup.string().trim()
+                .min(8, 'Password must be at least 8 characters')
+                .max(250, 'Password must be at most 50 characters')
+                .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/,"At least 1 letter and 1 number"),
             password: yup.string().trim()
                 .min(8, 'Password must be at least 8 characters')
                 .max(250, 'Password must be at most 50 characters')
-                .required('Password is required')
-                .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/,
-                    "At least 1 letter and 1 number")
+                .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/,"At least 1 letter and 1 number")
 
         }),
-        onSubmit: (data) => {
+        onSubmit: async (data) => {
 
             data.userName = data.userName.trim();
             data.emailAddress = data.emailAddress.trim().toLowerCase();
-            data.password = data.password.trim();
+
+            if (data.password != "" && data.oldpassword != "") {
+                try {
+                    const response = await http.post('/UplayUser/validatePassword', {
+                        userId: user.userId,
+                        oldPassword: data.oldpassword
+                    });
+
+                    // Validation successful, proceed to update the password
+                    const newPassword = data.password.trim();
+                    data.password = newPassword;
+
+                } catch (error) {
+                    // Old password validation failed
+                    console.error('Error validating old password:', error);
+                    return;
+                }
+
+            }
+            
             console.log(data)
             http.put(`/UplayUser/${user.userId}`, data)
                 .then((res) => {
                     console.log(res.data);
-
                     navigate("/");
+                })
+                .catch((error) => {
+                    console.error('Error updating user details:', error);
                 });
         }
     });
@@ -204,6 +229,22 @@ function Profiles() {
                                 Change Password:
                             </Typography>
                             <TextField
+                                label="Old password"
+                                margin="normal"
+                                fullWidth
+                                margin="dense"
+                                autoComplete="off"
+                                name="oldpassword"
+                                type="password"
+                                value={formik.values.oldpassword}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={formik.touched.oldpassword && Boolean(formik.errors.oldpassword)}
+                                helperText={formik.touched.oldpassword && formik.errors.oldpassword}
+                                InputLabelProps={{ style: { marginTop: '5px' } }} // Adjust marginTop here
+                                style={{ marginBottom: '10px' }} // Adjust spacing here
+                            />
+                            <TextField
                                 label="New Password"
                                 margin="normal"
                                 fullWidth
@@ -224,9 +265,17 @@ function Profiles() {
                                 Update details
                             </Button>
 
-                            <Button variant="contained" color="primary" style={{ marginTop: '20px', marginLeft: '20px' }} onClick={handleNavigate}>
-                                Become a Member
-                            </Button>
+                            {/* Conditionally render "Become a Member" button */}
+                            {user?.emailAddress.toLowerCase() !== "admin@gmail.com" && (
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    style={{ marginTop: '20px', marginLeft: '20px' }}
+                                    onClick={handleNavigate}
+                                >
+                                    Become a Member
+                                </Button>
+                            )}
                         </CardContent>
                     </Card>
                 </Box>

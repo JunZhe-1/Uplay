@@ -3,6 +3,7 @@ using System;
 using LearningAPI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240122140339_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,9 +95,6 @@ namespace LearningAPI.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("date");
-
                     b.Property<DateTime>("ExpiredDate")
                         .HasColumnType("datetime");
 
@@ -107,8 +107,8 @@ namespace LearningAPI.Migrations
 
                     b.Property<string>("NRIC")
                         .IsRequired()
-                        .HasMaxLength(4)
-                        .HasColumnType("varchar(4)");
+                        .HasMaxLength(9)
+                        .HasColumnType("varchar(9)");
 
                     b.Property<string>("Name")
                         .IsRequired()

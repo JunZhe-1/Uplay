@@ -30,6 +30,7 @@ namespace LearningAPI.Migrations
                     Event_Fee_NTUC = table.Column<int>(type: "int", nullable: false),
                     Vacancies = table.Column<int>(type: "int", nullable: false),
                     ImageFile = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true),
+                    Event_Launching_Date = table.Column<DateTime>(type: "datetime", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
@@ -85,9 +86,8 @@ namespace LearningAPI.Migrations
                     Voucher_Description = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     Start_Date = table.Column<DateTime>(type: "datetime", nullable: false),
                     End_Date = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Discount_type = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    Discount_In_Percentage = table.Column<int>(type: "int", nullable: false),
                     Discount_In_Value = table.Column<int>(type: "int", nullable: false),
+                    Limit_Value = table.Column<int>(type: "int", nullable: false),
                     Create_date = table.Column<DateTime>(type: "datetime", nullable: false),
                     ImageFile = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true),
                     Member_Type = table.Column<string>(type: "longtext", nullable: false)
