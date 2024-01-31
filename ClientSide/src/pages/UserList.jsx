@@ -15,27 +15,46 @@ import global from '../global';
 function UserList() {
 
     const [userList, setuserList] = useState([]);
+    const [userstatusList, setuserstatusList] = useState([]);
 
     useEffect(() => {
         const fetchUser = async () => {
             try {
                 const response = await http.get('/UplayUser/auth');
-                console.log(response.data.user)
-               
+                console.log(response.data.user);
+
                 try {
-                    if (response.data.user.emailAddress == "admin@gmail.com") {
-                      
-                        const response1 = await http.get('/UplayUser')
-                        console.log(response1.data)
+                    if (response.data.user.emailAddress === "admin@gmail.com") {
+                        const response1 = await http.get('/UplayUser');
+                        console.log(response1.data);
                         const filteredUserList = response1.data.filter(user => user.emailAddress !== "admin@gmail.com");
-                        await setuserList(filteredUserList)
+                        await setuserList(filteredUserList);
 
+                        try {
+                            const promises = filteredUserList.map(async (user) => {
+                                try {
+                                    const respose = await http.get(`/Member/${user.userId}`);
+                                    if (respose.data.memberStatus == null) {
+                                    return "Guest"}
+                                    return respose.data.memberStatus;
+                                    
+                                   
+                                } catch (error) {
+                                    return "Guest";
+                                }
+                            });
 
+                            const mylist = await Promise.all(promises);
+                            console.log("mylist:"+mylist)
+                            setuserstatusList(mylist);
+                            console.log(userstatusList);
+                        } catch (error) {
+                            console.error('Error fetching user status:', error);
+                        }
                     }
                 } catch (error) {
                     console.error('Error fetching userlist:', error);
-}
-
+                }
             } catch (error) {
                 console.error('Error fetching user:', error);
             }
@@ -73,18 +92,19 @@ function UserList() {
                         User Name
                         </TableCell>
                         <TableCell>
-                         Set As Member
+                        User Type
                         </TableCell>
 
                     </TableRow>
                     </TableHead>
                     <TableBody>
-                        {userList.map((user) => (
+                        {userList.map((user, index) => (
                             <TableRow key={user.userId}>
                                 <TableCell>{user.userId}</TableCell>
                                 <TableCell>{user.emailAddress}</TableCell>
                                 <TableCell>{user.userName}</TableCell>
-                                {/* Add more cells for other user properties */}
+                                <TableCell>{ userstatusList[index]}</TableCell>
+                                
                             </TableRow>
                         ))}
                     </TableBody>

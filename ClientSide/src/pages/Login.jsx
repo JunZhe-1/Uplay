@@ -49,6 +49,8 @@ function Login() {
                                 }
                                 localStorage.setItem("memberStatus", userStatus);
                                 console.log(localStorage.getItem("memberStatus"))
+                                if (userStatus == null) {
+                                localStorage.setItem("memberStatus","Guest")}
                             })
                             .catch((error) => {
                                 console.error("Error fetching user status:", error);
