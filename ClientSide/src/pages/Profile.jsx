@@ -267,7 +267,9 @@ function Profiles() {
                             </Button>
 
                             {/* Conditionally render "Become a Member" button */}
-                            {user?.emailAddress.toLowerCase() !== "admin@gmail.com" && (
+                            {user?.emailAddress.toLowerCase() !== "admin@gmail.com" &&memberstatus !== "NTUC" &&(
+
+                               
                                 <Button
                                     variant="contained"
                                     color="primary"
@@ -275,7 +277,23 @@ function Profiles() {
                                     onClick={handleNavigate}
                                 >
                                     Become a Member
+                                    </Button>
+                                
+
+                            )}
+                            {user?.emailAddress.toLowerCase() !== "admin@gmail.com" && memberstatus == "NTUC" && (
+
+
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    style={{ marginTop: '20px', marginLeft: '20px' }}
+                                    onClick={handleNavigate}
+                                >
+                                    Check your member profile
                                 </Button>
+
+
                             )}
                         </CardContent>
                     </Card>

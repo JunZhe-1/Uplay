@@ -30,8 +30,40 @@ namespace LearningAPI.Controllers
             return Ok(member);
         }
 
+        [HttpPost("{id}")]
+        public IActionResult SetAsMember(int id)
+        {
 
-        [HttpPost]
+
+            var now = DateTime.Now;
+            try
+            {
+                var myMember = new Member()
+                {
+                    UserId = id,
+                    NRIC = "000A",
+                    Name = "Wait For Reset",
+                    DateOfBirth = now.Date,
+                    MemberStatus = "NTUC",
+                    LastSubscriptionDate = now,
+                    ExpiredDate = now.AddYears(1),
+                };
+
+                _context.Members.Add(myMember);
+                _context.SaveChanges();
+                return Ok(myMember);
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500);
+            }
+            
+        }
+
+
+    
+
+    [HttpPost]
         public IActionResult AddUser(BuyMemberRequest member)
         {
             var now = DateTime.Now;
@@ -63,9 +95,10 @@ namespace LearningAPI.Controllers
             }
 
         }
+
        
 
-        [HttpPut("{id}")]
+    [HttpPut("{id}")]
 
         public IActionResult UpdateMember(int id, Member member)
         {
@@ -80,6 +113,25 @@ namespace LearningAPI.Controllers
             mymember.ExpiredDate = mymember.ExpiredDate.AddYears(1);
             _context.SaveChanges();
             return Ok(mymember);
+
+        }
+        [HttpPut("Set/{id}")]
+
+        public IActionResult UpdateMemberAdmin(int id)
+        {
+            try { 
+            var mymember = _context.Members.Find(id);
+
+            
+            mymember.LastSubscriptionDate = DateTime.Now;
+            mymember.MemberStatus = "NTUC";
+            mymember.ExpiredDate = mymember.ExpiredDate.AddYears(1);
+            _context.SaveChanges();
+            return Ok(mymember);
+            }catch (Exception ex) {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500);
+            }
 
         }
 

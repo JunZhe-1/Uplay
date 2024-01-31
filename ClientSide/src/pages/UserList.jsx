@@ -69,6 +69,25 @@ function UserList() {
         // This block will run when userList is updated
         console.log('userList updated:', userList);
     }, [userList]);
+    async function handleSetAsMember(userid) {
+        try {
+            const response = await http.post(`/Member/${userid}`)
+            console.log(response.memberStatus)
+            alert("Set successfully")
+        } catch (error) {
+            try {
+                var response1 = await http.put((`/Member/Set/${userid}`))
+                console.log(response1.memberStatus)
+                alert("Set successfully")
+            } catch(error1) {
+            console.log("Unable to add or update")}
+            
+
+        }
+
+
+
+    }
     return (
 
         <Box>
@@ -78,44 +97,57 @@ function UserList() {
                 fontWeight="bold"
                 color="#E8533F"  >
                 User List</Typography>
-            <TableContainer>
-                <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>
-                        User Id
-                        </TableCell>
-                        <TableCell>
-                            User Email
-                        </TableCell>
-                        <TableCell>
-                        User Name
-                        </TableCell>
-                        <TableCell>
-                        User Type
-                        </TableCell>
-
-                    </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {userList.map((user, index) => (
-                            <TableRow key={user.userId}>
-                                <TableCell>{user.userId}</TableCell>
-                                <TableCell>{user.emailAddress}</TableCell>
-                                <TableCell>{user.userName}</TableCell>
-                                <TableCell>{ userstatusList[index]}</TableCell>
-                                
-                            </TableRow>
-                        ))}
-                    </TableBody>
-
-
-                </Table>
-            </TableContainer>
-
-
-
-
+         
+                {userstatusList.length > 0 ? (
+                    <TableContainer>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>User Id</TableCell>
+                                    <TableCell>User Email</TableCell>
+                                    <TableCell>User Name</TableCell>
+                                    <TableCell>User Type</TableCell>
+                                    <TableCell>Set as member</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {userList.map((user, index) => (
+                                    <TableRow key={user.userId}>
+                                        <TableCell>{user.userId}</TableCell>
+                                        <TableCell>{user.emailAddress}</TableCell>
+                                        <TableCell>{user.userName}</TableCell>
+                                        <TableCell>{userstatusList[index]}</TableCell>
+                                        <TableCell>
+                                            {userstatusList[index] === "NTUC" ? (
+                                                 <Button
+                                                    style={{
+                                                        backgroundColor: 'grey',
+                                                        color: 'white',
+                                                    }}
+                                                >
+                                                    Already A Member
+                                                </Button>
+                                               
+                                            ) : (
+                                                    <Button
+                                                        style={{
+                                                            backgroundColor: '#E8533F',
+                                                            color: 'white',
+                                                        }}
+                                                        onClick={() => handleSetAsMember(user.userId)}
+                                                    >
+                                                        Set   As   Member
+                                                    </Button>
+                                            )}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                ) : (
+                    <Typography align="center">No data available.</Typography>
+                )}
         </Box>
 
     )

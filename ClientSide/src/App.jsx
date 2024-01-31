@@ -88,7 +88,7 @@ function App() {
                               <Box sx={{ flexGrow: 1 }}></Box>
                               {user && (
                                   <>
-                                      {user.userName != "admin" ? (
+                                      {user.userName != "Admin" ? (
                                           <div>
                                               <Link to={`/Event/EventClientSide`} style={{ textDecoration: 'none' }}>
                                                   <Button
@@ -129,6 +129,19 @@ function App() {
                                                   }}
                                               >
                                                   <MenuItem onClick={handleClose}>
+                                                      <Box sx={{ borderBottom: '1px solid #E8533F', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                          <Typography
+                                                              sx={{
+                                                                  color: '#E8533F',
+                                                                  fontWeight: 'bold',
+                                                                  fontSize: '12px',
+                                                              }}
+                                                          >
+                                                              {localStorage.getItem("memberStatus")}
+                                                          </Typography>
+                                                      </Box>
+                                                  </MenuItem>
+                                                  <MenuItem onClick={handleClose}>
                                                       <Link to="/profile" style={{ textDecoration: 'none' }}>
                                                           <Typography sx={{ color: 'black' }}>My Profile</Typography>
                                                       </Link>
@@ -138,6 +151,9 @@ function App() {
                                                           <Typography sx={{ color: 'black' }}>My Vouchers</Typography>
                                                       </Link>
                                                   </MenuItem>
+                                
+
+
                                                   <MenuItem onClick={handleClose}>
                                                       <Typography
                                                           sx={{ color: 'black', cursor: 'pointer' }}
@@ -145,7 +161,9 @@ function App() {
                                                       >
                                                           Logout
                                                       </Typography>
+                                                      
                                                   </MenuItem>
+
                                               </Menu>
                                           </div>
                                       ) : null}
