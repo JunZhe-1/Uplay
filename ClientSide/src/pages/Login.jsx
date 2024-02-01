@@ -43,6 +43,10 @@ function Login() {
                         http.get(`/Member/${id}`)  
                             .then((respose) => {
                                 // Assuming memberStatusRes.data.status contains the user status
+                                navigate("/")
+
+                                window.location.reload();
+
                                 const userStatus = respose.data.memberStatus;
                                 if (localStorage.getItem("memberStatus")) {
                                     localStorage.removeItem("memberStatus");
@@ -64,9 +68,12 @@ function Login() {
                         if (localStorage.getItem("memberStatus")) {
                             localStorage.removeItem("memberStatus");
                         }
+
                         localStorage.setItem("memberStatus", "Guest");
+
                     }
-                    navigate("/")
+                   
+
                     
                 })
                 .catch(function (err) {
