@@ -162,15 +162,15 @@ namespace LearningAPI.Controllers
 
             if (voucher.Discount_In_Value == 0)
             {
-                string message = "Discount value must be more than 0";
+                string message = "Discount must more than 0";
                 return BadRequest(new { message });
 
             }
-            else if (voucher.Limit_Value == 0)
-            {
-                string message = "Limit Value must be more than 0";
-                return BadRequest(new { message });
-            }
+            //else if (voucher.Limit_Value == 0)
+            //{
+            //    string message = "Limit Value must be more than 0";
+            //    return BadRequest(new { message });
+            //}
             else
             {
 
@@ -210,12 +210,12 @@ namespace LearningAPI.Controllers
                 else if (start > end)
                 {
 
-                    string message = "Voucher's End Date must set after Start Date";
+                    string message = "End Date must be set after the Start Date";
                     return BadRequest(new { message });
                 }
                 else if (end < now)
                 {
-                    string message = "Voucher's End date must set after today's Date";
+                    string message = "End Date must be set after today's Date";
                     return BadRequest(new { message });
                 }
                 else
