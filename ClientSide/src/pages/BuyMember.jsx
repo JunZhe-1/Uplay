@@ -70,6 +70,9 @@ function BuyMember() {
                 .then((res) => {
                     console.log(res.data);
                     navigate("/profile");
+                    localStorage.removeItem("memberStatus")
+                    localStorage.setItem("memberStatus","NTUC")
+
                 });
         }
 
