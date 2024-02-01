@@ -107,6 +107,7 @@ function HomePage() {
                                             alt="data"
                                             src={`${import.meta.env.VITE_FILE_BASE_URL}${data.imageFile}`}
                                             style={{
+                                                height:'20vh',
                                                 width: '100%',
                                                 objectFit: 'cover',
                                             }}
@@ -154,7 +155,7 @@ function HomePage() {
                         </Grid>
                     ))}
                 </Grid>
-                <Box style={{ width: '100%', marginTop: '2vh' }}>
+                <Box style={{ width: '100%', marginTop: '10vh'}}>
                     <img
                         alt="data"
                         src={`./image/contact.png`}
