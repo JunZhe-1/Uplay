@@ -163,7 +163,7 @@ function EventDetail() {
 
                         <TableRow>
                             <TableCell sx={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', maxWidth: '100%', width: '65%', padding: '30px' }}>
-                                <Typography variant="h6" sx={{ color: 'black', fontWeight: 'bold', fontSize: '29px' }}>Description</Typography>
+                                <Typography variant="h6" sx={{ color: 'black', fontWeight: 'bold', fontSize:'29px' }}>Description</Typography>
                                 <Typography variant="body1">
                                     {EventDetail.Event_Description}
                                 </Typography>
@@ -206,7 +206,7 @@ function EventDetail() {
 
                         <TableRow>
                             <TableCell sx={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', maxWidth: '100%', width: '65%', padding: '30px' }}>
-                                <Typography variant="h6" sx={{ color: 'black', fontWeight: 'bold', fontSize: '29px' }}>Location</Typography>
+                                <Typography variant="h6" sx={{ color: 'black', fontWeight: 'bold',fontSize:'29px' }}>Location</Typography>
                                 <Typography variant="body1">
                                     {EventDetail.Event_Location}
                                 </Typography><br /><br />
@@ -271,7 +271,7 @@ function EventDetail() {
 
                         <TableRow>
                             <TableCell>
-                                <Box sx={{ mt: 5, marginTop: '-2vh' }}>
+                                <Box sx={{ mt: 5 , marginTop:'-2vh'}}>
                                     <Button variant="contained" type="submit">
                                         Share Your Review
                                     </Button>
@@ -280,10 +280,10 @@ function EventDetail() {
                         </TableRow>
                     </TableBody>
                 </TableContainer>
+              
 
 
-
-                <TableContainer style={{ height: '380px', marginTop: '9vh' }}>
+                <TableContainer style={{ height: '800px', marginTop: '9vh' }}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead> <TableRow>
                             <TableCell style={{ textAlign: 'right' }}>
@@ -304,14 +304,14 @@ function EventDetail() {
                             </TableCell>
                         </TableRow></TableHead>
                         <TableBody>
-
+                           
 
                             {rows
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row) => (
                                     <TableRow hover role="checkbox" tabIndex={-1} key={row.no}>
                                         <TableCell colSpan={3}>
-                                            <Box style={{ width: '7.5%', marginTop: '2vh' }}>
+                                            <Box style={{ width: '6%', marginTop: '2vh' }}>
                                                 <img
                                                     alt="data"
                                                     src={`/image/dp/${Math.floor(Math.random() * 7) + 1}.png`}
@@ -319,12 +319,12 @@ function EventDetail() {
                                                         width: '100%',
                                                         height: '9vh',
                                                         objectFit: 'cover',
-                                                        borderRadius: '50%'
+                                                        borderRadius: '70%'
                                                     }}
                                                 />
                                             </Box>
 
-                                            <span style={{ fontSize: '20px', fontWeight: 'bold' }}>{row['name']}</span>
+                                            <span style={{ fontSize: '16px', fontWeight: 'bold' }}>{row['name']}</span>
                                             <br />
                                             <Rating
                                                 value={parseFloat(row['rating'])}
@@ -334,7 +334,7 @@ function EventDetail() {
                                                 edit={false}
                                             />
                                             <br />
-                                            <span style={{ fontSize: '16px' }}>{row['eventReview']}</span>
+                                            <span style={{ fontSize: '14px' }}>{row['eventReview']}</span>
                                         </TableCell>
                                     </TableRow>
                                 ))}

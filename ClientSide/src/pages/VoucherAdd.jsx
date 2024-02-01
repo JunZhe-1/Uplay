@@ -137,7 +137,7 @@ function VoucherAdd() {
                                 fullWidth
                                 margin="dense"
                                 autoComplete="off"
-                                label="Voucher_Name"
+                                label="Voucher Name"
                                 name="Voucher_Name"
                                 value={formik.values.Voucher_Name}
                                 onChange={formik.handleChange}
@@ -150,7 +150,7 @@ function VoucherAdd() {
                                 fullWidth
                                 margin="dense"
                                 autoComplete="off"
-                                label="Voucher_Description"
+                                label="Voucher Description"
                                 name="Voucher_Description"
                                 value={formik.values.Voucher_Description}
                                 onChange={formik.handleChange}
@@ -164,7 +164,7 @@ function VoucherAdd() {
                             <DatePicker
                                 fullWidth
                                 margin="dense"
-                                label="Start_Date"
+                                label="Start Date"
                                 inputVariant="outlined"
                                 format="dd/MM/yyyy"
                                 value={formik.values.Start_Date}
@@ -180,7 +180,7 @@ function VoucherAdd() {
                             <DatePicker
                                 fullWidth
                                 margin="dense"
-                                label="End_Date"
+                                label="End Date"
                                 inputVariant="outlined"
                                 format="dd/MM/yyyy"
                                 value={formik.values.End_Date}
@@ -218,7 +218,7 @@ function VoucherAdd() {
                                     fullWidth
                                     margin="dense"
                                     autoComplete="off"
-                                    label="Discount_In_Value"
+                                    label="Discount"
                                     name="Discount_In_Value"
                                     value={formik.values.Discount_In_Value}
                                     onChange={formik.handleChange}
@@ -232,7 +232,7 @@ function VoucherAdd() {
                                 fullWidth
                                 margin="dense"
                                 autoComplete="off"
-                                label="Limit_Value"
+                                label="Spending Limit"
                                 name="Limit_Value"
                                 value={formik.values.Limit_Value}
                                 onChange={formik.handleChange}

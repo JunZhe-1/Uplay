@@ -323,7 +323,7 @@ function EventAdd() {
 
                 </Grid>
                 <Box sx={{ mt: 5 }}>
-                    <Button variant="contained" type="submit">
+                        <Button variant="contained" type="submit" style={{ width: '100%' }}>
                         Add
                     </Button>
                 </Box>
