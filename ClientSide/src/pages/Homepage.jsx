@@ -1,4 +1,5 @@
-﻿import React, { useEffect, useState, useContext } from 'react';
+﻿/* eslint-disable no-unused-vars */
+import React, { useEffect, useState, useContext } from 'react';
 import {
     Box,
     Typography,
@@ -9,7 +10,7 @@ import {
     RadioGroup,
     FormControl,
     FormControlLabel,
-    InputLabel,
+    InputLabel, Tooltip,
     Select,
     MenuItem,
     FormHelperText, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions
@@ -119,14 +120,16 @@ function HomePage() {
                                         display: 'flex',
                                         flexDirection: 'column',
                                         flexGrow: 1,
+                                        height: '17vh',
+                                        alignItems: 'flex-start', 
                                     }}
                                 >
-                                    <Typography variant="h6" sx={{ mb: 2, fontSize: '20px' }}>
-                                        <b> {data.Event_Name}</b>
+                                    <Typography variant="h6" sx={{ mb: 2, maxHeight: '7vh', fontSize: '20px', padding: '0 0 10px 0', flex: '2' }}>
+                                        <b>{data.Event_Name}</b>
                                     </Typography>
 
-                                    <Typography variant="h6" sx={{ mb: 2, fontSize: '16px' }}>
-                                     Available from: <b>   {dayjs.utc(data.Event_Launching_Date).format(global.datetimeFormat1)}</b>
+                                    <Typography variant="h6" sx={{ fontSize: '14px', alignSelf: 'flex-end', flex: '1' }}>
+                                        Available from: <b>{dayjs.utc(data.Event_Launching_Date).format(global.datetimeFormat1)}</b>
                                     </Typography>
                                     
                                     <Box sx={{ flexGrow: 1 }}></Box>

@@ -200,7 +200,7 @@ function EventEdit() {
                                 fullWidth
                                 margin="dense"
                                 autoComplete="off"
-                                label="Event_Name"
+                                label="Event Name"
                                 name="Event_Name"
                                 value={formik.values.Event_Name}
                                 onChange={formik.handleChange}
@@ -323,11 +323,12 @@ function EventEdit() {
                                 error={Boolean(formik.touched.Vacancies && formik.errors.Vacancies)}
                                 helperText={formik.touched.Vacancies && formik.errors.Vacancies}
                             />
+                            <Box sx={{ marginTop: '2vh' }}></Box>
 
                             <DatePicker
                                 fullWidth
                                 margin="dense"
-                                label="Event_Launching_Date"
+                                label="Event Launching Date"
                                 inputVariant="outlined"
                                 format="dd/MM/yyyy"
                                 value={formik.values.Event_Launching_Date}

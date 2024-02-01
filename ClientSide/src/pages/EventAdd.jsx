@@ -40,7 +40,7 @@ function EventAdd() {
             Event_Description: "",
             Event_Location: "",
             Event_Category: "Sports & Wellness",
-            Event_Launching_Date:"",
+            Event_Launching_Date: new Date(),
             Event_Fee_Guest: 0,   
             Event_Fee_Uplay: 0, 
             Event_Fee_NTUC: 0,
@@ -100,7 +100,7 @@ function EventAdd() {
             http.post("/Event/add_event", data)
                 .then((res) => {
                     console.log(data);
-                   // navigate("/Event");
+                   navigate("/Event");
                 })
                 .catch(function (err) {
 
@@ -157,7 +157,7 @@ function EventAdd() {
                             fullWidth
                             margin="dense"
                             autoComplete="off"
-                            label="Event_Name"
+                            label="Event Name"
                             name="Event_Name"
                             value={formik.values.Event_Name}
                             onChange={formik.handleChange}
@@ -279,11 +279,12 @@ function EventAdd() {
                             type="number"
                             error={Boolean(formik.touched.Vacancies && formik.errors.Vacancies)}
                             helperText={formik.touched.Vacancies && formik.errors.Vacancies}
-                        />
+                            />
+                            <Box sx={{marginTop:'2vh'} }></Box>
                         <DatePicker
                             fullWidth
                             margin="dense"
-                            label="Event_Launching_Date"
+                            label="Event Launching Date"
                             inputVariant="outlined"
                             format="dd/MM/yyyy"
                             value={formik.values.Event_Launching_Date}

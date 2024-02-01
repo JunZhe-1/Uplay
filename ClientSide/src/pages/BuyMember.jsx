@@ -171,7 +171,7 @@ function BuyMember() {
                 style={{ marginBottom: '10px' }}
             />
             <Typography variant="h6" style={{ fontSize: '23px', marginTop: '20px' }}>
-                No. years to subscribe:
+                No. of years to subscribe:
             </Typography>
             <Select
                 label="Years"
@@ -189,7 +189,7 @@ function BuyMember() {
              
             
              <Button variant="contained" color="primary" style={{ marginTop: '20px' }} type="submit">
-                                Buy Member
+                                Buy Membership
             </Button>
 
 

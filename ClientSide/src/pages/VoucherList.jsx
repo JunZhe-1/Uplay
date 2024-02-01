@@ -167,7 +167,7 @@ function VoucherList() {
                                                     <img
                                                         alt="tutorial"
                                                         src={`${import.meta.env.VITE_FILE_BASE_URL}${data.ImageFile}`}
-                                                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px' }}
+                                                        style={{ width: '100%', height: '100%', objectFit: 'fill', borderRadius: '10px' }}
                                                     />
 
                                                 </Box>

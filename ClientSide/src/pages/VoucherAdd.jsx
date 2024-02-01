@@ -34,8 +34,8 @@ function VoucherAdd() {
     const formik = useFormik({
         initialValues: {
             Voucher_Name: "",
-            Start_Date: "", // Initialize as null or a default date
-            End_Date: "",   // Initialize as null or a default date
+            Start_Date: new Date(), // Initialize as null or a default date
+            End_Date: new Date(),   // Initialize as null or a default date
             Voucher_Description:"",
             Discount_In_Value: 0,
             Limit_Value: 0,

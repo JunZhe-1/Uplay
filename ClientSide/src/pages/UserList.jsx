@@ -17,8 +17,10 @@ function UserList() {
     const [userList, setuserList] = useState([]);
     const [userstatusList, setuserstatusList] = useState([]);
 
-    useEffect(() => {
-        const fetchUser = async () => {
+
+
+        const fetchUser = async () =>
+        {
             try {
                 const response = await http.get('/UplayUser/auth');
                 console.log(response.data.user);
@@ -35,17 +37,18 @@ function UserList() {
                                 try {
                                     const respose = await http.get(`/Member/${user.userId}`);
                                     if (respose.data.memberStatus == null) {
-                                    return "Guest"}
+                                        return "Guest"
+                                    }
                                     return respose.data.memberStatus;
-                                    
-                                   
+
+
                                 } catch (error) {
                                     return "Guest";
                                 }
                             });
 
                             const mylist = await Promise.all(promises);
-                            console.log("mylist:"+mylist)
+                            console.log("mylist:" + mylist)
                             setuserstatusList(mylist);
                             console.log(userstatusList);
                         } catch (error) {
@@ -59,11 +62,16 @@ function UserList() {
                 console.error('Error fetching user:', error);
             }
         };
+
+
         if (localStorage.getItem('accessToken')) {
             fetchUser();
         }
 
-    }, []);
+
+        useEffect(() => {
+            fetchUser();
+        }, []);
 
     useEffect(() => {
         // This block will run when userList is updated
@@ -73,10 +81,12 @@ function UserList() {
         try {
             const response = await http.post(`/Member/${userid}`)
             console.log(response.memberStatus)
+            fetchUser();
             alert("Set successfully")
         } catch (error) {
             try {
                 var response1 = await http.put((`/Member/Set/${userid}`))
+
                 console.log(response1.memberStatus)
                 alert("Set successfully")
             } catch(error1) {
