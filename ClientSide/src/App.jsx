@@ -88,7 +88,7 @@ function App() {
                               <Box sx={{ flexGrow: 1 }}></Box>
                               {user && (
                                   <>
-                                      {user.userName != "Admin" ? (
+                                      {user.emailAddress != "admin@gmail.com" ? (
                                           <div>
                                               <Link to={`/Event/EventClientSide`} style={{ textDecoration: 'none' }}>
                                                   <Button
@@ -172,7 +172,7 @@ function App() {
 
                               {user && (
                                   <>
-                                      {user.userName === "admin" || user.userName === "Admin" && (
+                                      {user.emailAddress === "admin@gmail.com" && (
                                           <div>
                                               <Button
                                                   id="admin-fade-button"
