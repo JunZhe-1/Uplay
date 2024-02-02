@@ -27,6 +27,9 @@ import EventDetail from './pages/EventDetail';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HomePage from './pages/Homepage';
 import UserList from './pages/UserList';
+import Password_Current from './pages/Password_Current';
+import Password_Change from './pages/Password_Change';
+import Userprofile from './pages/UserProfile';
 function App() {
     const [user, setUser] = useState(null);
     const imageUrl = './../image/testing.png';
@@ -289,6 +292,9 @@ function App() {
               <Route path={"/register"} element={<Register />} />
               <Route path={"/login"} element={<Login />} />
               <Route path={"/form"} element={<MyForm />} />
+              <Route path='/password_current' element={<Password_Current />} />
+              <Route path='/password_change' element={<Password_Change />} />
+              <Route path='/userProfile' element={<Userprofile />} />
 
                           <Route path={"/profile"} element={<Profile />} />
                           <Route path={"/Event/add_event"} element={<EventAdd />} />
