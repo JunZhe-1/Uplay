@@ -118,7 +118,6 @@ namespace LearningAPI.Controllers
         }
 
         [HttpPut("{id}")]
-
         public IActionResult UpdateUplayUser(int id, UpdateUplayUserRequest uplayuser)
         {
             var user = _context.UplayUsers.Find(id);
@@ -126,18 +125,35 @@ namespace LearningAPI.Controllers
             {
                 return NotFound();
             }
-            user.UserName = uplayuser.UserName;
-            if (uplayuser.Password != "" && uplayuser.Password != null) { 
-            string passwordHash = BCrypt.Net.BCrypt.HashPassword(uplayuser.Password);
-            user.Password = passwordHash;
-            }
-            user.EmailAddress = uplayuser.EmailAddress.Trim();
-            
-            user.UpdatedAt = DateTime.UtcNow;
-            _context.SaveChanges();
-            return Ok(user);
 
+            user.UserName = uplayuser.UserName;
+            user.EmailAddress = uplayuser.EmailAddress.Trim();
+            user.UpdatedAt = DateTime.UtcNow;
+
+            if (!string.IsNullOrEmpty(uplayuser.Password.Trim()))
+            {
+                if (uplayuser.Password.Trim().Length < 8)
+                {
+                    // Handle validation error for password length, if needed
+                    return Ok("Set all except password");
+                }
+                else
+                {
+                    string passwordHash = BCrypt.Net.BCrypt.HashPassword(uplayuser.Password);
+                    user.Password = passwordHash;
+                }
+            }
+            _context.SaveChanges();
+
+            return Ok(user);
         }
+
+
+
+
+        
+
+
 
         [HttpGet("auth"), Authorize]
         public IActionResult Auth()
