@@ -27,6 +27,8 @@ function Profiles()
     console.log(user1,user,'testing');
 
     const [memberstatus, setmemberstatus] = useState(false);
+    const [membername, setmembername] = useState(null);
+    const [membernric, setmembernric] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -77,35 +79,15 @@ function Profiles()
 
           console.log("enter");
 
-
           
-                data.userName = data.userName.trim();
+            data.userName = data.userName.trim();
             data.emailAddress = data.emailAddress.trim().toLowerCase();
-
-            // if (data.password != "" && data.oldpassword != "") {
-                try {
-                    const response = await http.post('/UplayUser/validatePassword', {
-                        userId: user1.userId,
-                        // oldPassword: data.oldpassword
-                    });
-
-                    // Validation successful, proceed to update the password
-                    // const newPassword = data.password.trim();
-                    // data.password = newPassword;
-
-                } catch (error) {
-                    // Old password validation failed
-                    console.error('Error validating old password:', error);
-                    formik.setErrors({ oldpassword: "Invalid old password." });
-                    return;
-                }
-
-            // }
             
             console.log(data)
             http.put(`/UplayUser/${user1.userId}`, data)
                 .then((res) => {
                     console.log(res.data);
+                    alert("Profile updated successfully")
                     navigate("/");
                 })
                 .catch((error) => {
@@ -124,8 +106,7 @@ function Profiles()
                     console.log(response.data);
                     formik.setValues({
                         userName: response.data.userName,
-                        emailAddress: response.data.emailAddress,
-                        password: ""
+                        emailAddress: response.data.emailAddress
                     });
                 } catch (error) {
                     console.error('Error fetching user profile:', error);
@@ -141,6 +122,9 @@ function Profiles()
                     else {
                         console.log(response1)
                         setmemberstatus(response1.data.memberStatus)
+                        setmembername(response1.data.name)
+                        setmembernric(response1.data.nric)
+                        console.log("name"+membername)
 
                     }
 
@@ -292,10 +276,10 @@ function Profiles()
           {memberstatus} Member
         </Typography>
         <Typography style={{ marginTop: '1vh', marginLeft: '5vh' }}>
-          <p><b style={{ fontSize: '18px' }}>Name: &nbsp;</b> <span style={{ fontSize: '15px' }}>{(user.userName).toUpperCase()}</span></p>
+                                <p><b style={{ fontSize: '18px' }}>Name: &nbsp;</b> <span style={{ fontSize: '15px' }}>{membername.toUpperCase()}</span></p>
         </Typography>
         <Typography style={{ marginTop: '-3vh', marginLeft: '5vh' }}>
-          <p><b style={{ fontSize: '18px' }}>NRIC: &nbsp;</b> <span style={{ fontSize: '15px' }}>*******414J</span></p>
+                                <p><b style={{ fontSize: '18px' }}>NRIC: &nbsp;</b> <span style={{ fontSize: '15px' }}>*******{membernric}</span></p>
         </Typography>
       </>
     ) : (
@@ -409,7 +393,10 @@ function Profiles()
         background: '#f4511e',
         color: 'white',
       },
-    }} onClick={() =>changeedit(getedit)}>
+                                    }} onClick={(e) => {
+                                        e.preventDefault();
+                                        changeedit(getedit);
+                                    }}>
       Edit
     </Button>
   </Box>
