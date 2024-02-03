@@ -5,6 +5,8 @@ import {    Drawer, List, ListItem, ListItemIcon, ListItemText,
     Paper, TableContainer, Table, TableHead, TableBody, TableRow, TableCell
     , Dialog, InputLabel, TablePagination, DialogTitle, DialogContent, DialogContentText, DialogActions, Select, MenuItem } from '@mui/material';
 import http from '../http';
+import { ToastContainer, toast } from 'react-toastify';
+
 import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
@@ -12,9 +14,17 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import UserContext from '../contexts/UserContext';
 
-function Profiles() {
+function Profiles()
+ {
     const [profileList, setProfileList] = useState([]);
-    const [user, setUser1] = useState(null);
+    const { user } = useContext(UserContext);
+
+
+    const [user1, setUser1] = useState(null);
+
+    const [getedit, setedit] = useState(true);
+
+    console.log(user1,user,'testing');
 
     const [memberstatus, setmemberstatus] = useState(false);
     const navigate = useNavigate();
@@ -39,9 +49,8 @@ function Profiles() {
         initialValues: {
             userName: profileList.userName,
             emailAddress: profileList.emailAddress,
-            password: "",
-            oldpassword:""
-
+            // password: "",
+            // oldpassword:""
 
         },
         validationSchema: yup.object({
@@ -53,31 +62,36 @@ function Profiles() {
                 .email('Enter a valid email')
                 .max(50, 'Email must be at most 50 characters')
                 .required('Email is required'),
-            oldpassword: yup.string().trim()
-                .min(8, 'Password must be at least 8 characters')
-                .max(250, 'Password must be at most 50 characters')
-                .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/,"At least 1 letter and 1 number"),
-            password: yup.string().trim()
-                .min(8, 'Password must be at least 8 characters')
-                .max(250, 'Password must be at most 50 characters')
-                .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/,"At least 1 letter and 1 number")
+            // oldpassword: yup.string().trim()
+            //     .min(8, 'Password must be at least 8 characters')
+            //     .max(250, 'Password must be at most 50 characters')
+            //     .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/,"At least 1 letter and 1 number"),
+            // password: yup.string().trim()
+            //     .min(8, 'Password must be at least 8 characters')
+            //     .max(250, 'Password must be at most 50 characters')
+            //     .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/,"At least 1 letter and 1 number")
 
         }),
         onSubmit: async (data) => {
 
-            data.userName = data.userName.trim();
+
+          console.log("enter");
+
+
+          
+                data.userName = data.userName.trim();
             data.emailAddress = data.emailAddress.trim().toLowerCase();
 
-            if (data.password != "" && data.oldpassword != "") {
+            // if (data.password != "" && data.oldpassword != "") {
                 try {
                     const response = await http.post('/UplayUser/validatePassword', {
-                        userId: user.userId,
-                        oldPassword: data.oldpassword
+                        userId: user1.userId,
+                        // oldPassword: data.oldpassword
                     });
 
                     // Validation successful, proceed to update the password
-                    const newPassword = data.password.trim();
-                    data.password = newPassword;
+                    // const newPassword = data.password.trim();
+                    // data.password = newPassword;
 
                 } catch (error) {
                     // Old password validation failed
@@ -86,10 +100,10 @@ function Profiles() {
                     return;
                 }
 
-            }
+            // }
             
             console.log(data)
-            http.put(`/UplayUser/${user.userId}`, data)
+            http.put(`/UplayUser/${user1.userId}`, data)
                 .then((res) => {
                     console.log(res.data);
                     navigate("/");
@@ -102,7 +116,7 @@ function Profiles() {
 
     useEffect(() => {
 
-        if (user) {
+        if (user1) {
             const getProfile = async () => {
                 try {
                     const response = await http.get(`/UplayUser/${user.userId}`);
@@ -141,61 +155,292 @@ function Profiles() {
             getMemberStatus();
 
         }
-    }, [user]);
+    }, [user1]);
     const handleNavigate = () => {
         navigate("/buymember");
     };
+
+
+    const changeedit =(j)=>{
+        setedit(!j);
+        
+    }
+
+
+
+
+
+    const [imageFile, setImageFile] = useState(null);
+
+
+    const onFileChange = (e) => {
+      let file = e.target.files[0];
+      if (file) {
+          if (file.size > 1024 * 1024) {
+              toast.error('Maximum file size is 1MB');
+              return;
+          }
+
+          let formData = new FormData();
+          formData.append('file', file);
+          http.post('/file/upload', formData, {
+              headers: {
+                  'Content-Type': 'multipart/form-data'
+              }
+          })
+              .then((res) => {
+                  setImageFile(res.data.filename);
+                  
+              })
+              .catch(function (error) {
+                  console.log(error.response);
+                  toast.error(`${error.response.data.message}`);
+
+              });
+      }
+  };
 
 
     return (
 <Box>
   <Box sx={{ display: 'flex', flexDirection: 'column', marginTop: '0vh', position: 'relative', left: '-10px' }}>
     <Box sx={{padding:'29px'}}>
-  <Box style={{ width: '6%', marginTop: '2vh',marginLeft:'-13.5vh' }}>
-                                                <img
-                                                    alt="data"
-                                                    src={`/image/dp/${Math.floor(Math.random() * 7) + 1}.png`}
-                                                    style={{
-                                                        width: '100%',
-                                                        height: '9vh',
-                                                        objectFit: 'cover',
-                                                        borderRadius: '70%'
-                                                    }}
-                                                />
-                                            </Box>
-     <Typography sx={{ fontSize: '20px', marginLeft: '-3vh', fontWeight: 'bold', marginTop: '-7vh' }}>
-    lucas lau jia yuan bib
+ <Box style={{ width: '7%', marginTop: '2vh', marginLeft: '-13.5vh', cursor: 'pointer', position: 'relative' }}>
+  <Button
+    variant="contained"
+    component="label"
+    style={{
+      width: '100%',
+      height: '100%',
+      padding: 0,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: '70%',
+    }}
+  >
+    <input
+      hidden
+      accept="image/*"
+      multiple
+      type="file"
+      onChange={onFileChange}
+      style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, opacity: 0 }}
+    />
+    <img
+      alt="data"
+      src={`/image/dp/${Math.floor(Math.random() * 7) + 1}.png`}
+      style={{
+        width: '100%',
+        height: '10.5vh',
+        objectFit: 'cover',
+        borderRadius: '70%',
+      }}
+    />
+  </Button>
+</Box>
+
+     <Typography sx={{ fontSize: '20px', marginLeft: '-2vh', fontWeight: 'bold', marginTop: '-6vh' }}>
+    {user.userName}
   </Typography>
   </Box>
+  <Typography sx={{  marginLeft: '2vh',marginTop:'1vh' ,color:'#f4511e', fontWeight:'bold'}}>Your Profile</Typography>
 
-     <Typography sx={{cursor:'pointer',  marginLeft: '2vh' }}>Change Password</Typography>
-    <Typography sx={{ marginLeft: '2vh',cursor:'pointer' ,marginTop:'2vh'}}>Booking History</Typography>
+  <Typography onClick={() => navigate('/password_current')}
+  sx={{
+    cursor: 'pointer',
+    marginLeft: '2vh',
+    marginTop: '3vh',
+    transition: 'color 0.2s, font-weight 0.2s',
+
+    '&:hover': {
+      color: '#f4511e', 
+      fontWeight: 'bold', 
+
+    },
+  }}
+
+>
+  Change Password
+</Typography>
+    <Typography 
+     sx={{
+    cursor: 'pointer',
+    marginLeft: '2vh',
+    marginTop: '3vh',
+    transition: 'color 0.2s, font-weight 0.2s',
+
+    '&:hover': {
+      color: '#f4511e', 
+      fontWeight: 'bold', 
+
+    },
+  }}>Booking History</Typography>
   </Box>
 
-  <Box sx={{ display: 'flex', flexDirection: 'column', position: 'relative', marginTop: '-20vh', marginLeft: '35vh' }}>
-    <Typography variant="h6" style={{ fontSize: '30px', color: '#f4511e', fontWeight: 'bold' }}>
+  <Box>
+
+  <Box sx={{ display: 'flex', flexDirection: 'column', position: 'relative', marginTop: '-30vh', marginLeft: '35vh' }}>
+    <Typography  style={{ fontSize: '28px', color: '#f4511e', fontWeight: 'bold' }}>
       Edit Profile
     </Typography>
     <div style={{ border: '1px solid grey', width: '110vh', marginTop: '2.5vh' }}></div>
 
     {memberstatus === "NTUC" || memberstatus === "Uplay" ? (
       <>
-        <Typography variant="h6" style={{ marginTop: '5vh', fontSize: '20px', color: '#f4511e', marginLeft: '1vh', fontWeight: 'bold' }}>
+        <Typography  style={{ marginTop: '5vh', fontSize: '24px', color: '#f4511e', marginLeft: '1vh', fontWeight: 'bold' }}>
           {memberstatus} Member
         </Typography>
         <Typography style={{ marginTop: '1vh', marginLeft: '5vh' }}>
-          <p><b style={{ fontSize: '18px' }}>Name: &nbsp;</b> <span style={{ fontSize: '15px' }}>Lucas</span></p>
+          <p><b style={{ fontSize: '18px' }}>Name: &nbsp;</b> <span style={{ fontSize: '15px' }}>{(user.userName).toUpperCase()}</span></p>
         </Typography>
         <Typography style={{ marginTop: '-3vh', marginLeft: '5vh' }}>
-          <p><b style={{ fontSize: '18px' }}>NRIC: &nbsp;</b> <span style={{ fontSize: '15px' }}>414J</span></p>
+          <p><b style={{ fontSize: '18px' }}>NRIC: &nbsp;</b> <span style={{ fontSize: '15px' }}>*******414J</span></p>
         </Typography>
       </>
     ) : (
       <Typography variant="h6" style={{ marginTop: '3vh', fontSize: '18px', marginLeft: '1vh' }}>
-        <p>Not a member yet? Click here to join <span ><Link style={{ color: '#f4511e', fontWeight: 'bold' }}>Uplay</Link> or <Link style={{ color: 'blue', fontWeight: 'bold' }}>NTUC</Link></span></p>
+        <p>Not a member yet? Click here to join <span ><Link style={{ color: '#f4511e', fontWeight: 'bold' }}>Uplay</Link> or <Link onClick={handleNavigate} style={{ color: 'blue', fontWeight: 'bold' }}>NTUC</Link></span></p>
       </Typography>
     )}
+
+
+<Typography variant="h6" style={{ fontSize: '24px', display:'flex',color: '#f4511e', fontWeight: 'bold' , marginTop:'6vh', marginLeft: '1vh'}}>
+      My Profile
+    </Typography>
+    <form onSubmit={formik.handleSubmit}>
+
+<Box onSubmit={formik.handleSubmit} sx={{ display: 'flex',flexDirection: 'column'}}>
+
+    <Box sx={{ marginTop: '5vh', display: 'flex', alignItems: 'center' }}  >
+  <Box sx={{ marginRight: '1rem' }}>
+    <InputLabel sx={{color:'black'}}><b > Name:</b></InputLabel>
   </Box>
+
+  {user.emailAddress.toLowerCase() === "admin@gmail.com" ? (
+    
+    <TextField
+      fullWidth
+      label=""
+      name="userName"
+      value={formik.values.userName}
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      error={formik.touched.userName && Boolean(formik.errors.userName)}
+      helperText={formik.touched.userName && formik.errors.userName}
+      InputLabelProps={{ shrink: Boolean(formik.values.userName) || formik.values.userName === '' }}
+      disabled={true}
+      style={{ width: '40%' }}
+    />
+  ) : (
+    <TextField
+      fullWidth
+      label=""
+      name="userName"
+      value={formik.values.userName}
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      error={formik.touched.userName && Boolean(formik.errors.userName)}
+      helperText={formik.touched.userName && formik.errors.userName}
+      style={{ width: '40%' }}
+      disabled={getedit}
+      InputLabelProps={{ shrink: Boolean(formik.values.userName) || formik.values.userName === '' }}
+    />
+  )}
+
+  
+  </Box>
+
+
+  <Box sx={{ marginTop: '5vh', display: 'flex', alignItems: 'center' }}  >
+  <Box sx={{ marginRight: '1rem' }}>
+    <InputLabel sx={{color:'black'}}><b > Email:</b></InputLabel>
+  </Box>
+
+  {user.emailAddress.toLowerCase() === "admin@gmail.com" ? (
+    
+    <TextField
+      fullWidth
+      label=""
+      name="emailAddress"
+      value={formik.values.emailAddress}
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      error={formik.touched.emailAddress && Boolean(formik.errors.emailAddress)}
+      helperText={formik.touched.emailAddress && formik.errors.emailAddress}
+      InputLabelProps={{ shrink: Boolean(formik.values.emailAddress) || formik.values.emailAddress === '' }}
+      disabled={true}
+      style={{ width: '40%' }}
+    />
+  ) : (
+    <TextField 
+      fullWidth
+      label=""
+      name="emailAddress"
+      value={formik.values.emailAddress}
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      error={formik.touched.emailAddress && Boolean(formik.errors.emailAddress)}
+      helperText={formik.touched.emailAddress && formik.errors.emailAddress}
+      style={{ width: '40%' }}
+      disabled={getedit}
+      InputLabelProps={{ shrink: Boolean(formik.values.emailAddress) || formik.values.emailAddress === '' }}
+    />
+  )}
+
+  
+  </Box>
+
+
+  {getedit === true ? (
+  <Box sx={{ mt: 2, display: 'flex', padding: '30px', marginLeft: '20vh' }}>
+    <Button variant="contained" sx={{
+      width: '40%',
+      height: '6vh',
+      borderRadius: '10px',
+      alignItems: 'center',
+      fontSize: '20px',
+      border: '1px solid #f4511e',
+      background: 'white',
+      color: '#f4511e',
+      fontWeight: 'bold',
+      transition: 'background 0.3s',
+      '&:hover': {
+        background: '#f4511e',
+        color: 'white',
+      },
+    }} onClick={() =>changeedit(getedit)}>
+      Edit
+    </Button>
+  </Box>
+) : (
+  <Box sx={{ mt: 2, display: 'flex', padding: '30px', marginLeft: '20vh' }}>
+    <Button variant="contained" type="submit" sx={{
+      width: '40%',
+      height: '6vh',
+      borderRadius: '10px',
+      alignItems: 'center',
+      fontSize: '20px',
+      border: '1px solid #f4511e',
+      background: 'white',
+      color: '#f4511e',
+      fontWeight: 'bold',
+      transition: 'background 0.3s',
+      '&:hover': {
+        background: '#f4511e',
+        color: 'white',
+      },
+    }}>
+      Save
+    </Button>
+  </Box>
+)}
+</Box>
+</form>
+</Box>
+</Box>
+<ToastContainer />
+
 </Box>
 
 

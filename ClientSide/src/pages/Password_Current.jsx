@@ -25,6 +25,8 @@ function Password_Current() {
     const [ErrorMsg, SetErrorMSg] = useState("");
     const [GetError, SetError] = useState(true);
 
+    const navigate = useNavigate();
+
 
     // you can either use between these two methods
     const { id } = useParams();
@@ -61,7 +63,8 @@ function Password_Current() {
 
             }
             else{
-SetError(true);
+
+                SetError(true);
                 values.password = values.toString().trim();
 
             // http.post("/Voucher/add", values)
@@ -72,7 +75,10 @@ SetError(true);
             //     .catch(function (err) {
             //         SetError(true);
             //         toast.error(`${err.response.data.message}`);
-            //         console.log(err.response.data.message);
+           // SetError(false);
+
+           // SetErrorMSg("Your Password is wrong ");
+
             //     })
         }
     }
@@ -90,7 +96,7 @@ SetError(true);
         }}>
             <Box sx={{ width: '62vh', height: '15vh', padding: '17vh', border: '1px solid black', background: '#FCFCFC', borderRadius: '10px' }}>
                 <form onSubmit={formik.handleSubmit}>
-                    <Typography sx={{ marginLeft: '-15vh', marginTop: '-15vh' }}><ArrowBackIcon /></Typography>
+                    <Typography sx={{ marginLeft: '-15vh', marginTop: '-15vh' , cursor:'pointer'}} onClick={() => navigate('/profile')} ><ArrowBackIcon /></Typography>
 
                     <Typography sx={{ my: 2, color: 'black', fontWeight: '600', textAlign: 'center', fontSize: '32px', padding: '0 0 2vh 0' }}>Enter Your Current Password</Typography>
                     <TextField

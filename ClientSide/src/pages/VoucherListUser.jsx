@@ -14,6 +14,7 @@ function VoucherListUser() {
 
 
     const { user } = useContext(UserContext);
+    console.log(user);
 
     const getVoucherUser = () => {
         http.get(`/Voucher/uservoucher/${user.userId}`).then((res) => {

@@ -8,6 +8,8 @@ import {
 } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
+import { ToastContainer, toast } from 'react-toastify';
+
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import http from '../http';
 import { useFormik } from 'formik';
@@ -95,7 +97,7 @@ function Userprofile() {
                 .then((res) => {
                     console.log(res.data);
                     navigate("/");
-                    r
+                    
                 })
                 .catch((error) => {
                     console.error('Error updating user details:', error);
