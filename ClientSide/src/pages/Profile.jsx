@@ -284,7 +284,7 @@ function Profiles()
       </>
     ) : (
       <Typography variant="h6" style={{ marginTop: '3vh', fontSize: '18px', marginLeft: '1vh' }}>
-        <p>Not a member yet? Click here to join <span ><Link style={{ color: '#f4511e', fontWeight: 'bold' }}>Uplay</Link> or <Link onClick={handleNavigate} style={{ color: 'blue', fontWeight: 'bold' }}>NTUC</Link></span></p>
+                                <p>Not a member yet? Click here to join <span ><Link to="/buymember" style={{ color: '#f4511e', fontWeight: 'bold' }}>Uplay</Link> or <Link onClick={handleNavigate} style={{ color: 'blue', fontWeight: 'bold' }}>NTUC</Link></span></p>
       </Typography>
     )}
 

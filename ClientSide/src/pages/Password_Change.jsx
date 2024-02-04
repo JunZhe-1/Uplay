@@ -22,9 +22,11 @@ import { tr } from 'date-fns/locale';
 import password from './Password_Current';
 
 function Password_Change() {
-
+    const [profileList, setProfileList] = useState([]);
     const [ErrorMsg, SetErrorMSg] = useState("");
     const [GetError, SetError] = useState(true);
+    const navigate = useNavigate();
+    const { user } = useContext(UserContext);
  
 
     const [compare, setCompare] = useState();
@@ -36,31 +38,52 @@ function Password_Change() {
     const { id } = useParams();
     // const { user } = useContext(UserContext);
 
-    
+
+    useEffect(() => {
+        if (user) {
+            const getProfile = async () => {
+                try {
+                    console.log(user.userId);
+                    const response = await http.get(`/UplayUser/${user.userId}`);
+                    setProfileList(response.data);
+                    console.log(response.data);
+                    formik.setValues({
+                        userName: response.data.userName,
+                        emailAddress: response.data.emailAddress,
+                        password: "",
+                        confirmPassword:""
+                    });
+                } catch (error) {
+                    console.error('Error fetching user profile:', error);
+                }
+            };
+            getProfile();
+        }
+    }, [user]);
     const formik = useFormik({
         initialValues: Getpassword,
         enableReinitialize: true,
         validationSchema: yup.object({
-            password: yup.string().trim(),
-                // .min(8, 'Password must be at least 8 characters')
-                // .max(250, 'Password must be at most 50 characters')
-                // .required('Password is required')
-                // .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, "At least 1 letter and 1 number"),
+            password: yup.string().trim()
+                .min(8, 'Password must be at least 8 characters')
+                .max(250, 'Password must be at most 50 characters')
+                .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, "At least 1 letter and 1 number"),
             confirmPassword: yup.string().trim()
-                // .required('Confirm password is required')
-                // .oneOf([yup.ref('password')], 'Passwords must match')
+                .min(8, 'Password must be at least 8 characters')
+                .max(250, 'Password must be at most 50 characters')
+                .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, "At least 1 letter and 1 number")
         }),
-        onSubmit: (values) => {
+        onSubmit: (data) => {
 
             const newRefex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}/;
-            if(values.confirmPassword.trim() == "" || values.password.trim() == ""){
+            if(data.confirmPassword.trim() == "" || data.password.trim() == ""){
                 SetError(false);
                 SetErrorMSg("password and confirm password are required");
                 return;
             }
 
          
-            else if (!newRefex.test(values.password)) 
+            else if (!newRefex.test(data.password)) 
             {
                 SetError(false);
 
@@ -69,7 +92,7 @@ function Password_Change() {
 
 
             }
-            else if(values.password != values.confirmPassword)
+            else if(data.password != data.confirmPassword)
             {
                 SetError(false);
 
@@ -79,9 +102,22 @@ function Password_Change() {
 
             }
             else {
+                console.log(user.userId)
                 SetError(true);
-
+                data.password = data.password.trim();
+                console.log(data)
+                http.put(`/UplayUser/${user.userId}`, data)
+                    .then((res) => {
+                        console.log(res.data);
+                        alert("Profile updated successfully")
+                        navigate("/");
+                    })
+                    .catch((error) => {
+                        console.error('Error updating user details:', error);
+                    });
             }
+
+            
                 
 
             // http.post("/Voucher/add", Getpassword)
