@@ -60,7 +60,6 @@ function EventEdit() {
                 ...res.data,
                 Event_Launching_Date: new Date(res.data.Event_Launching_Date),
             }));
-
         });
     }, []);
 

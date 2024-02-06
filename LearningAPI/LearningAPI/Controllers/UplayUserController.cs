@@ -87,7 +87,7 @@ namespace LearningAPI.Controllers
             }
  
             var uplayuser = new
-            {
+            { 
                 foundUser.UserId,
                 foundUser.EmailAddress,
                 foundUser.UserName

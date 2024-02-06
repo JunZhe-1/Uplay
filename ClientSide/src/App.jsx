@@ -24,12 +24,17 @@ import VoucherListUser from './pages/VoucherListUser';
 import EventEdit from './pages/EventEdit';
 import EventClientSide from './pages/EventClientSide';
 import EventDetail from './pages/EventDetail';
+import CartAdd from './pages/CartAdd';
+import CartEdit from './pages/CartEdit';
+import CartList from './pages/CartList';
+import CartUser from './pages/CartUser';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HomePage from './pages/Homepage';
 import UserList from './pages/UserList';
 import Password_Current from './pages/Password_Current';
 import Password_Change from './pages/Password_Change';
 import Userprofile from './pages/UserProfile';
+
 function App() {
     const [user, setUser] = useState(null);
     const imageUrl = './../image/testing.png';
@@ -87,6 +92,7 @@ function App() {
         
                 
                 </Link>
+
                 {/*<Link to="/tutorials" ><Typography>Home page</Typography></Link>*/}
                               <Box sx={{ flexGrow: 1 }}></Box>
                               {user && (
@@ -265,12 +271,14 @@ function App() {
                                   </>
                               )}
 
-
                 {!user && (
                   <>
-                    <Link to="/register" ><Typography>Register</Typography></Link>
-                                      <Link to="/login" ><Typography>Login</Typography></Link>
-
+                    <Link to="/register">
+                      <Typography>Register</Typography>
+                    </Link>
+                    <Link to="/login">
+                      <Typography>Login</Typography>
+                    </Link>
                   </>
                 )}
               </Toolbar>
@@ -292,6 +300,7 @@ function App() {
               <Route path={"/register"} element={<Register />} />
               <Route path={"/login"} element={<Login />} />
               <Route path={"/form"} element={<MyForm />} />
+
               <Route path='/password_current' element={<Password_Current />} />
               <Route path='/password_change' element={<Password_Change />} />
               <Route path='/userProfile' element={<Userprofile />} />
@@ -305,9 +314,13 @@ function App() {
                           <Route path={"/Event/EventClientSide"} element={<EventClientSide />} />
 
 
-                            <Route path={"/profile"} element={<Profile />} />
+                          <Route path={"/profile"} element={<Profile />} />
                           <Route path={"/buymember"} element={<BuyMember />} />
                           <Route path={"/userlist"} element={<UserList />} />
+                          <Route path={"/Cart/add"} element={<CartAdd />} />
+                          <Route path={"/Cart"} element={<CartList />} />
+                          <Route path={"/Cart/update/:id"} element={<CartEdit />} />
+                          <Route path={"/Cart/getuser/:id"} element={<CartUser />} />
 
                         </Routes>
                     </Container>
@@ -315,6 +328,7 @@ function App() {
             </Router>
         </UserContext.Provider>
     );
+
 }
 
 export default App;
