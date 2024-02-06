@@ -7,30 +7,29 @@ import http from '../http';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
 function Register() {
     const navigate = useNavigate();
 
     const formik = useFormik({
         initialValues: {
-            name: "",
-            email: "",
+            userName: "",
+            emailAddress: "",
             password: "",
             confirmPassword: ""
         },
         validationSchema: yup.object({
-            name: yup.string().trim()
-                .min(3, 'Name must be at least 3 characters')
+            userName: yup.string().trim()
+                .min(1, 'Name must be at least 3 characters')
                 .max(50, 'Name must be at most 50 characters')
-                .required('Name is required')
-                .matches(/^[a-zA-Z '-,.]+$/,
-                    "Only allow letters, spaces and characters: ' - , ."),
-            email: yup.string().trim()
-                .email('Enter a valid email')
+                .required('Name is required'),
+            emailAddress: yup.string().trim()
+                .matches(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/, 'Enter a valid email address')
                 .max(50, 'Email must be at most 50 characters')
                 .required('Email is required'),
             password: yup.string().trim()
                 .min(8, 'Password must be at least 8 characters')
-                .max(50, 'Password must be at most 50 characters')
+                .max(250, 'Password must be at most 50 characters')
                 .required('Password is required')
                 .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/,
                     "At least 1 letter and 1 number"),
@@ -39,17 +38,23 @@ function Register() {
                 .oneOf([yup.ref('password')], 'Passwords must match')
         }),
         onSubmit: (data) => {
-            data.name = data.name.trim();
-            data.email = data.email.trim().toLowerCase();
+            data.userName = data.userName.trim();
+            data.emailAddress = data.emailAddress.trim().toLowerCase();
             data.password = data.password.trim();
-            http.post("/user/register", data)
+            http.post("/UplayUser/register", data)
                 .then((res) => {
                     console.log(res.data);
                     navigate("/login");
                 })
                 .catch(function (err) {
-                    toast.error(`${err.response.data.message}`);
-                });
+                    if (err.response && err.response.data && err.response.data.message) {
+                        toast.error(err.response.data.message);
+                    } else if (err.message) {
+                        // Handle cases where there is an error message directly in the error object
+                        toast.error(err.message);
+                    } else {
+                        toast.error("An error occurred. Please try again later.");
+                    }                });
         }
     });
 
@@ -68,22 +73,22 @@ function Register() {
                 <TextField
                     fullWidth margin="dense" autoComplete="off"
                     label="Name"
-                    name="name"
-                    value={formik.values.name}
+                    name="userName"
+                    value={formik.values.userName}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={formik.touched.name && Boolean(formik.errors.name)}
-                    helperText={formik.touched.name && formik.errors.name}
+                    error={formik.touched.userName && Boolean(formik.errors.userName)}
+                    helperText={formik.touched.userName && formik.errors.userName}
                 />
                 <TextField
                     fullWidth margin="dense" autoComplete="off"
                     label="Email"
-                    name="email"
-                    value={formik.values.email}
+                    name="emailAddress"
+                    value={formik.values.emailAddress}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={formik.touched.email && Boolean(formik.errors.email)}
-                    helperText={formik.touched.email && formik.errors.email}
+                    error={formik.touched.emailAddress && Boolean(formik.errors.emailAddress)}
+                    helperText={formik.touched.emailAddress && formik.errors.emailAddress}
                 />
                 <TextField
                     fullWidth margin="dense" autoComplete="off"

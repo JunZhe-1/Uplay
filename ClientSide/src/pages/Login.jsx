@@ -8,36 +8,76 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UserContext from '../contexts/UserContext';
 
+
 function Login() {
     const navigate = useNavigate();
     const { setUser } = useContext(UserContext);
 
     const formik = useFormik({
         initialValues: {
-            email: "",
+            emailAddress: "",
             password: ""
         },
-        validationSchema: yup.object({
-            email: yup.string().trim()
-                .email('Enter a valid email')
+        validationSchema: yup.object({  
+            emailAddress: yup.string().trim()
+                .matches(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/, 'Enter a valid email address')
                 .max(50, 'Email must be at most 50 characters')
                 .required('Email is required'),
             password: yup.string().trim()
                 .min(8, 'Password must be at least 8 characters')
                 .max(50, 'Password must be at most 50 characters')
                 .required('Password is required')
+                
         }),
         onSubmit: (data) => {
-            data.email = data.email.trim().toLowerCase();
+            data.emailAddress = data.emailAddress.trim().toLowerCase();
             data.password = data.password.trim();
-            http.post("/user/login", data)
+            http.post("/UplayUser/login", data)
                 .then((res) => {
                     localStorage.setItem("accessToken", res.data.accessToken);
                     setUser(res.data.user);
-                    navigate("/");
+                    console.log(res.data.uplayuser);
+                    var id = res.data.uplayuser.userId
+                    console.log(id)
+                    try {
+                        http.get(`/Member/${id}`)  
+                            .then((respose) => {
+                                // Assuming memberStatusRes.data.status contains the user status
+                                navigate("/")
+
+                                window.location.reload();
+
+                                const userStatus = respose.data.memberStatus;
+                                if (localStorage.getItem("memberStatus")) {
+                                    localStorage.removeItem("memberStatus");
+                                }
+                                localStorage.setItem("memberStatus", userStatus);
+                                console.log(localStorage.getItem("memberStatus"))
+                                if (userStatus == null) {
+                                localStorage.setItem("memberStatus","Guest")}
+                            })
+                            .catch((error) => {
+                                console.error("Error fetching user status:", error);
+                                if (localStorage.getItem("memberStatus")) {
+                                    localStorage.removeItem("memberStatus");
+                                }
+                                // If there is an error, set user status to "Guest"
+                                localStorage.setItem("memberStatus", "Guest");
+                            });
+                    } catch {
+                        if (localStorage.getItem("memberStatus")) {
+                            localStorage.removeItem("memberStatus");
+                        }
+
+                        localStorage.setItem("memberStatus", "Guest");
+
+                    }
+                   
+
+                    
                 })
                 .catch(function (err) {
-                    toast.error(`${err.response.data.message}`);
+                    toast.error(err.response.data.message);
                 });
         }
     });
@@ -57,12 +97,12 @@ function Login() {
                 <TextField
                     fullWidth margin="dense" autoComplete="off"
                     label="Email"
-                    name="email"
-                    value={formik.values.email}
+                    name="emailAddress"
+                    value={formik.values.emailAddress}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={formik.touched.email && Boolean(formik.errors.email)}
-                    helperText={formik.touched.email && formik.errors.email}
+                    error={formik.touched.emailAddress && Boolean(formik.errors.emailAddress)}
+                    helperText={formik.touched.emailAddress && formik.errors.emailAddress}
                 />
                 <TextField
                     fullWidth margin="dense" autoComplete="off"
