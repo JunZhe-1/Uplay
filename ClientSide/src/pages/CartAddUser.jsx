@@ -14,7 +14,7 @@ import {
   MenuItem,
   FormHelperText,
 } from "@mui/material";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -24,41 +24,42 @@ import http from "../http";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UserContext from "../contexts/UserContext";
+import da from "date-fns/locale/da";
 
-function CartEdit() {
-  const { id } = useParams();
+function CartAddUser() {
   const navigate = useNavigate();
-  console.log(id);
+  const location = useLocation();
+  const [imageFile, setimageFile] = useState(null);
+  const { user } = useContext(UserContext);
+  const { event_ID } = location.state;
 
-  const [cartinfo, setCart] = useState({
-    Booking_Date: new Date(),
-    Booking_Quantity: 0,
-    UserId: 0,
-    Event_ID: 0,
+  const [EventDetail, setEvent] = useState({
+    Event_ID: "",
+    Event_Name: "",
+    Event_Description: "",
+    Event_Location: "",
+    Event_Category: "Sports & Wellness",
+    Event_Fee_Guest: 0,
+    Event_Fee_Uplay: 0,
+    Event_Fee_NTUC: 0,
+    Vacancies: 0,
+    User_ID: user.userId,
   });
 
   useEffect(() => {
-    http
-      .get(`/Cart/get/${id}`)
-      .then((res) => {
-        console.log(res.data);
-         const bookingDate = new Date(res.data.Booking_Date.replace(" ", "T"));
-        setCart({
-          Booking_Date: bookingDate,
-          Booking_Quantity: res.data.Booking_Quantity,
-          UserId: res.data.userId,
-          Event_ID: res.data.event_ID,
-        });
-      })
-      .catch(function (err) {
-        toast.error(`${err.response.data.message}`);
-      });
+    http.get(`/Event/getEvent/${event_ID}`).then((res) => {
+      setimageFile(res.data.imageFile);
+      console.log(res.data);
+      setEvent(res.data);
+    });
   }, []);
 
   const formik = useFormik({
-    initialValues: cartinfo,
-    enableReinitialize: true,
-
+    initialValues: {
+      Booking_Date: "",
+      Booking_Quantity: 0,
+      Event_ID: event_ID || 0,
+    },
     validationSchema: yup.object({
       Booking_Date: yup.date().required("Booking date is required"),
       Booking_Quantity: yup
@@ -66,29 +67,27 @@ function CartEdit() {
         .min(0, "Booking Quantity cannot be below 0")
         .max(10, "Booking Quantity cannot be above 10")
         .required("Booking Quantity is required"),
-      UserId: yup
-        .number()
-        .min(0, "User ID cannot be below than 0")
-        .max(1000, "User ID cannot be above 1000"),
       Event_ID: yup
         .number()
         .min(0, "Event ID cannot be below 0")
         .max(1000, "Event ID cannot be above 1000")
         .required("Event ID is required"),
     }),
+
     onSubmit: (data) => {
       data.Booking_Quantity = parseInt(data.Booking_Quantity);
-      data.UserId = parseInt(data.UserId);
       data.Event_ID = parseInt(data.Event_ID);
-
       console.log("onsubmit:", data);
+
       http
-        .put(`/Cart/update/${id}`, data)
+        .post("/Cart/add", data)
         .then((res) => {
-          console.log(res.data);
-          navigate("/Cart");
+          console.log("Success");
+          toast.success("Cart added successfully");
+          navigate("/Cart/getuser/:id");
         })
         .catch(function (err) {
+          console.log(err.response.data);
           toast.error(`${err.response.data.message}`);
         });
     },
@@ -98,9 +97,28 @@ function CartEdit() {
 
   return (
     <Box>
-      <Typography variant="h5" sx={{ my: 2 }}>
-        Edit Cart
+      <Typography variant="h3" align="center" sx={{ my: 1 }}>
+        Add {EventDetail.Event_Name.toUpperCase()} to Cart
       </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "60vh",
+        }}
+      >
+        <img
+          alt="Event"
+          src={`${import.meta.env.VITE_FILE_BASE_URL}${imageFile}`}
+          style={{
+            width: "90%",
+            height: "80%",
+            objectFit: "cover",
+            borderRadius: "10px",
+          }}
+        />
+      </Box>
       <Box component="form" onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={6} lg={8}>
@@ -156,40 +174,24 @@ function CartEdit() {
                 fullWidth
                 margin="dense"
                 autoComplete="off"
-                label="User ID"
-                name="UserId"
-                value={formik.values.UserId}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                type="number"
-                error={Boolean(
-                  formik.touched.UserId && formik.errors.UserId
-                )}
-                helperText={formik.touched.UserId && formik.errors.UserId}
-              />
-
-              <TextField
-                fullWidth
-                margin="dense"
-                autoComplete="off"
                 label="Event ID"
                 name="Event_ID"
                 value={formik.values.Event_ID}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                type="number"
+                type="hidden"
+                sx={{ display: "none" }}
                 error={Boolean(
                   formik.touched.Event_ID && formik.errors.Event_ID
                 )}
                 helperText={formik.touched.Event_ID && formik.errors.Event_ID}
               />
-
             </Grid>
           </Grid>
         </Grid>
         <Box sx={{ mt: 5 }}>
           <Button variant="contained" type="submit" style={{ width: "100%" }}>
-            Update
+            Add to Cart
           </Button>
         </Box>
       </Box>
@@ -198,4 +200,4 @@ function CartEdit() {
     </Box>
   );
 }
-export default CartEdit;
+export default CartAddUser;

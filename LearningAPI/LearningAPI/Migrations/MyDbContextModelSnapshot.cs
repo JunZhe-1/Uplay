@@ -46,9 +46,6 @@ namespace LearningAPI.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Voucher_ID")
-                        .HasColumnType("int");
-
                     b.HasKey("Cart_ID");
 
                     b.ToTable("Carts");

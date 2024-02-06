@@ -42,7 +42,6 @@ import UserContext from "../contexts/UserContext";
 function CartUser() {
   const navigate = useNavigate();
   const [CartList, setCartList] = useState([]);
-  const [search, setSearch] = useState("");
   const [cart_id, setid] = useState("");
 
   const { user } = useContext(UserContext);
@@ -60,32 +59,6 @@ function CartUser() {
       .catch(function (err) {
         toast.error(`${err.response.data.message}`);
       });
-  };
-
-  const onSearchChange = (e) => {
-    setSearch(e.target.value);
-  };
-  const onSearchKeyDown = (e) => {
-    if (e.key === "Enter") {
-      searchsender();
-    }
-  };
-
-  const onClickSearch = () => {
-    searchsender();
-  };
-
-  const onClickClear = () => {
-    setSearch("");
-    getCartList();
-  };
-
-  const searchsender = () => {
-    if (search.trim() !== "") {
-      http.get(`/Cart?search=${search}`).then((res) => {
-        setCartList(res.data);
-      });
-    }
   };
 
   const [open, setOpen] = useState(false);
@@ -115,49 +88,31 @@ function CartUser() {
         variant="h5"
         sx={{ my: 2, color: "black", fontWeight: "bold" }}
       >
-        Cart Management
+        Your Cart
       </Typography>
-      <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-        <Input
-          value={search}
-          placeholder="Search"
-          onChange={onSearchChange}
-          onKeyDown={onSearchKeyDown}
-        />
-        <IconButton color="primary" onClick={onClickSearch}>
-          <Search />
-        </IconButton>
-        <IconButton color="primary" onClick={onClickClear}>
-          <Clear />
-        </IconButton>
-      </Box>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
-                <TableCell>Cart ID</TableCell>
+                <TableCell>Cart Item</TableCell>
                 <TableCell>Booking Date</TableCell>
                 <TableCell>Booking Quantity</TableCell>
-                <TableCell>User ID</TableCell>
                 <TableCell>Event ID</TableCell>
-                <TableCell>Voucher ID</TableCell>
               </TableRow>
             </TableHead>
 
             <TableBody>
               {CartList.sort(
-                (a, b) => new Date(a.UpdatedAt) - new Date(b.UpdatedAt)
+                (a, b) => new Date(a.CreatedAt) - new Date(b.CreatedAt)
               ).map((data, index) => (
                 <TableRow key={index}>
-                  <TableCell>{data.Cart_ID}</TableCell>
+                  <TableCell>{index + 1}</TableCell>
                   <TableCell>
                     {dayjs.utc(data.Booking_Date).format(global.datetimeFormat)}
                   </TableCell>
                   <TableCell>{data.Booking_Quantity}</TableCell>
-                  <TableCell>{data.userId}</TableCell>
                   <TableCell>{data.event_ID}</TableCell>
-                  <TableCell>{data.voucher_ID}</TableCell>
                   <TableCell>
                     {" "}
                     <IconButton
@@ -169,7 +124,7 @@ function CartUser() {
                   </TableCell>
                   <TableCell>
                     {" "}
-                    <Link to={`/Cart/update/${data.Cart_ID}`}>
+                    <Link to={`/Cart/updateuser/${data.Cart_ID}`}>
                       <IconButton color="primary" sx={{ padding: "4px" }}>
                         <Edit />
                       </IconButton>
@@ -182,10 +137,10 @@ function CartUser() {
         </TableContainer>
       </Paper>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Delete Event</DialogTitle>
+        <DialogTitle>Delete Cart Item</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to Delete this Cart?
+            Are you sure you want to Delete this Cart Item?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

@@ -25,7 +25,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UserContext from "../contexts/UserContext";
 
-function CartEdit() {
+function CartUserEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
   console.log(id);
@@ -33,8 +33,6 @@ function CartEdit() {
   const [cartinfo, setCart] = useState({
     Booking_Date: new Date(),
     Booking_Quantity: 0,
-    UserId: 0,
-    Event_ID: 0,
   });
 
   useEffect(() => {
@@ -46,8 +44,6 @@ function CartEdit() {
         setCart({
           Booking_Date: bookingDate,
           Booking_Quantity: res.data.Booking_Quantity,
-          UserId: res.data.userId,
-          Event_ID: res.data.event_ID,
         });
       })
       .catch(function (err) {
@@ -66,15 +62,6 @@ function CartEdit() {
         .min(0, "Booking Quantity cannot be below 0")
         .max(10, "Booking Quantity cannot be above 10")
         .required("Booking Quantity is required"),
-      UserId: yup
-        .number()
-        .min(0, "User ID cannot be below than 0")
-        .max(1000, "User ID cannot be above 1000"),
-      Event_ID: yup
-        .number()
-        .min(0, "Event ID cannot be below 0")
-        .max(1000, "Event ID cannot be above 1000")
-        .required("Event ID is required"),
     }),
     onSubmit: (data) => {
       data.Booking_Quantity = parseInt(data.Booking_Quantity);
@@ -83,10 +70,10 @@ function CartEdit() {
 
       console.log("onsubmit:", data);
       http
-        .put(`/Cart/update/${id}`, data)
+        .put(`/Cart/updateuser/${id}`, data)
         .then((res) => {
           console.log(res.data);
-          navigate("/Cart");
+          navigate("/Cart/getuser/:id");
         })
         .catch(function (err) {
           toast.error(`${err.response.data.message}`);
@@ -99,7 +86,7 @@ function CartEdit() {
   return (
     <Box>
       <Typography variant="h5" sx={{ my: 2 }}>
-        Edit Cart
+        Edit Cart Item
       </Typography>
       <Box component="form" onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
@@ -151,39 +138,6 @@ function CartEdit() {
                   formik.errors.Booking_Quantity
                 }
               />
-
-              <TextField
-                fullWidth
-                margin="dense"
-                autoComplete="off"
-                label="User ID"
-                name="UserId"
-                value={formik.values.UserId}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                type="number"
-                error={Boolean(
-                  formik.touched.UserId && formik.errors.UserId
-                )}
-                helperText={formik.touched.UserId && formik.errors.UserId}
-              />
-
-              <TextField
-                fullWidth
-                margin="dense"
-                autoComplete="off"
-                label="Event ID"
-                name="Event_ID"
-                value={formik.values.Event_ID}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                type="number"
-                error={Boolean(
-                  formik.touched.Event_ID && formik.errors.Event_ID
-                )}
-                helperText={formik.touched.Event_ID && formik.errors.Event_ID}
-              />
-
             </Grid>
           </Grid>
         </Grid>
@@ -198,4 +152,4 @@ function CartEdit() {
     </Box>
   );
 }
-export default CartEdit;
+export default CartUserEdit;

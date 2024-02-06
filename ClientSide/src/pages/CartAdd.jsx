@@ -34,10 +34,9 @@ function CartAdd() {
       Booking_Date: "",
       Booking_Quantity: 0,
       Event_ID: 0,
-      Voucher_ID: 0,
     },
     validationSchema: yup.object({
-      Booking_Date: yup.date().required('Booking date is required'),
+      Booking_Date: yup.date().required("Booking date is required"),
       Booking_Quantity: yup
         .number()
         .min(0, "Booking Quantity cannot be below 0")
@@ -48,16 +47,11 @@ function CartAdd() {
         .min(0, "Event ID cannot be below 0")
         .max(1000, "Event ID cannot be above 1000")
         .required("Event ID is required"),
-      Voucher_ID: yup
-        .number()
-        .min(0, "Voucher ID cannot be below than 0")
-        .max(1000, "Voucher ID cannot be above 1000"),
     }),
 
     onSubmit: (data) => {
       data.Booking_Quantity = parseInt(data.Booking_Quantity);
       data.Event_ID = parseInt(data.Event_ID);
-      data.Voucher_ID = parseInt(data.Voucher_ID);
       console.log("onsubmit:", data);
 
       http
@@ -148,23 +142,6 @@ function CartAdd() {
                 helperText={formik.touched.Event_ID && formik.errors.Event_ID}
               />
 
-              <TextField
-                fullWidth
-                margin="dense"
-                autoComplete="off"
-                label="Voucher ID"
-                name="Voucher_ID"
-                value={formik.values.Voucher_ID}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                type="number"
-                error={Boolean(
-                  formik.touched.Voucher_ID && formik.errors.Voucher_ID
-                )}
-                helperText={
-                  formik.touched.Voucher_ID && formik.errors.Voucher_ID
-                }
-              />
             </Grid>
           </Grid>
         </Grid>

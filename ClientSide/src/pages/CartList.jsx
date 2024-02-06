@@ -116,7 +116,7 @@ function CartList() {
         variant="h5"
         sx={{ my: 2, color: "black", fontWeight: "bold" }}
       >
-        Cart Management
+        Cart Item Management
       </Typography>
       <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
         <Input
@@ -150,7 +150,6 @@ function CartList() {
                 <TableCell>Booking Quantity</TableCell>
                 <TableCell>User ID</TableCell>
                 <TableCell>Event ID</TableCell>
-                <TableCell>Voucher ID</TableCell>
               </TableRow>
             </TableHead>
 
@@ -166,7 +165,6 @@ function CartList() {
                   <TableCell>{data.Booking_Quantity}</TableCell>
                   <TableCell>{data.userId}</TableCell>
                   <TableCell>{data.event_ID}</TableCell>
-                  <TableCell>{data.voucher_ID}</TableCell>
 
                   <TableCell>
                     {" "}
@@ -192,10 +190,10 @@ function CartList() {
         </TableContainer>
       </Paper>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Delete Event</DialogTitle>
+        <DialogTitle>Delete Cart</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to Delete this Cart?
+            Are you sure you want to Delete this Cart Item?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
