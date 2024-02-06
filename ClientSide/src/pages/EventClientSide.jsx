@@ -2,7 +2,8 @@
 import { Link } from 'react-router-dom';
 import {
     Container, AppBar, Toolbar,
-Box, Typography, Grid, Card, CardContent, Input, IconButton, Button } from '@mui/material';
+    Box, Typography, Grid, Card, CardContent, Input, IconButton, Button
+} from '@mui/material';
 import { AccountCircle, AccessTime, Search, Clear, Edit } from '@mui/icons-material';
 import http from '../http';
 import dayjs from 'dayjs';
@@ -19,11 +20,13 @@ function EventClientSide() {
 
     const getEvents = () => {
         http.get(`/Event`).then((res) => {
-            setEvent(res.data);
-            setEventBackup(res.data);
+            const userEvents = res.data.filter(event =>  event.Event_Status === true);
+            setEvent(userEvents);
+            setEventBackup(userEvents);
             console.log(res.data);
         });
     };
+
 
 
     useEffect(() => {
@@ -33,15 +36,30 @@ function EventClientSide() {
     const filterEvent = (i) => {
         console.log(i);
         if (i) {
+            const now = new Date();
             if (i == "all") {
                 filterEvent(null);
             }
-            else {
+            else if (i == "upcoming") {
                 const selectedEvents = EventList.filter((x) => {
-                    return i === x.Event_Category;
+                    const eventLaunchingDate = new Date(x.Event_Launching_Date);
+                    const comparisonResult = now < eventLaunchingDate ;
+
+                    return comparisonResult;
                 });
                 setEventBackup(selectedEvents);
             }
+
+            else {
+                const selectedEvents = EventList.filter((x) => {
+                    const eventLaunchingDate = new Date(x.Event_Launching_Date);
+                    const comparisonResult = i === x.Event_Category && now >= eventLaunchingDate;
+
+                    return comparisonResult;
+                });
+                setEventBackup(selectedEvents);
+            }
+
         }
         else {
             setEventBackup(EventList);
@@ -82,32 +100,52 @@ function EventClientSide() {
     };
     return (
 
-<Box style={{ padding: '20px' }}>
-    <Typography variant="h5" sx={{ mb: 2, color: 'black', fontWeight: 'bold' }}>
-        Events
-    </Typography>
+        <Box style={{ padding: '20px' }}>
+            <Typography variant="h5" sx={{ mb: 2, color: 'black', fontWeight: 'bold' }}>
+                Events
+            </Typography>
 
 
 
-    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-        <Input value={search} placeholder="Search"
-            onChange={onSearchChange}
-            onKeyDown={onSearchKeyDown} />
-        <IconButton color="primary"
-            onClick={onClickSearch}>
-            <Search />
-        </IconButton>
-        <IconButton color="primary"
-            onClick={onClickClear}>
-            <Clear />
+            <Box sx={{
+                display: 'flex', alignItems: 'center', mb: 2, borderRadius: '8px', justifyContent: 'center', width: '100%', border: '1px #ECECEC solid', padding: '20px', backgroundColor: '#ECECEC'
+            }}>
+                {/*        <Box style={{ border: 'black 1px solid', borderRadius: '10px' }}>*/}
+                <Input
+                    value={search}
+                    placeholder="Search for events"
+                    onChange={onSearchChange}
+                    onKeyDown={onSearchKeyDown}
+                    style={{
+                        border: 'black 1px solid',
+                        borderRadius: '8px',
+                        backgroundColor: 'white',
+                        padding: '4px 8px 4px 8px',
+                        width: '25%',
+                        textDecoration: 'none',
+                    }}
+                />
+
+                <IconButton color="primary"
+                    onClick={onClickSearch}>
+                    <Search style={{ color: '#E6533F', fontWeight: 'bold' }} />
                 </IconButton>
+                {/*<IconButton color="primary"*/}
+                {/*    onClick={onClickClear}>*/}
+                {/*    <Clear />*/}
+                {/*            </IconButton>*/}
+                {/*    </Box>*/}
             </Box>
 
-            <AppBar position="static" className="AppBar3" style={{ backgroundColor: 'white', padding: '0px 0px 6vh 0px' }} elevation={0}>
-                <Container>
+            <AppBar position="static" className="AppBar3" style={{ backgroundColor: 'white', padding: '0 0 6vh 0' }} elevation={0}>
+                <Container maxWidth="xl">
                     <Toolbar disableGutters={true} style={{ whiteSpace: 'nowrap' }}>
-                        <Button onClick={() => filterEvent('all')} sx={{ color: '#E6533F', margin: '0 30px 0 0', borderRadius: '10px', border: 'solid 2px #E6533F', padding: '8px 20px', transition: 'transform 0.3s ease-in-out' }}>
+                        <Button onClick={() => filterEvent('all')} sx={{ color: '#E6533F', margin: '0 10px 0 0', borderRadius: '10px', border: 'solid 2px #E6533F', padding: '8px 20px', transition: 'transform 0.3s ease-in-out' }}>
                             All Categories
+                        </Button>
+
+                        <Button onClick={() => filterEvent('upcoming')} sx={{ color: '#E6533F', margin: '0 30px 0 0', borderRadius: '10px', border: 'solid 2px #E6533F', padding: '8px 20px', transition: 'transform 0.3s ease-in-out' }}>
+                            Up Coming
                         </Button>
 
                         <Button onClick={() => filterEvent('Dine & Wine')} sx={{ color: '#E6533F', margin: '0 30px 0 0', borderRadius: '10px', border: 'solid 2px #E6533F', padding: '8px 20px', transition: 'transform 0.3s ease-in-out' }}>
@@ -137,61 +175,62 @@ function EventClientSide() {
             <Typography variant="h5" sx={{ mb: 2, color: 'black', fontWeight: '20px' }}>
                 Results ({EventListBackup.length})
             </Typography>
-        
-    <Grid container spacing={3}>
+
+            <Grid container spacing={3}>
                 {EventListBackup.map((data) => (
-            <Grid item xs={12} md={6} lg={4} key={data.id}>
-                <Card
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        boxShadow: '0 8px 5px rgba(0, 0, 0, 0.2)',
-                        height: '100%',
-                    }}
-                >
-                    {data.imageFile && (
-                        <Box
-                            style={{
+                    <Grid item xs={12} md={6} lg={4} key={data.id}>
+                        <Card
+                            sx={{
                                 display: 'flex',
-                                alignItems: 'center',
-                                width: '100%',
-                                overflow: 'hidden',
-                                maxHeight: '200px', // Adjust the max height of the image
+                                flexDirection: 'column',
+                                boxShadow: '0 8px 5px rgba(0, 0, 0, 0.2)',
+                                height: '100%',
                             }}
                         >
-                            <img
-                                alt="data"
-                                src={`${import.meta.env.VITE_FILE_BASE_URL}${data.imageFile}`}
-                                style={{
-                                    width: '100%',
-                                    objectFit: 'cover',
+                            {data.imageFile && (
+                                <Box
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        width: '100%',
+                                        overflow: 'hidden',
+                                        maxHeight: '200px', // Adjust the max height of the image
+                                    }}
+                                >
+                                    <img
+                                        alt="data"
+                                        src={`${import.meta.env.VITE_FILE_BASE_URL}${data.imageFile}`}
+                                        style={{
+                                            width: '100%',
+                                            objectFit: 'cover',
+                                        }}
+                                    />
+                                </Box>
+                            )}
+                            <CardContent
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    flexGrow: 1,
                                 }}
-                            />
-                        </Box>
-                    )}
-                    <CardContent
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            flexGrow: 1,
-                        }}
-                    >
-                        <Typography variant="h6" sx={{ mb: 2, fontSize: '20px' }}>
-                            <b> {data.Event_Name}</b>
-                        </Typography>
-                        <Typography
-                            sx={{ color: 'text.secondary', mt:-1, fontSize: '18px' }}
-                        >
-                            Uplay: <b>&nbsp;${data.Event_Fee_Uplay}</b><br />
-                            NTUC: <b>${data.Event_Fee_NTUC}</b>
-                        </Typography>
-                        <Box sx={{ flexGrow: 1 }}></Box>
-                        <Link to={`/Event/getEvent/${data.Event_ID}`}>
+                            >
+                                <Typography variant="h6" sx={{ mb: 2, fontSize: '20px' }}>
+                                    <b> {data.Event_Name}</b>
+                                </Typography>
+                                <Typography
+                                    sx={{ color: 'text.secondary', mt: -1, fontSize: '18px' }}
+                                >
+                                    Uplay: <b>&nbsp;${data.Event_Fee_Uplay}</b><br />
+                                    NTUC: <b>${data.Event_Fee_NTUC}</b>
+                                </Typography>
+                                <Box sx={{ flexGrow: 1 }}></Box>
+
+                                <Link to={`/Event/getEvent/${data.Event_ID}`}>
                                     <Button className="add_btn"
                                         sx={{
                                             fontSize: '16px',
                                             padding: '1px',
-                                            width:'100%',
+                                            width: '100%',
                                             border: '1px #E6533F solid',
                                             backgroundColor: 'white',
                                             color: '#E6533F',
@@ -204,14 +243,16 @@ function EventClientSide() {
                                     >
                                         <b>See Detail</b>
                                     </Button>
-                        </Link>
-                        
-                    </CardContent>
-                </Card>
+                                </Link>
+
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                ))}
             </Grid>
-        ))}
-    </Grid>
-</Box>
-)
+         
+        </Box>
+
+    )
 };
 export default EventClientSide;

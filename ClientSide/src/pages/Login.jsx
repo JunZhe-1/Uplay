@@ -18,9 +18,9 @@ function Login() {
             emailAddress: "",
             password: ""
         },
-        validationSchema: yup.object({
+        validationSchema: yup.object({  
             emailAddress: yup.string().trim()
-                .email('Enter a valid email')
+                .matches(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/, 'Enter a valid email address')
                 .max(50, 'Email must be at most 50 characters')
                 .required('Email is required'),
             password: yup.string().trim()
@@ -37,10 +37,47 @@ function Login() {
                     localStorage.setItem("accessToken", res.data.accessToken);
                     setUser(res.data.user);
                     console.log(res.data.uplayuser);
-                    navigate("/");
+                    var id = res.data.uplayuser.userId
+                    console.log(id)
+                    try {
+                        http.get(`/Member/${id}`)  
+                            .then((respose) => {
+                                // Assuming memberStatusRes.data.status contains the user status
+                                navigate("/")
+
+                                window.location.reload();
+
+                                const userStatus = respose.data.memberStatus;
+                                if (localStorage.getItem("memberStatus")) {
+                                    localStorage.removeItem("memberStatus");
+                                }
+                                localStorage.setItem("memberStatus", userStatus);
+                                console.log(localStorage.getItem("memberStatus"))
+                                if (userStatus == null) {
+                                localStorage.setItem("memberStatus","Guest")}
+                            })
+                            .catch((error) => {
+                                console.error("Error fetching user status:", error);
+                                if (localStorage.getItem("memberStatus")) {
+                                    localStorage.removeItem("memberStatus");
+                                }
+                                // If there is an error, set user status to "Guest"
+                                localStorage.setItem("memberStatus", "Guest");
+                            });
+                    } catch {
+                        if (localStorage.getItem("memberStatus")) {
+                            localStorage.removeItem("memberStatus");
+                        }
+
+                        localStorage.setItem("memberStatus", "Guest");
+
+                    }
+                   
+
+                    
                 })
                 .catch(function (err) {
-                    toast.error(`${err.response.data.message}`);
+                    toast.error(err.response.data.message);
                 });
         }
     });

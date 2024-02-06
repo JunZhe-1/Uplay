@@ -1,4 +1,5 @@
-﻿import React, { useEffect, useState, useContext } from 'react';
+﻿/* eslint-disable no-dupe-keys */
+import React, { useEffect, useState, useContext } from 'react';
 import {
     Box,
     Typography,
@@ -12,8 +13,11 @@ import {
     InputLabel,
     Select,
     MenuItem,
-    FormHelperText
+    FormHelperText,
+    Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions
 } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+
 import { useParams, useNavigate } from 'react-router-dom';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -25,6 +29,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UserContext from '../contexts/UserContext';
 import da from 'date-fns/locale/da';
+let num = 0;
+
 
 function VoucherEdit() {
     const { id } = useParams();
@@ -38,11 +44,10 @@ function VoucherEdit() {
         Voucher_Description: "",
         Start_Date: new Date(), 
         End_Date: new Date(),  
-        Discount_In_Percentage: 0,
         Voucher_Description:"",
         Discount_In_Value: 0,
+        Limit_Value:0 ,
         Member_Type: "Uplay",
-        Discount_type: "Percentage",
 
     });
     useEffect(() => {
@@ -66,25 +71,25 @@ function VoucherEdit() {
 
         validationSchema: yup.object({
             Voucher_Name: yup.string().trim()
-                .min(3, 'Voucher_Name must be at least 3 characters')
-                .max(100, 'Voucher_Name must be at most 100 characters')
-                .required('Voucher_Name is required'),
+                .min(3, 'Voucher Name must be at least 3 characters')
+                .max(50, 'Voucher name must be at most 50 characters')
+                .required('Voucher Name is required'),
             Voucher_Description: yup.string().trim()
                 .min(1, 'Voucher description must be at least 3 characters')
-                .max(50, 'Voucher Dewcription must be below 100 to make it concise for user.')
+                .max(50, 'Voucher description must be at most 50 characters')
                 .required('voucher Description is required'),
-            Discount_In_Percentage: yup.number()
-                .min(0, 'Discount Percent cannot below than 1%')
-                .max(100, 'Discount Percent cannot above 100%')
-                .required('Number is required'),
             Discount_In_Value: yup.number()
-                .min(0, 'Discount Value cannot below than $1')
-                .max(1000, 'Too Much')
-                .required('Number is required'),
-
-
-            Start_Date: yup.date().required('Start date is required'),
-            End_Date: yup.date().required('End date is required'),
+                .min(1, ' Value must be at least 1')
+                .max(1000, 'value must be at most 1000')
+                .required('value is required'),
+            Limit_Value: yup.number()
+                .min(0, 'Limit value must start from 0')
+                .max(10000, 'invalid Value')
+                .required('limit value is required'),
+            Start_Date: yup.date()
+                .required('Start date is required'),
+            End_Date: yup.date()
+                .required('End date is required'),
             Member_Type: yup.string()
                 .required('Member type is required')
 
@@ -96,26 +101,50 @@ function VoucherEdit() {
             if (imageFile) {
                 voucher.ImageFile = imageFile;
             }
-            //  voucher.Start_Date = new Date(voucher.Start_Date).toISOString();
-            // voucher.End_Date = new Date(voucher.End_Date).toISOString();
-            if (voucher.Discount_type === "Value") {
-                voucher.Discount_In_Value = parseInt(voucher.Discount_In_Value);
-                voucher.Discount_In_Percentage = 0;
-            } else if (voucher.Discount_type === "Percentage") {
-                voucher.Discount_In_Percentage = parseInt(voucher.Discount_In_Percentage);
-                voucher.Discount_In_Value = 0;
-            }
-            http.put(`/Voucher/update/${id}`, voucher)
-                .then((res) => {
-                    console.log(res.voucher);
-                    navigate("/Voucher");
-                })
-                .catch(function (err) {
-                    toast.error(`${err.response.data.message}`);
-                })
+      
+            voucher.Discount_In_Value = parseInt(voucher.Discount_In_Value);
+            voucher.Limit_Value = parseInt(voucher.Limit_Value);
+            setVoucher(voucher);
+            handleOpen1();
+
+            //http.put(`/Voucher/update/${id}`, voucher)
+            //    .then((res) => {
+            //        console.log(res.voucher);
+            //        navigate("/Voucher");
+            //    })
+            //    .catch(function (err) {
+            //        toast.error(`${err.response.data.message}`);
+            //    })
 
         }
     });
+
+    const double_confirm = () => {
+        http.put(`/Voucher/update/${id}`, voucherinfo)
+            .then((res) => {
+                console.log(res.voucherinfo);
+                navigate("/Voucher");
+            })
+            .catch(function (err) {
+                toast.error(`${err.response.data.message}`);
+            })}
+
+
+    const [open1, setOpen1] = useState(false);
+
+
+
+    const handleOpen1 = () => {
+        setOpen1(true);
+
+
+    };
+
+
+    const handleClose1 = () => {
+        setOpen1(false);
+        num--;
+    };
 
     console.log(formik);
 
@@ -166,7 +195,7 @@ function VoucherEdit() {
                                 fullWidth
                                 margin="dense"
                                 autoComplete="off"
-                                label="Voucher_Name"
+                                label="Voucher Name"
                                 name="Voucher_Name"
                                 value={formik.values.Voucher_Name}
                                 onChange={formik.handleChange}
@@ -179,7 +208,7 @@ function VoucherEdit() {
                                 fullWidth
                                 margin="dense"
                                 autoComplete="off"
-                                label="Voucher_Description"
+                                label="Voucher Description"
                                 name="Voucher_Description"
                                 value={formik.values.Voucher_Description}
                                 onChange={formik.handleChange}
@@ -193,10 +222,10 @@ function VoucherEdit() {
                             <DatePicker
                                 fullWidth
                                 margin="dense"
-                                label="Start_Date"
+                                label="Start Date"
                                 inputVariant="outlined"
                                 format="dd/MM/yyyy"
-                                value={formik.values.Start_Date || null}
+                                value={formik.values.Start_Date}
                                 onChange={(date) => {
                                     formik.setFieldValue('Start_Date', date);
                                     formik.setFieldError('Start_Date', ''); // Clear validation error
@@ -209,10 +238,10 @@ function VoucherEdit() {
                             <DatePicker
                                 fullWidth
                                 margin="dense"
-                                label="End_Date"
+                                label="End Date"
                                 inputVariant="outlined"
                                 format="dd/MM/yyyy"
-                                value={formik.values.End_Date || null}
+                                value={formik.values.End_Date}
                                 onChange={(date) => {
                                     formik.setFieldValue('End_Date', date);
                                     formik.setFieldError('End_Date', ''); // Clear validation error
@@ -243,66 +272,34 @@ function VoucherEdit() {
                                 )}
                             </FormControl>
 
-                            <RadioGroup
-                                row
-                                aria-label="Discount_type"
-                                name="Discount_type"
-                                value={formik.values.Discount_type || ''}
-                                onChange={(e) => {
-                                    formik.handleChange(e);
-                                    if (e.target.value === "Percentage") {
-                                        formik.setFieldValue("Discount_In_Value", 0);
-                                        formik.setFieldValue("Discount_In_Percentage", 1);
-                                    } else if (e.target.value === "Value") {
-                                        formik.setFieldValue("Discount_In_Percentage", 0);
-                                        formik.setFieldValue("Discount_In_Value", 1);
-                                    }
-                                }}
-
+                            <TextField
+                                fullWidth
+                                margin="dense"
+                                autoComplete="off"
+                                label="Discount"
+                                name="Discount_In_Value"
+                                value={formik.values.Discount_In_Value}
+                                onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-                            >
-                                <FormControlLabel
-                                    value="Percentage"
-                                    control={<Radio color="primary" />}
-                                    label="Percentage"
-                                />
-                                <FormControlLabel
-                                    value="Value"
-                                    control={<Radio color="primary" />}
-                                    label="Value"
-                                />
-                            </RadioGroup>
+                                type="number"
+                                error={Boolean(formik.touched.Discount_In_Value && formik.errors.Discount_In_Value)}
+                                helperText={formik.touched.Discount_In_Value && formik.errors.Discount_In_Value}
+                            />
 
+                            <TextField
+                                fullWidth
+                                margin="dense"
+                                autoComplete="off"
+                                label="Spending Limit"
+                                name="Limit_Value"
+                                value={formik.values.Limit_Value}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                type="number"
+                                error={Boolean(formik.touched.Limit_Value && formik.errors.Limit_Value)}
+                                helperText={formik.touched.Limit_Value && formik.errors.Limit_Value}
+                            />
 
-                            {formik.values.Discount_type === "Percentage" ? (
-                                <TextField
-                                    fullWidth
-                                    margin="dense"
-                                    autoComplete="off"
-                                    label="Discount_In_Percentage"
-                                    name="Discount_In_Percentage"
-                                    value={formik.values.Discount_In_Percentage}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    type="number"
-                                    error={Boolean(formik.touched.Discount_In_Percentage && formik.errors.Discount_In_Percentage)}
-                                    helperText={formik.touched.Discount_In_Percentage && formik.errors.Discount_In_Percentage}
-                                />
-                            ) : (
-                                <TextField
-                                    fullWidth
-                                    margin="dense"
-                                    autoComplete="off"
-                                    label="Discount_In_Value"
-                                    name="Discount_In_Value"
-                                        value={formik.values.Discount_In_Value}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    type="number"
-                                        error={Boolean(formik.touched.Discount_In_Value && formik.errors.Discount_In_Value)}
-                                        helperText={formik.touched.Discount_In_Value && formik.errors.Discount_In_Value}
-                                />
-                            )}
                              <Grid item xs={12} md={6} lg={4}>
                                 <Box sx={{ textAlign: 'left', mt: 2 }} >
                                     {
@@ -334,12 +331,41 @@ function VoucherEdit() {
                     </Grid>
                     <Box sx={{ mt: 2 }}>
                         <Button variant="contained" type="submit" style={{ width: '100%' }}>
-
-                            Add
+                            Add Voucher
                         </Button>
+                    </Box>
+                    <Box sx={{ mt: 1 }}>
+                        <Link to="/Voucher" sx={{ color: 'white', textDecoration: 'none' }}>
+                            <Button variant="contained" style={{ width: '100%' }}>
+                                Cancel
+                            </Button>
+                        </Link>
+
                     </Box>
 
                 </Box>
+
+
+                <Dialog open={open1} onClose={handleClose1}>
+                    <DialogTitle>
+                        Confirmation
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Are you sure want to update the detail of the voucher?
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button variant="contained" color="inherit"
+                            onClick={handleClose1}>
+                            Cancel
+                        </Button>
+                        <Button variant="contained" color="error"
+                            onClick={double_confirm}>
+                            Confirm
+                        </Button>
+                    </DialogActions>
+                </Dialog>
 
 
                 <ToastContainer />

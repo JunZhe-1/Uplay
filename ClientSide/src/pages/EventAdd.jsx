@@ -1,4 +1,5 @@
-﻿import React, { useEffect, useState, useContext } from 'react';
+﻿/* eslint-disable no-unused-vars */
+import React, { useEffect, useState, useContext } from 'react';
 import {
     Box,
     Typography,
@@ -38,7 +39,8 @@ function EventAdd() {
             Event_Name: "",
             Event_Description: "",
             Event_Location: "",
-            Event_Category:"Sports & Wellness",
+            Event_Category: "Sports & Wellness",
+            Event_Launching_Date: new Date(),
             Event_Fee_Guest: 0,   
             Event_Fee_Uplay: 0, 
             Event_Fee_NTUC: 0,
@@ -59,22 +61,23 @@ function EventAdd() {
                 .max(300, 'Event location error')
                 .required('Event location is required'),
             Event_Fee_Guest: yup.number()
-                .min(0, 'Event Fee Guest Percent cannot below than 0')
+                .min(1, 'Event Fee Guest Percent cannot below than 1')
                 .max(1000, 'Event Fee Guest Percent cannot above 1000')
-                .required('Event Fee Guest  is required'),            
+                .required('Event Fee Guest is required'),            
             Event_Fee_Uplay: yup.number()
-                .min(0, 'Event Fee Uplay Percent cannot below than 0')
+                .min(1, 'Event Fee Uplay Percent cannot below than 1')
                 .max(1000, 'Event Fee Uplay Percent cannot above 1000')
                 .required('Event Fee Uplay is required'),            
             Event_Fee_NTUC: yup.number()
-                .min(0, 'Event Fee Ntuc Percent cannot below than 0')
+                .min(1, 'Event Fee Ntuc Percent cannot below than 1')
                 .max(1000, 'Event Fee Ntuc Percent cannot above 1000')
                 .required('Event_Name is required'),
             
             Vacancies: yup.number()
-                .min(1, 'Vacancies Value cannot below than $0')
-                .max(10000, 'too much')
-                .required('Event_Name is required'),
+                .min(1, 'Vacancies Value cannot below than 0')
+                .max(10000, 'maximun is 10000')
+                .required('Vacancies is required'),
+            Event_Launching_Date: yup.date().required('Event Date is required')
 
             
 
@@ -85,7 +88,7 @@ function EventAdd() {
             data.Event_Name = data.Event_Name.trim();
             data.Event_Description = data.Event_Description.trim();
             data.Event_Location = data.Event_Location.trim();
-            data.Event_Fee_Guest = data.Event_Fee_Guest;
+            data.Event_Fee_Guest = parseInt(data.Event_Fee_Guest);
             if (imageFile) {
                 data.imageFile = imageFile;
             }
@@ -97,7 +100,7 @@ function EventAdd() {
             http.post("/Event/add_event", data)
                 .then((res) => {
                     console.log(data);
-                    navigate("/Event");
+                   navigate("/Event");
                 })
                 .catch(function (err) {
 
@@ -140,6 +143,7 @@ function EventAdd() {
 
     return (
 
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
 
         <Box>
             <Typography variant="h5" sx={{ my: 2 }}>
@@ -153,7 +157,7 @@ function EventAdd() {
                             fullWidth
                             margin="dense"
                             autoComplete="off"
-                            label="Event_Name"
+                            label="Event Name"
                             name="Event_Name"
                             value={formik.values.Event_Name}
                             onChange={formik.handleChange}
@@ -275,8 +279,23 @@ function EventAdd() {
                             type="number"
                             error={Boolean(formik.touched.Vacancies && formik.errors.Vacancies)}
                             helperText={formik.touched.Vacancies && formik.errors.Vacancies}
+                            />
+                            <Box sx={{marginTop:'2vh'} }></Box>
+                        <DatePicker
+                            fullWidth
+                            margin="dense"
+                            label="Event Launching Date"
+                            inputVariant="outlined"
+                            format="dd/MM/yyyy"
+                            value={formik.values.Event_Launching_Date}
+                            onChange={(date) => {
+                                formik.setFieldValue('Event_Launching_Date', date);
+                                formik.setFieldError('Event_Launching_Date', ''); // Clear validation error
+                            }}
+                            onBlur={formik.handleBlur}
+                            error={formik.touched.Event_Launching_Date && Boolean(formik.errors.Event_Launching_Date)}
+                            helperText={formik.touched.Event_Launching_Date && formik.errors.Event_Launching_Date}
                         />
-
 
 
                         <Grid item xs={12} md={6} lg={4}>
@@ -305,14 +324,15 @@ function EventAdd() {
 
                 </Grid>
                 <Box sx={{ mt: 5 }}>
-                    <Button variant="contained" type="submit">
+                        <Button variant="contained" type="submit" style={{ width: '100%' }}>
                         Add
                     </Button>
                 </Box>
             </Box>
 
             <ToastContainer />
-        </Box>
+            </Box>
+        </LocalizationProvider>
         );
 
 }

@@ -1,4 +1,5 @@
-﻿import React, { useEffect, useState, useContext } from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useState, useContext } from 'react';
 import {
     Box,
     Typography,
@@ -12,8 +13,11 @@ import {
     InputLabel,
     Select,
     MenuItem,
-    FormHelperText
+    FormHelperText, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions
+
 } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+
 import { useParams, useNavigate } from 'react-router-dom';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -25,6 +29,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UserContext from '../contexts/UserContext';
 import da from 'date-fns/locale/da';
+
+let num = 0;
+
 
 function EventEdit() {
     const { id } = useParams();
@@ -38,16 +45,21 @@ function EventEdit() {
         Event_Location: "",
         Event_Category: "Sports & Wellness",
 
-        Event_Fee_Guest: 0,  
+        Event_Fee_Guest: 0,
         Event_Fee_Uplay: 0,
         Event_Fee_NTUC: 0,
         Vacancies: 0,
+        Event_Launching_Date: ""
+
     });
 
     useEffect(() => {
         http.get(`/Event/getEvent/${id}`).then((res) => {
             setimageFile(res.data.imageFile);
-            setEvent(res.data);
+            setEvent((prevVoucher) => ({
+                ...res.data,
+                Event_Launching_Date: new Date(res.data.Event_Launching_Date),
+            }));
         });
     }, []);
 
@@ -69,22 +81,25 @@ function EventEdit() {
                 .max(300, 'Event location error')
                 .required('Event location is required'),
             Event_Fee_Guest: yup.number()
-                .min(0, 'Event Fee Guest Percent cannot below than 0')
+                .min(1, 'Event Fee Guest Percent cannot below than 1')
                 .max(1000, 'Event Fee Guest Percent cannot above 1000')
-                .required('Event Fee Guest  is required'),
+                .required('Event Fee Guest is required'),
             Event_Fee_Uplay: yup.number()
-                .min(0, 'Event Fee Uplay Percent cannot below than 0')
+                .min(1, 'Event Fee Uplay Percent cannot below than 1')
                 .max(1000, 'Event Fee Uplay Percent cannot above 1000')
                 .required('Event Fee Uplay is required'),
             Event_Fee_NTUC: yup.number()
-                .min(0, 'Event Fee Ntuc Percent cannot below than 0')
+                .min(1, 'Event Fee Ntuc Percent cannot below than 1')
                 .max(1000, 'Event Fee Ntuc Percent cannot above 1000')
                 .required('Event_Name is required'),
 
             Vacancies: yup.number()
-                .min(1, 'Vacancies Value cannot below than $0')
-                .max(10000, 'too much')
-                .required('Event_Name is required'),
+                .min(1, 'Vacancies Value cannot below than 0')
+                .max(10000, 'maximun is 10000')
+                .required('Vacancies is required'),
+            Event_Launching_Date: yup.date().required('Event Date is required')
+
+
 
         }),
         onSubmit: (data) => {
@@ -93,17 +108,20 @@ function EventEdit() {
             data.Event_Location = data.Event_Location.trim();
             if (imageFile) {
                 data.imageFile = imageFile;
-                
+
             }
-            http.put(`/Event/update/${id}`, data)
-                .then((res) => {
-                    console.log(res.data);
-                    console.log(res.data.imageFile);
-                    navigate("/Event");
-                })
-                .catch(function (err) {
-                    toast.error(`${err.response.data.message}`);
-                })
+            setEvent(data);
+            handleOpen1();
+
+            //http.put(`/Event/update/${id}`, data)
+            //    .then((res) => {
+            //        console.log(res.data);
+            //        console.log(res.data.imageFile);
+            //        navigate("/Event");
+            //    })
+            //    .catch(function (err) {
+            //        toast.error(`${err.response.data.message}`);
+            //    })
 
         }
     });
@@ -136,181 +154,257 @@ function EventEdit() {
         }
     };
 
+    const double_confirm = () => {
+        http.put(`/Event/update/${id}`, Eventinfo)
+            .then((res) => {
+                console.log(res.data);
+                console.log(res.data.imageFile);
+                navigate("/Event");
+            })
+            .catch(function (err) {
+                toast.error(`${err.response.data.message}`);
+            })
+    }
+
+
+    const [open1, setOpen1] = useState(false);
+
+
+
+    const handleOpen1 = () => {
+        setOpen1(true);
+
+
+    };
+
+
+    const handleClose1 = () => {
+        setOpen1(false);
+        num--;
+    };
+
     return (
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
 
-    
-        <Box>
-            <Typography variant="h5" sx={{ my: 2 }}>
-                Edit Event
 
-            </Typography>
-            <Box component="form" onSubmit={formik.handleSubmit}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} md={6} lg={8}>
-                        <TextField
-                            fullWidth
-                            margin="dense"
-                            autoComplete="off"
-                            label="Event_Name"
-                            name="Event_Name"
-                            value={formik.values.Event_Name}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={Boolean(formik.touched.Event_Name && formik.errors.Event_Name)}
-                            helperText={formik.touched.Event_Name && formik.errors.Event_Name}
-                        />
+            <Box>
+                <Typography variant="h5" sx={{ my: 2 }}>
+                    Edit Event
 
-                        <TextField
-                            fullWidth
-                            multiline
-                            rows={4}
-                            margin="dense"
-                            autoComplete="off"
-                            label="Event Description"
-                            name="Event_Description"
-                            value={formik.values.Event_Description}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={Boolean(formik.touched.Event_Description && formik.errors.Event_Description)}
-                            helperText={formik.touched.Event_Description && formik.errors.Event_Description}
-                        />
-
-                        <FormControl fullWidth margin="dense"
-                            error={Boolean(formik.touched.Event_Category && formik.errors.Event_Category)}
-                        >
-                            <InputLabel htmlFor="Event_Category">Event Category</InputLabel>
-                            <Select
-                                name="Event_Category"
-                                value={formik.values.Event_Category}
+                </Typography>
+                <Box component="form" onSubmit={formik.handleSubmit}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} md={6} lg={8}>
+                            <TextField
+                                fullWidth
+                                margin="dense"
+                                autoComplete="off"
+                                label="Event Name"
+                                name="Event_Name"
+                                value={formik.values.Event_Name}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
+                                error={Boolean(formik.touched.Event_Name && formik.errors.Event_Name)}
+                                helperText={formik.touched.Event_Name && formik.errors.Event_Name}
+                            />
+
+                            <TextField
+                                fullWidth
+                                multiline
+                                rows={4}
+                                margin="dense"
                                 autoComplete="off"
+                                label="Event Description"
+                                name="Event_Description"
+                                value={formik.values.Event_Description}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={Boolean(formik.touched.Event_Description && formik.errors.Event_Description)}
+                                helperText={formik.touched.Event_Description && formik.errors.Event_Description}
+                            />
+
+                            <FormControl fullWidth margin="dense"
+                                error={Boolean(formik.touched.Event_Category && formik.errors.Event_Category)}
                             >
-                                <MenuItem value="Dine & Wine">Dine & Wine</MenuItem>
-                                <MenuItem value="Family Bonding">Family Bonding</MenuItem>
-                                <MenuItem value="Hobbies & Wellness">Hobbies & Wellness</MenuItem>
-                                <MenuItem value="Sports & Wellness">Sports & Wellness</MenuItem>
-                                <MenuItem value="Travel">Travel</MenuItem>
-                            </Select>
-                            {formik.touched.Event_Category && formik.errors.Event_Category && (
-                                <FormHelperText>{formik.errors.Event_Category}</FormHelperText>
-                            )}
-                        </FormControl>
-
-                        <TextField
-                            fullWidth
-                            margin="dense"
-                            autoComplete="off"
-                            label="Event Location"
-                            name="Event_Location"
-                            value={formik.values.Event_Location}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={Boolean(formik.touched.Event_Location && formik.errors.Event_Location)}
-                            helperText={formik.touched.Event_Location && formik.errors.Event_Location}
-                        />
-
-
-                        <Grid container spacing={2}>
-                            <Grid item xs={4}>
-                                <TextField
-                                    fullWidth
-                                    margin="dense"
-                                    autoComplete="off"
-                                    label="Event Fee Guest"
-                                    name="Event_Fee_Guest"
-                                    value={formik.values.Event_Fee_Guest}
+                                <InputLabel htmlFor="Event_Category">Event Category</InputLabel>
+                                <Select
+                                    name="Event_Category"
+                                    value={formik.values.Event_Category}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
-                                    type="number"
-                                    error={Boolean(formik.touched.Event_Fee_Guest && formik.errors.Event_Fee_Guest)}
-                                    helperText={formik.touched.Event_Fee_Guest && formik.errors.Event_Fee_Guest}
-                                />
-                            </Grid>
-                            <Grid item xs={4}>
-                                <TextField
-                                    fullWidth
-                                    margin="dense"
                                     autoComplete="off"
-                                    label="Event Fee Uplay"
-                                    name="Event_Fee_Uplay"
-                                    value={formik.values.Event_Fee_Uplay}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    type="number"
-                                    error={Boolean(formik.touched.Event_Fee_Uplay && formik.errors.Event_Fee_Uplay)}
-                                    helperText={formik.touched.Event_Fee_Uplay && formik.errors.Event_Fee_Uplay}
-                                />
+                                >
+                                    <MenuItem value="Dine & Wine">Dine & Wine</MenuItem>
+                                    <MenuItem value="Family Bonding">Family Bonding</MenuItem>
+                                    <MenuItem value="Hobbies & Wellness">Hobbies & Wellness</MenuItem>
+                                    <MenuItem value="Sports & Wellness">Sports & Wellness</MenuItem>
+                                    <MenuItem value="Travel">Travel</MenuItem>
+                                </Select>
+                                {formik.touched.Event_Category && formik.errors.Event_Category && (
+                                    <FormHelperText>{formik.errors.Event_Category}</FormHelperText>
+                                )}
+                            </FormControl>
+
+                            <TextField
+                                fullWidth
+                                margin="dense"
+                                autoComplete="off"
+                                label="Event Location"
+                                name="Event_Location"
+                                value={formik.values.Event_Location}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={Boolean(formik.touched.Event_Location && formik.errors.Event_Location)}
+                                helperText={formik.touched.Event_Location && formik.errors.Event_Location}
+                            />
+
+
+                            <Grid container spacing={2}>
+                                <Grid item xs={4}>
+                                    <TextField
+                                        fullWidth
+                                        margin="dense"
+                                        autoComplete="off"
+                                        label="Event Fee Guest"
+                                        name="Event_Fee_Guest"
+                                        value={formik.values.Event_Fee_Guest}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        type="number"
+                                        error={Boolean(formik.touched.Event_Fee_Guest && formik.errors.Event_Fee_Guest)}
+                                        helperText={formik.touched.Event_Fee_Guest && formik.errors.Event_Fee_Guest}
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <TextField
+                                        fullWidth
+                                        margin="dense"
+                                        autoComplete="off"
+                                        label="Event Fee Uplay"
+                                        name="Event_Fee_Uplay"
+                                        value={formik.values.Event_Fee_Uplay}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        type="number"
+                                        error={Boolean(formik.touched.Event_Fee_Uplay && formik.errors.Event_Fee_Uplay)}
+                                        helperText={formik.touched.Event_Fee_Uplay && formik.errors.Event_Fee_Uplay}
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <TextField
+                                        fullWidth
+                                        margin="dense"
+                                        autoComplete="off"
+                                        label="Event Fee NTUC"
+                                        name="Event_Fee_NTUC"
+                                        value={formik.values.Event_Fee_NTUC}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        type="number"
+                                        error={Boolean(formik.touched.Event_Fee_NTUC && formik.errors.Event_Fee_NTUC)}
+                                        helperText={formik.touched.Event_Fee_NTUC && formik.errors.Event_Fee_NTUC}
+                                    />
+                                </Grid>
                             </Grid>
-                            <Grid item xs={4}>
-                                <TextField
-                                    fullWidth
-                                    margin="dense"
-                                    autoComplete="off"
-                                    label="Event Fee NTUC"
-                                    name="Event_Fee_NTUC"
-                                    value={formik.values.Event_Fee_NTUC}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    type="number"
-                                    error={Boolean(formik.touched.Event_Fee_NTUC && formik.errors.Event_Fee_NTUC)}
-                                    helperText={formik.touched.Event_Fee_NTUC && formik.errors.Event_Fee_NTUC}
-                                />
+
+
+
+                            <TextField
+                                fullWidth
+                                margin="dense"
+                                autoComplete="off"
+                                label="Vacancies"
+                                name="Vacancies"
+                                value={formik.values.Vacancies}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                type="number"
+                                error={Boolean(formik.touched.Vacancies && formik.errors.Vacancies)}
+                                helperText={formik.touched.Vacancies && formik.errors.Vacancies}
+                            />
+                            <Box sx={{ marginTop: '2vh' }}></Box>
+
+                            <DatePicker
+                                fullWidth
+                                margin="dense"
+                                label="Event Launching Date"
+                                inputVariant="outlined"
+                                format="dd/MM/yyyy"
+                                value={formik.values.Event_Launching_Date}
+                                onChange={(date) => {
+                                    formik.setFieldValue('Event_Launching_Date', date);
+                                    formik.setFieldError('Event_Launching_Date', ''); // Clear validation error
+                                }}
+                                onBlur={formik.handleBlur}
+                                error={formik.touched.Event_Launching_Date && Boolean(formik.errors.Event_Launching_Date)}
+                                helperText={formik.touched.Event_Launching_Date && formik.errors.Event_Launching_Date}
+                            />
+
+                            <Grid item xs={12} md={6} lg={4}>
+                                <Box sx={{ textAlign: 'left', mt: 2 }} >
+                                    <Button variant="contained" component="label">
+                                        Upload Image
+                                        <input hidden accept="image/*" multiple type="file"
+                                            onChange={onFileChange} />
+                                    </Button>
+                                    {
+                                        imageFile && (
+                                            <Box className="aspect-ratio-container" sx={{ mt: 2 }}>
+                                                <img alt="event"
+                                                    src={`${import.meta.env.VITE_FILE_BASE_URL}${imageFile}`}>
+                                                </img>
+                                            </Box>
+                                        )
+                                    }
+                                </Box>
                             </Grid>
+
                         </Grid>
 
 
 
-                        <TextField
-                            fullWidth
-                            margin="dense"
-                            autoComplete="off"
-                            label="Vacancies"
-                            name="Vacancies"
-                            value={formik.values.Vacancies}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            type="number"
-                            error={Boolean(formik.touched.Vacancies && formik.errors.Vacancies)}
-                            helperText={formik.touched.Vacancies && formik.errors.Vacancies}
-                        />
-
-
-
-                        <Grid item xs={12} md={6} lg={4}>
-                            <Box sx={{ textAlign: 'left', mt: 2 }} >
-                                <Button variant="contained" component="label">
-                                    Upload Image
-                                    <input hidden accept="image/*" multiple type="file"
-                                        onChange={onFileChange} />
-                                </Button>
-                                {
-                                    imageFile && (
-                                        <Box className="aspect-ratio-container" sx={{ mt: 2 }}>
-                                            <img alt="event"
-                                                src={`${import.meta.env.VITE_FILE_BASE_URL}${imageFile}`}>
-                                            </img>
-                                        </Box>
-                                    )
-                                }
-                            </Box>
-                        </Grid>
 
                     </Grid>
+                    <Box sx={{ mt: 5 }}>
+                        <Button variant="contained" type="submit" style={{ width: '100%' }}>
+                            Update Event
+                        </Button>
+                    </Box>
+                    <Box sx={{ mt: 1 }}>
+                        <Link to="/Event" sx={{ color: 'white', textDecoration: 'none' }}>
+                            <Button variant="contained" style={{ width: '100%' }}>
+                                Cancel
+                            </Button>
+                        </Link>
 
-
-
-
-                </Grid>
-                <Box sx={{ mt: 5 }}>
-                    <Button variant="contained" type="submit">
-                        Add
-                    </Button>
+                    </Box>
                 </Box>
-            </Box>
 
-            <ToastContainer />
-        </Box>
+
+                <Dialog open={open1} onClose={handleClose1}>
+                    <DialogTitle>
+                        Confirmation
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Are you sure want to update the detail of the Event?
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button variant="contained" color="inherit"
+                            onClick={handleClose1}>
+                            Cancel
+                        </Button>
+                        <Button variant="contained" color="error"
+                            onClick={double_confirm}>
+                            Confirm
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
+                <ToastContainer />
+            </Box>
+        </LocalizationProvider>
     );
 
 }

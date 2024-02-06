@@ -95,10 +95,29 @@ namespace LearningAPI.Controllers
             string accessToken = CreateToken(foundUser);
             return Ok(new { uplayuser, accessToken });
         }
+        [HttpPost("validatePassword")]
+        public IActionResult ValidatePassword(ValidatePasswordRequest request)
+        {
+            var user = _context.UplayUsers.Find(request.UserId);
 
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            bool verified = BCrypt.Net.BCrypt.Verify(request.OldPassword, user.Password);
+
+            if (verified)
+            {
+                return Ok(new { message = "Password validated successfully" });
+            }
+            else
+            {
+                return BadRequest(new { message = "Old password is incorrect" });
+            }
+        }
 
         [HttpPut("{id}")]
-
         public IActionResult UpdateUplayUser(int id, UpdateUplayUserRequest uplayuser)
         {
             var user = _context.UplayUsers.Find(id);
@@ -106,16 +125,35 @@ namespace LearningAPI.Controllers
             {
                 return NotFound();
             }
-            user.UserName = uplayuser.UserName;
-            uplayuser.Password = uplayuser.Password.Trim();
-            string passwordHash = BCrypt.Net.BCrypt.HashPassword(uplayuser.Password);
-            user.EmailAddress = uplayuser.EmailAddress.Trim();
-            user.Password = passwordHash;
-            user.UpdatedAt = DateTime.UtcNow;
-            _context.SaveChanges();
-            return Ok(user);
 
+            user.UserName = uplayuser.UserName;
+            user.EmailAddress = uplayuser.EmailAddress.Trim();
+            user.UpdatedAt = DateTime.UtcNow;
+
+            if (!string.IsNullOrEmpty(uplayuser.Password.Trim()))
+            {
+                if (uplayuser.Password.Trim().Length < 8)
+                {
+                    // Handle validation error for password length, if needed
+                    return Ok("Set all except password");
+                }
+                else
+                {
+                    string passwordHash = BCrypt.Net.BCrypt.HashPassword(uplayuser.Password);
+                    user.Password = passwordHash;
+                }
+            }
+            _context.SaveChanges();
+
+            return Ok(user);
         }
+
+
+
+
+        
+
+
 
         [HttpGet("auth"), Authorize]
         public IActionResult Auth()

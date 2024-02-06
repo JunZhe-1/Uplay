@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
     Box, Typography, Grid, Card, CardContent, Input, IconButton, Button,
     Paper, TableContainer, Table, TableHead, TableBody, TableRow, TableCell
-    , Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions
+    , Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Switch
 } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import { AccountCircle, AccessTime, Search, Settings, Clear, Visibility, Edit, Delete, Block } from '@mui/icons-material';
@@ -11,6 +11,7 @@ import http from '../http';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
+import UserContext from '../contexts/UserContext';
 
 import global from '../global';
 
@@ -19,6 +20,8 @@ function VoucherList() {
     const [VoucherList, setVoucherList] = useState([]);
     const [search, setSearch] = useState('');
     const [voucher_id, setid] = useState('');
+    const { user } = useContext(UserContext);
+
 
     // get all the voucher first
     useEffect(() => {
@@ -35,6 +38,21 @@ function VoucherList() {
             });
     };
 
+
+
+
+    const toggleSearchInput = (id) => {
+    
+
+        http.put(`/Voucher/updateStatus/${id}`).then((res) => {
+            console.log("update status sucessfully");
+            getVoucherList();
+
+        })
+            .catch(function (err) {
+                toast.error(`${err.response.data.message}`);
+            });
+    };
 
     const onSearchChange = (e) => {
         setSearch(e.target.value);
@@ -92,9 +110,9 @@ function VoucherList() {
 
     return (
         <Box>
-        <Typography variant="h5" sx={{ my: 2, color: 'black', fontWeight: 'bold' }}>
-            Voucher Management
-        </Typography>
+            <Typography variant="h5" sx={{ my: 2, color: 'black', fontWeight: 'bold' }}>
+                Voucher Management
+            </Typography>
 
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
             <Input value={search} placeholder="Search"
@@ -105,7 +123,18 @@ function VoucherList() {
             </IconButton>
             <IconButton color="primary" onClick={onClickClear}>
                 <Clear />
-            </IconButton>
+                </IconButton>
+                <Box sx={{ flexGrow: 1 }} />
+
+                {
+                    user.emailAddress.toLowerCase() === "admin@gmail.com" &&(
+                        <Link to="/Voucher/add" style={{ textDecoration: 'none' }}>
+                            <Button variant='contained' style={{ background: 'grey' }}>
+                                Add
+                            </Button>
+                        </Link>
+                    )
+                }
         </Box>
 
 
@@ -120,14 +149,14 @@ function VoucherList() {
                             <TableCell>Start Date</TableCell>
                             <TableCell>End Date</TableCell>
                                 <TableCell>member type</TableCell>
-                            <TableCell>Discount</TableCell>
-                           
-                        </TableRow>
-                    </TableHead>
+                                <TableCell>Discount</TableCell>
 
-                    <TableBody>
+                            </TableRow>
+                        </TableHead>
+
+                        <TableBody>
                             {VoucherList
-                                .sort((a, b) => new Date(a.end_Date) - new Date(b.end_Date))    
+                                .sort((a, b) => new Date(a.end_Date) - new Date(b.end_Date))
                                 .map((data, index) => (
 
 
@@ -138,7 +167,7 @@ function VoucherList() {
                                                     <img
                                                         alt="tutorial"
                                                         src={`${import.meta.env.VITE_FILE_BASE_URL}${data.ImageFile}`}
-                                                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px' }}
+                                                        style={{ width: '100%', height: '100%', objectFit: 'fill', borderRadius: '10px' }}
                                                     />
 
                                                 </Box>
@@ -148,39 +177,40 @@ function VoucherList() {
                                         <TableCell>{dayjs.utc(data.Start_Date).format(global.datetimeFormat)}</TableCell>
                                         <TableCell>{dayjs.utc(data.End_Date).format(global.datetimeFormat)}</TableCell>
                                         <TableCell>{data.Member_Type}</TableCell>
-                                    <TableCell>
-                                        <>
-                                            {data.Discount_type == "Value" ? (
-                                                <>
-                                                    ${data.Discount_In_Value}
-                                                </>
-                                            ) : (
-                                                <>
-                                                        {data.Discount_In_Percentage}%
-                                                </>
-                                            )}
-                                        </>
+                                        <TableCell>
+                                            ${data.Discount_In_Value}
+                                                 
+                                              
+                                            
 
                                         </TableCell>
-                                        <TableCell> <IconButton color="primary"
-                                            onClick={() => handleOpen(data.Voucher_ID)}>
-                                            <Clear />
-                                        </IconButton></TableCell>
+
+                                        <TableCell>
+
+                                            <Switch
+                                                checked={data.Voucher_Status}
+                                                onChange={() => toggleSearchInput(data.Voucher_ID)}
+                                                color="primary"
+                                            /></TableCell>
+                                  
                                         <TableCell> <Link to={`/Voucher/update/${data.Voucher_ID}`}>
-                                            <IconButton color="primary" sx={{ padding: '4px' }}>
+                                            <IconButton color="primary" sx={{ padding: '4px', color: '#0096FF' }}>
                                                 <Edit />
                                             </IconButton>
                                         </Link></TableCell>
-                                       
+                                        <TableCell> <IconButton color="primary"
+                                            onClick={() => handleOpen(data.Voucher_ID)} style={{ color: 'red' }}>
+                                            <Clear />
+                                        </IconButton></TableCell>
 
 
 
 
-                                </TableRow>
-                            ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                                    </TableRow>
+                                ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </Paper>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>
@@ -198,7 +228,7 @@ function VoucherList() {
                     </Button>
                     <Button variant="contained" color="error"
                         onClick={() => deleteVoucher(voucher_id)}>
-                         Delete
+                        Delete
                     </Button>
                 </DialogActions>
             </Dialog>
@@ -207,7 +237,7 @@ function VoucherList() {
 
 
 
-            );
+    );
 }
 
 export default VoucherList;

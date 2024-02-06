@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Typography, TextField, Button, Grid } from '@mui/material';
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+import { Box, Typography, TextField, Button, Grid,Select } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, MenuItem } from '@mui/material';
 import http from '../http';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
 function BuyMember() { 
     const [user, setUser] = useState(null);
     const [defaultName, setDefaultName] = useState("");
     const [defaultNRIC, setDefaultNRIC] =useState("");
     const [defaultMemberStatus, setDefaultMemberStatus] = useState("");
+    const [defaultDateOfBirth, setDefaultDateOfBirth] = useState("");
     const navigate = useNavigate();
 
 
@@ -30,12 +32,14 @@ function BuyMember() {
             fetchUser();
         }
     }, []);
-
+    const today = new Date().toISOString().split('T')[0];
     const formik = useFormik({
         initialValues: {
             name: defaultName,
             nric: defaultNRIC,
-            memberStatus: defaultMemberStatus
+            dob: defaultDateOfBirth||today,
+            memberStatus: defaultMemberStatus,
+            years:1
 
         },
         validationSchema: yup.object({
@@ -44,20 +48,31 @@ function BuyMember() {
                 .max(50, 'Name must be at most 50 characters')
                 .required('Name is required'),
             nric: yup.string().trim()
-                .matches(/^[stST]\d{7}[a-zA-Z]$/, 'Invalid NRIC format')
-                .required('NRIC is required')
+                .matches(/^\d{3}[a-zA-Z]$/, 'Invalid NRIC format')
+                .required('NRIC is required'),
+            dob: yup.date().required('Date of Birth is required'),
+            years: yup.number().oneOf([1, 2, 3], 'Please select a valid number of years').required('Years is required'),
+            
 
         }),
         onSubmit: (data) => {
 
             data.name = data.name.trim();
             data.nric = data.nric.trim().toLowerCase();
-            data.memberStatus = "NTUC Member";
+            data.memberStatus = "NTUC";
+            const dobDate = new Date(data.dob);
+            const formattedDateOfBirth = dobDate.toISOString().split('T')[0];
+
+            // Assign the formatted date to the data.dateOfBirth property
+            data.dateOfBirth = formattedDateOfBirth;
             console.log(data)
-            http.post("/Member", data)
+            http.post("/Member", data,2)
                 .then((res) => {
                     console.log(res.data);
                     navigate("/profile");
+                    localStorage.removeItem("memberStatus")
+                    localStorage.setItem("memberStatus","NTUC")
+
                 });
         }
 
@@ -73,6 +88,7 @@ function BuyMember() {
                         setDefaultName("")
                         setDefaultNRIC("")
                         setDefaultMemberStatus("User")
+                        setDefaultDateOfBirth(today)
 
                     }
                     else {
@@ -80,6 +96,7 @@ function BuyMember() {
                         setDefaultName(response1.data.name)
                         setDefaultNRIC(response1.data.nric)
                         setDefaultMemberStatus(response1.data.memberStatus)
+
 
                     }
 
@@ -122,7 +139,7 @@ function BuyMember() {
                                 style={{ marginBottom: '10px' }} // Adjust spacing here
                             />
                             <Typography variant="h6" style={{ fontSize: '23px', marginTop: '20px' }}>
-                                NRIC:
+                                NRIC last 4 digit (e.g. 123A):
                             </Typography>
                             <TextField
                                 fullWidth
@@ -138,9 +155,44 @@ function BuyMember() {
                                 InputLabelProps={{ shrink: Boolean(formik.values.nric) || formik.values.nric === '' }}
                                 style={{ marginBottom: '10px' }} // Adjust spacing here
                             />
-
-                            <Button variant="contained" color="primary" style={{ marginTop: '20px' }} type="submit">
-                                Buy Member
+            <Typography variant="h6" style={{ fontSize: '23px', marginTop: '20px' }}>
+                Date of Birth:
+            </Typography>
+            <TextField
+                fullWidth
+                margin="dense"
+                autoComplete="off"
+                label="Date of Birth"
+                type="date"
+                name="dob"
+                value={formik.values.dob}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.dob && Boolean(formik.errors.dob)}
+                helperText={formik.touched.dob && formik.errors.dob}
+                InputLabelProps={{ shrink: true }}
+                style={{ marginBottom: '10px' }}
+            />
+            <Typography variant="h6" style={{ fontSize: '23px', marginTop: '20px' }}>
+                No. of years to subscribe:
+            </Typography>
+            <Select
+                label="Years"
+                name="years"
+                value={formik.values.years}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.years && Boolean(formik.errors.years)}
+                style={{ marginBottom: '10px' }}
+            >
+                <MenuItem value={1}>1</MenuItem>
+                <MenuItem value={2}>2</MenuItem>
+                <MenuItem value={3}>3</MenuItem>
+            </Select>
+             
+            
+             <Button variant="contained" color="primary" style={{ marginTop: '20px' }} type="submit">
+                                Buy Membership
             </Button>
 
 
