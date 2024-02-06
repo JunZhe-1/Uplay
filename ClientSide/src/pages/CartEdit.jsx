@@ -38,10 +38,21 @@ function CartEdit() {
   });
 
   useEffect(() => {
-    http.get(`/Cart/get/${id}`).then((res) => {
-      console.log(res.data);
-      setCart(res.data);
-    });
+    http
+      .get(`/Cart/get/${id}`)
+      .then((res) => {
+        console.log(res.data);
+         const bookingDate = new Date(res.data.Booking_Date.replace(" ", "T"));
+        setCart({
+          Booking_Date: bookingDate,
+          Booking_Quantity: res.data.Booking_Quantity,
+          Event_ID: res.data.event_ID,
+          Voucher_ID: res.data.voucher_ID,
+        });
+      })
+      .catch(function (err) {
+        toast.error(`${err.response.data.message}`);
+      });
   }, []);
 
   const formik = useFormik({
@@ -69,7 +80,7 @@ function CartEdit() {
       data.Booking_Quantity = parseInt(data.Booking_Quantity);
       data.Event_ID = parseInt(data.Event_ID);
       data.Voucher_ID = parseInt(data.Voucher_ID);
-      
+
       console.log("onsubmit:", data);
       http
         .put(`/Cart/update/${id}`, data)

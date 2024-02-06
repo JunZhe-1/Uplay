@@ -17,10 +17,12 @@ namespace LearningAPI.Controllers
     public class CartController : ControllerBase
     {
         private readonly MyDbContext _context;
+		private readonly ILogger<EventController> _logger;
 
-        public CartController(MyDbContext context)
+		public CartController(MyDbContext context, ILogger<EventController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         private int GetUserId()
@@ -67,78 +69,80 @@ namespace LearningAPI.Controllers
         }
 
         [HttpGet("get/{id}")]
-        public async Task<ActionResult<IEnumerable<Cart>>> GetCartItemsByCartId(int id)
+        public IActionResult GetCartItemsByCartId(int id)
         {
-            var cartItems = await _context.Carts
-                .Where(c => c.Cart_ID == id)
-                .ToListAsync();
-
-            if (cartItems == null || cartItems.Count == 0)
+            try
             {
-                return NotFound(new { message = "No cart items found for the given cart ID." });
-            }
+                Cart? cartItems = _context.Carts.Find(id);
 
-            return Ok(cartItems);
-        }
+
+                if (cartItems == null)
+                {
+                    return NotFound(new { message = "No cart items found for the given cart ID." });
+                }
+
+                return Ok(cartItems);
+            }
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error when get cart item by id");
+				return StatusCode(500);
+			}
+		}
 
         [HttpGet("getuser/{id}")]
         public async Task<ActionResult<IEnumerable<Cart>>> GetCartItemsByUserId(int id)
         {
-            var cartItems = await _context.Carts
-                .Where(c => c.UserId == id)
-                .ToListAsync();
-
-            if (cartItems == null || cartItems.Count == 0)
+            try
             {
-                return NotFound(new { message = "No cart items found for the given user ID." });
-            }
+                var cartItems = await _context.Carts
+                    .Where(c => c.UserId == id)
+                    .ToListAsync();
 
-            return Ok(cartItems);
-        }
+                if (cartItems == null || cartItems.Count == 0)
+                {
+                    return NotFound(new { message = "No cart items found for the given user ID." });
+                }
+
+                return Ok(cartItems);
+            }
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error when get user's cart by id");
+				return StatusCode(500);
+			}
+		}
 
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateCartItem(int id, Cart request)
         {
-            var cartItem = await _context.Carts.FindAsync(id);
-            DateTime book = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(request.Booking_Date, "Singapore Standard Time");
-
-            if (cartItem == null)
+            try
             {
-                return NotFound();
+                var cartItem = await _context.Carts.FindAsync(id);
+                DateTime book = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(request.Booking_Date, "Singapore Standard Time");
+
+                if (cartItem == null)
+                {
+                    return NotFound();
+                }
+
+                // Update relevant properties based on request
+                cartItem.Booking_Date = book;
+                cartItem.Booking_Quantity = request.Booking_Quantity;
+                cartItem.Event_ID = request.Event_ID;
+                cartItem.Voucher_ID = request.Voucher_ID;
+                cartItem.UpdatedAt = DateTime.UtcNow;
+
+                await _context.SaveChangesAsync();
+
+                return Ok(cartItem);
             }
-
-            // Update relevant properties based on request
-            cartItem.Booking_Date = book;
-            cartItem.Booking_Quantity = request.Booking_Quantity;
-            cartItem.Event_ID = request.Event_ID;
-            cartItem.Voucher_ID = request.Voucher_ID;
-            cartItem.UpdatedAt = DateTime.UtcNow;
-
-            await _context.SaveChangesAsync();
-
-            return Ok(cartItem);
-        }
-
-        [HttpPut("updateuser/{id}")]
-        public async Task<IActionResult> UpdateCartItemUser(int id, Cart request)
-        {
-            var userId = GetUserId(); 
-            var cartItem = await _context.Carts.FindAsync(id);
-
-            if (cartItem == null || cartItem.UserId != userId)
-            {
-                return NotFound();
-            }
-
-            // Update relevant properties based on request
-            cartItem.Booking_Quantity = request.Booking_Quantity;
-            cartItem.Voucher_ID = request.Voucher_ID;
-            cartItem.UpdatedAt = DateTime.UtcNow;
-
-            await _context.SaveChangesAsync();
-
-            return Ok(cartItem);
-        }
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error when updating cart");
+				return StatusCode(500);
+			}
+		}
 
         [HttpDelete("removeitem/{id}")]
         public async Task<IActionResult> RemoveCartItem(int id)
