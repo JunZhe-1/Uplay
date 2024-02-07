@@ -1,19 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import {
-  Box,
-  Typography,
-  TextField,
-  Button,
-  Grid,
-  Radio,
-  RadioGroup,
-  FormControl,
-  FormControlLabel,
-  InputLabel,
-  Select,
-  MenuItem,
-  FormHelperText,
-} from "@mui/material";
+import { Box, Typography, TextField, Button, Grid } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -40,7 +26,7 @@ function CartUserEdit() {
       .get(`/Cart/get/${id}`)
       .then((res) => {
         console.log(res.data);
-         const bookingDate = new Date(res.data.Booking_Date.replace(" ", "T"));
+        const bookingDate = new Date(res.data.Booking_Date.replace(" ", "T"));
         setCart({
           Booking_Date: bookingDate,
           Booking_Quantity: res.data.Booking_Quantity,
@@ -84,11 +70,11 @@ function CartUserEdit() {
   console.log(formik);
 
   return (
-    <Box>
+    <Box display="flex" flexDirection="column" alignItems="center">
       <Typography variant="h5" sx={{ my: 2 }}>
         Edit Cart Item
       </Typography>
-      <Box component="form" onSubmit={formik.handleSubmit}>
+      <Box component="form" onSubmit={formik.handleSubmit} width="100%">
         <Grid container spacing={2}>
           <Grid item xs={12} md={6} lg={8}>
             <Grid container spacing={2}>
@@ -141,8 +127,13 @@ function CartUserEdit() {
             </Grid>
           </Grid>
         </Grid>
-        <Box sx={{ mt: 5 }}>
-          <Button variant="contained" type="submit" style={{ width: "100%" }}>
+        <Box mt={2} width="100%">
+          <Button
+            variant="contained"
+            type="submit"
+            fullWidth
+            style={{ backgroundColor: "#E8533F", width: "100%" }}
+          >
             Update
           </Button>
         </Box>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, navigate } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -37,6 +37,20 @@ import {
 import http from "../http";
 import dayjs from "dayjs";
 import global from "../global";
+import Pagination from "@mui/material/Pagination";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+// Create a custom theme
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#E8533F", // Orange
+    },
+    secondary: {
+      main: "#0096ff", // Orange
+    },
+  },
+});
 
 function CartList() {
   const navigate = useNavigate();
@@ -110,107 +124,127 @@ function CartList() {
     navigate("/Cart/add");
   };
 
+  // Pagination
+  const itemsPerPage = 5;
+  const [page, setPage] = React.useState(1);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
   return (
-    <Box>
-      <Typography
-        variant="h5"
-        sx={{ my: 2, color: "black", fontWeight: "bold" }}
-      >
-        Cart Item Management
-      </Typography>
-      <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-        <Input
-          value={search}
-          placeholder="Search"
-          onChange={onSearchChange}
-          onKeyDown={onSearchKeyDown}
-        />
-        <IconButton color="primary" onClick={onClickSearch}>
-          <Search />
-        </IconButton>
-        <IconButton color="primary" onClick={onClickClear}>
-          <Clear />
-        </IconButton>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={ onAddClick }
-          sx={{ marginLeft: 2 }}
+    <ThemeProvider theme={theme}>
+      <Box>
+        <Typography
+          variant="h5"
+          sx={{ my: 2, color: "black", fontWeight: "bold" }}
         >
-          Add
-        </Button>
-      </Box>
-      <Paper sx={{ width: "100%", overflow: "hidden" }}>
-        <TableContainer sx={{ maxHeight: 440 }}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Cart ID</TableCell>
-                <TableCell>Booking Date</TableCell>
-                <TableCell>Booking Quantity</TableCell>
-                <TableCell>User ID</TableCell>
-                <TableCell>Event ID</TableCell>
-              </TableRow>
-            </TableHead>
-
-            <TableBody>
-              {CartList.sort(
-                (a, b) => new Date(a.UpdatedAt) - new Date(b.UpdatedAt)
-              ).map((data, index) => (
-                <TableRow key={index}>
-                  <TableCell>{data.Cart_ID}</TableCell>
-                  <TableCell>
-                    {dayjs.utc(data.Booking_Date).format(global.datetimeFormat)}
-                  </TableCell>
-                  <TableCell>{data.Booking_Quantity}</TableCell>
-                  <TableCell>{data.userId}</TableCell>
-                  <TableCell>{data.event_ID}</TableCell>
-
-                  <TableCell>
-                    {" "}
-                    <IconButton
-                      color="primary"
-                      onClick={() => handleOpen(data.Cart_ID)}
-                    >
-                      <Clear />
-                    </IconButton>
-                  </TableCell>
-                  <TableCell>
-                    {" "}
-                    <Link to={`/Cart/update/${data.Cart_ID}`}>
-                      <IconButton color="primary" sx={{ padding: "4px" }}>
-                        <Edit />
-                      </IconButton>
-                    </Link>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Delete Cart</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to Delete this Cart Item?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button variant="contained" color="inherit" onClick={handleClose}>
-            Cancel
-          </Button>
+          Cart Item Management
+        </Typography>
+        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+          <Input
+            value={search}
+            placeholder="Search"
+            onChange={onSearchChange}
+            onKeyDown={onSearchKeyDown}
+          />
+          <IconButton color="primary" onClick={onClickSearch}>
+            <Search />
+          </IconButton>
+          <IconButton color="primary" onClick={onClickClear}>
+            <Clear />
+          </IconButton>
           <Button
             variant="contained"
-            color="error"
-            onClick={() => deleteCart(cart_id)}
+            color="primary"
+            onClick={onAddClick}
+            sx={{ marginLeft: 2 }}
           >
-            Delete
+            Add
           </Button>
-        </DialogActions>
-      </Dialog>
-      <ToastContainer />{" "}
-    </Box>
+        </Box>
+        <Paper sx={{ width: "100%", overflow: "hidden" }}>
+          <TableContainer sx={{ maxHeight: 440 }}>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Cart ID</TableCell>
+                  <TableCell>Booking Date</TableCell>
+                  <TableCell>Booking Quantity</TableCell>
+                  <TableCell>User ID</TableCell>
+                  <TableCell>Event ID</TableCell>
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                {CartList.slice((page - 1) * itemsPerPage, page * itemsPerPage)
+                  .sort((a, b) => new Date(a.UpdatedAt) - new Date(b.UpdatedAt))
+                  .map((data, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{data.Cart_ID}</TableCell>
+                      <TableCell>
+                        {dayjs
+                          .utc(data.Booking_Date)
+                          .format(global.datetimeFormat)}
+                      </TableCell>
+                      <TableCell>{data.Booking_Quantity}</TableCell>
+                      <TableCell>{data.userId}</TableCell>
+                      <TableCell>{data.event_ID}</TableCell>
+
+                      <TableCell>
+                        {" "}
+                        <Link to={`/Cart/update/${data.Cart_ID}`}>
+                          <IconButton color="secondary" sx={{ padding: "4px" }}>
+                            <Edit />
+                          </IconButton>
+                        </Link>
+                      </TableCell>
+
+                      <TableCell>
+                        {" "}
+                        <IconButton
+                          color="primary"
+                          onClick={() => handleOpen(data.Cart_ID)}
+                        >
+                          <Clear />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Box sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
+            <Pagination
+              count={Math.ceil(CartList.length / itemsPerPage)}
+              page={page}
+              onChange={handleChangePage}
+            />
+          </Box>
+        </Paper>
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>Delete Cart</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to Delete this Cart Item?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button variant="contained" color="inherit" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => deleteCart(cart_id)}
+            >
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <ToastContainer />{" "}
+      </Box>
+    </ThemeProvider>
   );
 }
 
