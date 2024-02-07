@@ -162,9 +162,7 @@ function CartEdit() {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 type="number"
-                error={Boolean(
-                  formik.touched.UserId && formik.errors.UserId
-                )}
+                error={Boolean(formik.touched.UserId && formik.errors.UserId)}
                 helperText={formik.touched.UserId && formik.errors.UserId}
               />
 
@@ -183,12 +181,15 @@ function CartEdit() {
                 )}
                 helperText={formik.touched.Event_ID && formik.errors.Event_ID}
               />
-
             </Grid>
           </Grid>
         </Grid>
         <Box sx={{ mt: 5 }}>
-          <Button variant="contained" type="submit" style={{ width: "100%" }}>
+          <Button
+            variant="contained"
+            type="submit"
+            style={{ width: "100%", background: "#E8533F" }}
+          >
             Update
           </Button>
         </Box>

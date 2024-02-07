@@ -57,7 +57,7 @@ function CartAddUser() {
   const formik = useFormik({
     initialValues: {
       Booking_Date: "",
-      Booking_Quantity: 0,
+      Booking_Quantity: 1,
       Event_ID: event_ID || 0,
     },
     validationSchema: yup.object({
@@ -190,7 +190,7 @@ function CartAddUser() {
           </Grid>
         </Grid>
         <Box sx={{ mt: 5 }}>
-          <Button variant="contained" type="submit" style={{ width: "100%" }}>
+          <Button variant="contained" type="submit" style={{ width: "100%", background: "#E8533F" }} >
             Add to Cart
           </Button>
         </Box>
