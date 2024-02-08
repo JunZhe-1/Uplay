@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace LearningAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class helllo : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -146,6 +146,7 @@ namespace LearningAPI.Migrations
                     Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "date", nullable: false),
                     MemberStatus = table.Column<string>(type: "longtext", nullable: false),
+                    Points = table.Column<int>(type: "int", nullable: true),
                     LastSubscriptionDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     ExpiredDate = table.Column<DateTime>(type: "datetime", nullable: false)
                 },

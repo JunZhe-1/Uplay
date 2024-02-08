@@ -151,6 +151,9 @@ namespace LearningAPI.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<int?>("Points")
+                        .HasColumnType("int");
+
                     b.HasKey("UserId");
 
                     b.ToTable("Members");

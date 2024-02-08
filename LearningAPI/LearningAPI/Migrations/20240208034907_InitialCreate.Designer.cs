@@ -11,13 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-<<<<<<<< HEAD:LearningAPI/LearningAPI/Migrations/20240208021655_InitialCreate.Designer.cs
-    [Migration("20240208021655_InitialCreate")]
+    [Migration("20240208034907_InitialCreate")]
     partial class InitialCreate
-========
-    [Migration("20240207180643_helllo")]
-    partial class helllo
->>>>>>>> beb4478d41efeaac390afdfc291cfe656bfb506d:LearningAPI/LearningAPI/Migrations/20240207180643_helllo.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,6 +153,9 @@ namespace LearningAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
+
+                    b.Property<int?>("Points")
+                        .HasColumnType("int");
 
                     b.HasKey("UserId");
 
