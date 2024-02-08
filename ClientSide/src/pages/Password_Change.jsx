@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import {
     Box, Typography, Grid, Card, CardContent, Input, IconButton, Button,
     Paper, TableContainer, Table, TableHead, TableBody, TableRow, TableCell
-    , TextField, Dialog, InputLabel, TablePagination, DialogTitle, DialogContent, DialogContentText, DialogActions, Select, MenuItem 
+    , TextField, Dialog, InputLabel, TablePagination, DialogTitle, DialogContent, DialogContentText, DialogActions, Select, MenuItem, Tooltip  
 } from '@mui/material';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -199,11 +199,32 @@ function Password_Change() {
                         <Typography sx={{ visibility: 'hidden' }}>Correct Password</Typography>
                     )}
 
-                    <Box sx={{ mt: 2, padding: '3vh 0 0vh 0' }}>
+                    <Box sx={{ mt: 2, padding: '2vh 0 0vh 0' }}>
                         <Button variant="contained" type="submit" style={{ width: '100%', padding: '8px', fontSize: '15px', background: '#f4511e' }}>
                             CONFIRM
                         </Button>
                     </Box>
+
+
+                    <Box sx={{ mt: 2, marginTop: '-2vh'}}>
+   
+<Tooltip   placement="right" title="At least 1 digit and 8 characters" arrow>
+  <Typography
+    sx={{
+      cursor: 'pointer',
+      marginLeft: '2vh',
+      marginTop: '3vh',
+      textAlign:'right',
+      transition: 'color 0.2s',
+      '&:hover': {
+        color: '#f4511e'
+      },
+    }}
+  >
+    Password Requirement?
+  </Typography>
+</Tooltip></Box>
+
                 </form>
             </Box>
         </Box>

@@ -27,7 +27,7 @@ function VoucherListUser() {
         getVoucherUser();
     }, []);
 
-    const [vouchercatname, setvouchercategory] = useState();
+    const [vouchercatname, setvouchercategory] = useState("all");
 
 
     const filterVouchers = (search) => {
@@ -102,7 +102,7 @@ function VoucherListUser() {
     '&:hover': {
         transform: vouchercatname === "lastest" ? "scale(1)" : "scale(1.07)", 
       } }}>
-                            Lastest
+                            Newest
                         </Button>
                         <Button onClick={() => filterVouchers('expiring')} sx={{
     backgroundColor: vouchercatname === "expiring" ? "#E6533F" : "white",

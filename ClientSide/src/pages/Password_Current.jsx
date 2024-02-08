@@ -82,7 +82,9 @@ function Password_Current() {
 
             } catch (error) {
                 console.error('Error validating old password:', error);
-                formik.setErrors({ oldpassword: "Invalid old password." });
+                SetErrorMSg("Wrong Password ");
+
+                // formik.setErrors({ oldpassword: "Invalid old password." });
                 return;
             }
         }

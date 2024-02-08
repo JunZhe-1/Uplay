@@ -37,7 +37,7 @@ import UserList from './pages/UserList';
 import Password_Current from './pages/Password_Current';
 import Password_Change from './pages/Password_Change';
 import Userprofile from './pages/UserProfile';
-
+import MemberPurchase from './pages/MemberPurchase';
 function App() {
     const [user, setUser] = useState(null);
     const imageUrl = './../image/testing.png';
@@ -365,14 +365,11 @@ function App() {
               <Route path={"/"} element={<HomePage />} />
               <Route path={"/tutorials"} element={<Tutorials />} />
               <Route path={"/addtutorial"} element={<AddTutorial />} />
+
               <Route path={"/Voucher/add"} element={<VoucherAdd />} />
               <Route path={"/Voucher"} element={<VoucherList />} />
-
               <Route path={"/Voucher/update/:id"} element={<VoucherEdit />} />
-              <Route
-                path={"/Voucher/uservoucher/:id"}
-                element={<VoucherListUser />}
-              />
+              <Route path={"/Voucher/uservoucher/:id"} element={<VoucherListUser />} />
 
               <Route path={"/edittutorial/:id"} element={<EditTutorial />} />
               <Route path={"/register"} element={<Register />} />
@@ -382,6 +379,7 @@ function App() {
               <Route path="/password_current" element={<Password_Current />} />
               <Route path="/password_change" element={<Password_Change />} />
               <Route path="/userProfile" element={<Userprofile />} />
+              <Route path="/memberpurchase" element={<MemberPurchase />} />
 
               <Route path={"/profile"} element={<Profile />} />
               <Route path={"/Event/add_event"} element={<EventAdd />} />
