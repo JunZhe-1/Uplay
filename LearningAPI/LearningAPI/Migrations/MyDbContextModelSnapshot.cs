@@ -19,6 +19,38 @@ namespace LearningAPI.Migrations
                 .HasAnnotation("ProductVersion", "7.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("LearningAPI.Models.Cart", b =>
+                {
+                    b.Property<int>("Cart_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "Cart_ID");
+
+                    b.Property<DateTime>("Booking_Date")
+                        .HasColumnType("datetime")
+                        .HasAnnotation("Relational:JsonPropertyName", "Booking_Date");
+
+                    b.Property<int>("Booking_Quantity")
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "Booking_Quantity");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("Event_ID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Cart_ID");
+
+                    b.ToTable("Carts");
+                });
+
             modelBuilder.Entity("LearningAPI.Models.Event", b =>
                 {
                     b.Property<int>("Event_ID")

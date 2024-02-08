@@ -36,7 +36,7 @@
 
 
 .AppBar2 button {
-    color: #E6533F;
+    /* color: #E6533F; */
     text-decoration: none;
     margin-right: 30px;
     border-radius: 10px;
@@ -48,7 +48,7 @@
     .AppBar2 button:hover {
         background-color: #E6533F;
         color: white;
-        transform: scale(1.1);
+        /* transform: scale(1.1); */
     }
 
 .AppBar2 Button {
@@ -61,7 +61,7 @@
 
 
 .AppBar3 button {
-    color: #E6533F;
+    /* color: #E6533F; */
     text-decoration: none;
     margin-right: 10px;
     border-radius: 10px;
@@ -73,9 +73,15 @@
     .AppBar3 button:hover {
         background-color: #E6533F;
         color: white;
-        transform: scale(1.1);
+        /* transform: scale(1.1); */
     }
 
 .AppBar3 Button {
     margin-left: 3px;
+}
+
+
+.custom-link {
+  text-decoration: none;
+  /* Add other styles as needed */
 }

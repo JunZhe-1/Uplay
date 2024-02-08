@@ -10,7 +10,7 @@ using System.Diagnostics.Tracing;
 using System.Security.Claims;
 using System.Security.Cryptography;
 
-namespace LearningAPI.COntrollers
+namespace LearningAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]

@@ -32,5 +32,6 @@ namespace LearningAPI.Models
 
         [JsonIgnore]
         public Member? Member { get; set; }
+
     }
 }

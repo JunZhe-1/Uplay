@@ -64,14 +64,14 @@ function Password_Change() {
         initialValues: Getpassword,
         enableReinitialize: true,
         validationSchema: yup.object({
-            password: yup.string().trim()
-                .min(8, 'Password must be at least 8 characters')
-                .max(250, 'Password must be at most 50 characters')
-                .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, "At least 1 letter and 1 number"),
+            password: yup.string().trim(),
+                // .min(8, 'Password must be at least 8 characters')
+                // .max(250, 'Password must be at most 50 characters')
+                // .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, "At least 1 letter and 1 number"),
             confirmPassword: yup.string().trim()
-                .min(8, 'Password must be at least 8 characters')
-                .max(250, 'Password must be at most 50 characters')
-                .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, "At least 1 letter and 1 number")
+                // .min(8, 'Password must be at least 8 characters')
+                // .max(250, 'Password must be at most 50 characters')
+                // .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, "At least 1 letter and 1 number")
         }),
         onSubmit: (data) => {
 
@@ -160,7 +160,7 @@ function Password_Change() {
         }}>
             <Box sx={{ width: '63vh', height: '27.5vh', padding: '17vh', border: '1px solid black', background: '#FCFCFC', borderRadius: '10px' }}>
                 <form onSubmit={formik.handleSubmit}>
-                    <Typography sx={{ marginLeft: '-15vh', marginTop: '-15vh' }}><ArrowBackIcon /></Typography>
+                <Typography sx={{ marginLeft: '-15vh', marginTop: '-15vh' , cursor:'pointer'}} onClick={() => navigate('/profile')} ><ArrowBackIcon /></Typography>
 
                     <Typography sx={{ my: 2, color: 'black', fontWeight: '600', textAlign: 'center', fontSize: '32px', padding: '0 0 2vh 0' }}>Enter Your New Password</Typography>
                     <TextField
