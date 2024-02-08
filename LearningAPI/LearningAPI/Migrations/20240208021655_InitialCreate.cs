@@ -67,6 +67,7 @@ namespace LearningAPI.Migrations
                     EmailAddress = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
                     Password = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false),
                     UserName = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false),
+                    ImageFile = table.Column<string>(type: "longtext", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
