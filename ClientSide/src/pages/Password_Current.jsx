@@ -55,7 +55,7 @@ function Password_Current() {
     }, []);
     const handleSubmit = async (data) => {
         const newRefex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}/;
-
+console.log("enter");
         if (data.oldpassword.trim() === "") {
             SetError(false);
             SetErrorMSg("password is required");
@@ -91,9 +91,9 @@ function Password_Current() {
         },
         validationSchema: yup.object({
             oldpassword: yup.string().trim()
-                .min(8, 'Password must be at least 8 characters')
-                .max(250, 'Password must be at most 50 characters')
-                .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, "At least 1 letter and 1 number"),
+                // .min(8, 'Password must be at least 8 characters')
+                // .max(250, 'Password must be at most 50 characters')
+                // .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, "At least 1 letter and 1 number"),
                 // .min(8, 'Password must be at least 8 characters')
                 // .max(50, 'Password must be at most 50 characters')
                 // .required('Password is required'),
@@ -118,7 +118,7 @@ function Password_Current() {
                 <form onSubmit={formik.handleSubmit}>
                     <Typography sx={{ marginLeft: '-15vh', marginTop: '-15vh' , cursor:'pointer'}} onClick={() => navigate('/profile')} ><ArrowBackIcon /></Typography>
 
-                    <Typography sx={{ my: 2, color: 'black', fontWeight: '600', textAlign: 'center', fontSize: '32px', padding: '0 0 2vh 0' }}>Enter Your Current Password</Typography>
+                    <Typography sx={{ my: 2, color: 'black', fontWeight: '600', textAlign: 'center', fontSize: '28px', padding: '0 0 2vh 0' }}>Enter Your Current Password</Typography>
                     <TextField
                         fullWidth
                         label="Old password"
@@ -133,15 +133,15 @@ function Password_Current() {
                         onBlur={formik.handleBlur}
                         error={formik.touched.oldpassword && Boolean(formik.errors.oldpassword)}
                         helperText={formik.touched.oldpassword && formik.errors.oldpassword}
-                        InputLabelProps={{ style: { marginTop: '5px' } }} // Adjust marginTop here
-                        style={{ marginBottom: '10px' }} // Adjust spacing here
+                        InputLabelProps={{ style: { marginTop: '5px' } }} 
+                        style={{ marginBottom: '10px' }} 
                     />
    {GetError === false ? (
                         <Typography sx={{ color: 'red' }}>{ErrorMsg}</Typography>
                     ) : (
                         <Typography sx={{ visibility: 'hidden' }}>Correct Password</Typography>
                     )}
-                    <Box sx={{ mt: 2, padding: '3vh 0 0vh 0', minHeight: '2rem' }}>
+                    <Box sx={{ mt: 2, padding: '2vh 0 0vh 0', minHeight: '2rem' }}>
                         <Button variant="contained" type="submit" style={{ width: '100%', padding: '8px', fontSize: '15px', background: '#f4511e' }}>
                             CONFIRM
                         </Button>

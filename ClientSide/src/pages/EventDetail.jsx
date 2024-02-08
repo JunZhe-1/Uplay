@@ -19,7 +19,6 @@ import Rating from 'react-rating-stars-component';
 function EventDetail() {
     const { id } = useParams();
     const [reviewSuccess, setReviewSuccess] = useState(null);
-
     const [imageFile, setimageFile] = useState(null);
     const { user } = useContext(UserContext);
     const [EventDetail, setEvent] = useState({
@@ -269,10 +268,11 @@ function EventDetail() {
                     </TableCell>
                   </Box>
                   <br />
-                  <Link to={"/Cart/adduser" }state = {{event_ID: EventDetail.Event_ID, userId: user.userId}}>
+                  <Link sx={{textDecoration:"none"}}   className="custom-link"
+ to={"/Cart/adduser" }state = {{event_ID: EventDetail.Event_ID, userId: user.userId}}>
                     <Typography
                       variant="h5"
-                      sx={{
+                      sx={{ textDecoration:"none",
                         cursor:
                           new Date(EventDetail.Event_Launching_Date) >
                           new Date()

@@ -27,6 +27,7 @@ function EventClientSide() {
         });
     };
 
+    const [categoryname, setcategoryname] = useState("all");
 
 
     useEffect(() => {
@@ -35,10 +36,12 @@ function EventClientSide() {
 
     const filterEvent = (i) => {
         console.log(i);
+        setcategoryname(i);
         if (i) {
             const now = new Date();
             if (i == "all") {
                 filterEvent(null);
+                setcategoryname("all");
             }
             else if (i == "upcoming") {
                 const selectedEvents = EventList.filter((x) => {
@@ -48,13 +51,13 @@ function EventClientSide() {
                     return comparisonResult;
                 });
                 setEventBackup(selectedEvents);
+
             }
 
             else {
                 const selectedEvents = EventList.filter((x) => {
                     const eventLaunchingDate = new Date(x.Event_Launching_Date);
                     const comparisonResult = i === x.Event_Category && now >= eventLaunchingDate;
-
                     return comparisonResult;
                 });
                 setEventBackup(selectedEvents);
@@ -140,31 +143,106 @@ function EventClientSide() {
             <AppBar position="static" className="AppBar3" style={{ backgroundColor: 'white', padding: '0 0 6vh 0' }} elevation={0}>
                 <Container maxWidth="xl">
                     <Toolbar disableGutters={true} style={{ whiteSpace: 'nowrap' }}>
-                        <Button onClick={() => filterEvent('all')} sx={{ color: '#E6533F', margin: '0 10px 0 0', borderRadius: '10px', border: 'solid 2px #E6533F', padding: '8px 20px', transition: 'transform 0.3s ease-in-out' }}>
-                            All Categories
+                    <Button
+  onClick={() => filterEvent('all')}
+  sx={{
+    backgroundColor: categoryname === "all" ? "#E6533F" : "white",
+    color: categoryname === "all" ? "white" : "#E6533F",
+    transform: categoryname === "all" ? "scale(1)" : "scale(1)",
+    margin: '0 10px 0 0',
+    borderRadius: '10px',
+    border: 'solid 2px #E6533F',
+    padding: '8px 20px',
+    transition: 'transform 0.3s ease-in-out',
+    '&:hover': {
+        transform: categoryname === "all" ? "scale(1)" : "scale(1.07)", 
+      } }}>
+  All Categories
+</Button>
+
+
+                        <Button onClick={() => filterEvent('upcoming')} sx={{ 
+                            backgroundColor: categoryname === "upcoming" ? "#E6533F" : "white",
+    color: categoryname === "upcoming" ? "white" : "#E6533F",
+    transform: categoryname === "upcoming" ? "scale(1)" : "scale(1)",
+    margin: '0 10px 0 0',
+    borderRadius: '10px',
+    border: 'solid 2px #E6533F',
+    padding: '8px 20px',
+    transition: 'transform 0.3s ease-in-out',
+    '&:hover': {
+        transform: categoryname === "UpComing" ? "scale(1)" : "scale(1.07)", 
+      } }}>
+                            UpComing
                         </Button>
 
-                        <Button onClick={() => filterEvent('upcoming')} sx={{ color: '#E6533F', margin: '0 30px 0 0', borderRadius: '10px', border: 'solid 2px #E6533F', padding: '8px 20px', transition: 'transform 0.3s ease-in-out' }}>
-                            Up Coming
-                        </Button>
-
-                        <Button onClick={() => filterEvent('Dine & Wine')} sx={{ color: '#E6533F', margin: '0 30px 0 0', borderRadius: '10px', border: 'solid 2px #E6533F', padding: '8px 20px', transition: 'transform 0.3s ease-in-out' }}>
+                        <Button onClick={() => filterEvent('Dine & Wine')} sx={{  backgroundColor: categoryname === "Dine & Wine" ? "#E6533F" : "white",
+    color: categoryname === "Dine & Wine" ? "white" : "#E6533F",
+    transform: categoryname === "Dine & Wine" ? "scale(1)" : "scale(1)",
+    margin: '0 10px 0 0',
+    borderRadius: '10px',
+    border: 'solid 2px #E6533F',
+    padding: '8px 20px',
+    transition: 'transform 0.3s ease-in-out',
+    '&:hover': {
+        transform: categoryname === "Dine & Wine" ? "scale(1)" : "scale(1.07)", 
+      } }}>
                             Dine & Wine
                         </Button>
 
-                        <Button onClick={() => filterEvent('Family Bonding')} sx={{ color: '#E6533F', margin: '0 30px 0 0', borderRadius: '10px', border: 'solid 2px #E6533F', padding: '8px 20px', transition: 'transform 0.3s ease-in-out' }}>
+                        <Button onClick={() => filterEvent('Family Bonding')} sx={{  backgroundColor: categoryname === "Family Bonding" ? "#E6533F" : "white",
+    color: categoryname === "Family Bonding" ? "white" : "#E6533F",
+    transform: categoryname === "Family Bonding" ? "scale(1)" : "scale(1)",
+    margin: '0 10px 0 0',
+    borderRadius: '10px',
+    border: 'solid 2px #E6533F',
+    padding: '8px 20px',
+    transition: 'transform 0.3s ease-in-out', 
+    '&:hover': {
+        transform: categoryname === "Family Bonding" ? "scale(1)" : "scale(1.07)", 
+      } }}>
                             Family Bonding
                         </Button>
 
-                        <Button onClick={() => filterEvent('Hobbies & Wellness')} sx={{ color: '#E6533F', margin: '0 30px 0 0', borderRadius: '10px', border: 'solid 2px #E6533F', padding: '8px 20px', transition: 'transform 0.3s ease-in-out' }}>
+                        <Button onClick={() => filterEvent('Hobbies & Wellness')} sx={{  backgroundColor: categoryname === "Hobbies & Wellness" ? "#E6533F" : "white",
+    color: categoryname === "Hobbies & Wellness" ? "white" : "#E6533F",
+    transform: categoryname === "Hobbies & Wellness" ? "scale(1)" : "scale(1)",
+    margin: '0 10px 0 0',
+    borderRadius: '10px',
+    border: 'solid 2px #E6533F',
+    padding: '8px 20px',
+    transition: 'transform 0.3s ease-in-out', 
+    '&:hover': {
+        transform: categoryname === "Hobbies & Wellness" ? "scale(1)" : "scale(1.07)", 
+      } }}>
                             Hobbies & Wellness
                         </Button>
 
-                        <Button onClick={() => filterEvent('Sports & Wellness')} sx={{ color: '#E6533F', margin: '0 30px 0 0', borderRadius: '10px', border: 'solid 2px #E6533F', padding: '8px 20px', transition: 'transform 0.3s ease-in-out' }}>
+                        <Button onClick={() => filterEvent('Sports & Wellness')} sx={{  backgroundColor: categoryname === "Sports & Wellness" ? "#E6533F" : "white",
+    color: categoryname === "Sports & Wellness" ? "white" : "#E6533F",
+    transform: categoryname === "Sports & Wellness" ? "scale(1)" : "scale(1)",
+    margin: '0 10px 0 0',
+    borderRadius: '10px',
+    border: 'solid 2px #E6533F',
+    padding: '8px 20px',
+    transition: 'transform 0.3s ease-in-out', 
+    '&:hover': {
+        transform: categoryname === "Sports & Wellness" ? "scale(1)" : "scale(1.07)", 
+      } }}>
                             Sports & Wellness
                         </Button>
 
-                        <Button onClick={() => filterEvent('Travel')} sx={{ color: '#E6533F', margin: '0 30px 0 0', borderRadius: '10px', border: 'solid 2px #E6533F', padding: '8px 20px', transition: 'transform 0.3s ease-in-out' }}>
+                        <Button onClick={() => filterEvent('Travel')} sx={{  backgroundColor: categoryname === "Travel" ? "#E6533F" : "white",
+    color: categoryname === "Travel" ? "white" : "#E6533F",
+    transform: categoryname === "Travel" ? "scale(1)" : "scale(1)",
+    margin: '0 10px 0 0',
+    borderRadius: '10px',
+    border: 'solid 2px #E6533F',
+    padding: '8px 20px',
+    transition: 'transform 0.3s ease-in-out',
+    '&:hover': {
+        transform: categoryname === "Travel" ? "scale(1)" : "scale(1.07)", 
+      } }}>
                             Travel
                         </Button>
                     </Toolbar>
