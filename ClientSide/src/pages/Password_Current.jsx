@@ -55,8 +55,11 @@ function Password_Current() {
     }, []);
     const handleSubmit = async (data) => {
         const newRefex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}/;
-console.log("enter");
-        if (data.oldpassword.trim() === "") {
+
+
+        if (data.oldpassword.trim() === "" ) {
+            console.log("enter");
+
             SetError(false);
             SetErrorMSg("password is required");
             return;
@@ -86,7 +89,7 @@ console.log("enter");
     };
     const formik = useFormik({
         initialValues: {
-            password: ""
+            oldpassword: ""
            
         },
         validationSchema: yup.object({
