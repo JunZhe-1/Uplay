@@ -18,7 +18,62 @@ import UserContext from '../contexts/UserContext';
 
 function MemberPurchase()
 {
+    const [user, setUser] = useState(null);
+    const [defaultName, setDefaultName] = useState("");
+    const [defaultNRIC, setDefaultNRIC] = useState("");
+    const [defaultMemberStatus, setDefaultMemberStatus] = useState("");
+    const [defaultDateOfBirth, setDefaultDateOfBirth] = useState("");
+    const [formSubmitted, setFormSubmitted] = useState(false); // State to track form submission
+    const navigate = useNavigate();
 
+
+    const formik = useFormik({
+        initialValues: {
+            name: '',
+            nric: '',
+            dob: '',
+            memberStatus: '',
+            
+        },
+        validationSchema: yup.object({
+            years: yup.number().oneOf([1, 2, 3], 'Please select a valid number of years').required('Years is required'),
+        }),
+        onSubmit: (data) => {
+            // Move the form submission logic here
+            data.name = defaultName;
+            data.nric = defaultNRIC;
+            data.memberStatus = defaultMemberStatus
+            data.dob = defaultDateOfBirth
+            http.post("/Member", data, 2)
+                .then((res) => {
+                    console.log(res.data);
+                    navigate("/profile");
+                    localStorage.removeItem("memberStatus")
+                    localStorage.setItem("memberStatus", "NTUC")
+                });
+        }
+    });
+
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await http.get('/UplayUser/auth');
+                setUser(response.data.user);
+                setDefaultName(localStorage.getItem("name"));
+                setDefaultNRIC(localStorage.getItem("nric"));
+                setDefaultMemberStatus(localStorage.getItem("memstate"));
+                setDefaultDateOfBirth(localStorage.getItem("dob"));
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            }
+        };
+
+        if (localStorage.getItem('accessToken')) {
+            fetchUser();
+        }
+    }, []);
+    
 
 return (
    
@@ -174,8 +229,8 @@ return (
 
 
        
-            </Box>
-
+        </Box>
+      
 </Box>
 );
 }

@@ -51,7 +51,7 @@ function BuyMember() {
                 .matches(/^\d{3}[a-zA-Z]$/, 'Invalid NRIC format')
                 .required('NRIC is required'),
             dob: yup.date().required('Date of Birth is required'),
-            years: yup.number().oneOf([1, 2, 3], 'Please select a valid number of years').required('Years is required'),
+
             
 
         }),
@@ -62,10 +62,14 @@ function BuyMember() {
             data.memberStatus = "NTUC";
             const dobDate = new Date(data.dob);
             const formattedDateOfBirth = dobDate.toISOString().split('T')[0];
-
             // Assign the formatted date to the data.dateOfBirth property
             data.dateOfBirth = formattedDateOfBirth;
+            localStorage.setItem("name", data.name);
+            localStorage.setItem("nric", data.nric);
+            localStorage.setItem("memstate", data.memberStatus)
+            localStorage.setItem("dob", data.dateOfBirth)   
             console.log(data)
+            navigate("/memberpurchase")
             http.post("/Member", data,2)
                 .then((res) => {
                     console.log(res.data);
@@ -176,19 +180,6 @@ function BuyMember() {
             <Typography variant="h6" style={{ fontSize: '23px', marginTop: '20px' }}>
                 No. of years to subscribe:
             </Typography>
-            <Select
-                label="Years"
-                name="years"
-                value={formik.values.years}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.years && Boolean(formik.errors.years)}
-                style={{ marginBottom: '10px' }}
-            >
-                <MenuItem value={1}>1</MenuItem>
-                <MenuItem value={2}>2</MenuItem>
-                <MenuItem value={3}>3</MenuItem>
-            </Select>
              
             
              <Button variant="contained" color="primary" style={{ marginTop: '20px' }} type="submit">
