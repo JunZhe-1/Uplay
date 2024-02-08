@@ -82,6 +82,9 @@ function Profiles()
           
             data.userName = data.userName.trim();
             data.emailAddress = data.emailAddress.trim().toLowerCase();
+            if (imageFile) {
+                data.imageFile = imageFile
+            }
             
             console.log(data)
             http.put(`/UplayUser/${user1.userId}`, data)
@@ -189,7 +192,8 @@ function Profiles()
 <Box>
   <Box sx={{ display: 'flex', flexDirection: 'column', marginTop: '0vh', position: 'relative', left: '-10px' }}>
     <Box sx={{padding:'29px'}}>
- <Box style={{ width: '7%', marginTop: '2vh', marginLeft: '-13.5vh', cursor: 'pointer', position: 'relative' }}>
+                    <Box style={{ width: '7%', marginTop: '2vh', marginLeft: '-13.5vh', cursor: 'pointer', position: 'relative' }}>
+                        <form onSubmit={formik.handleSubmit}>
   <Button
     variant="contained"
     component="label"
@@ -221,7 +225,8 @@ function Profiles()
         borderRadius: '70%',
       }}
     />
-  </Button>
+                            </Button>
+                        </form>
 </Box>
 
      <Typography sx={{ fontSize: '20px', marginLeft: '-2vh', fontWeight: 'bold', marginTop: '-6vh' }}>
@@ -284,7 +289,7 @@ function Profiles()
       </>
     ) : (
       <Typography variant="h6" style={{ marginTop: '3vh', fontSize: '18px', marginLeft: '1vh' }}>
-                                <p>Not a member yet? Click here to join <span ><Link to="/buymember" style={{ color: '#f4511e', fontWeight: 'bold' }}>Uplay</Link> or <Link onClick={handleNavigate} style={{ color: 'blue', fontWeight: 'bold' }}>NTUC</Link></span></p>
+                                <p>Not a member yet? Click here to join <span ><Link to="/Event/EventClientSide" style={{ color: '#f4511e', fontWeight: 'bold' }}>Uplay</Link> or <Link Link to="/buymember" style={{ color: 'blue', fontWeight: 'bold' }}>NTUC</Link></span></p>
       </Typography>
     )}
 

@@ -143,6 +143,19 @@ namespace LearningAPI.Controllers
                     user.Password = passwordHash;
                 }
             }
+            if (!string.IsNullOrEmpty(uplayuser.ImageFile))
+            {
+                if (uplayuser.ImageFile.Trim().Length < 8)
+                {
+                    // Handle validation error for password length, if needed
+                    return Ok("Set all except password");
+                }
+                else
+                {
+                   
+                    user.ImageFile = uplayuser.ImageFile;
+                }
+            }
             _context.SaveChanges();
 
             return Ok(user);
