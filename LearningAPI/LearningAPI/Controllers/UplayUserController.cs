@@ -117,6 +117,36 @@ namespace LearningAPI.Controllers
             }
         }
 
+
+        [HttpPut("image/{id}")]
+        public IActionResult UpdateImage(int id, [FromBody] string ImageFileName)
+        {
+            var user = _context.UplayUsers.Find(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (string.IsNullOrEmpty(ImageFileName))
+            {
+                return BadRequest(new { message = "Image file name cannot be empty" });
+            }
+
+            user.ImageFile = ImageFileName;
+            user.EmailAddress = user.EmailAddress;
+            user.Password = user.Password;
+            user.UserName   = user.UserName;
+            user.CreatedAt = user.CreatedAt;
+            user.UpdatedAt = DateTime.Now;
+
+
+            _context.SaveChanges();
+
+            return Ok(user); // Return the updated user object if needed
+        }
+
+
         [HttpPut("{id}")]
         public IActionResult UpdateUplayUser(int id, UpdateUplayUserRequest uplayuser)
         {

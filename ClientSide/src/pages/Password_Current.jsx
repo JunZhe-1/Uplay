@@ -111,14 +111,14 @@ function Password_Current() {
 
 
     return (
-        <Box sx={{
+        <Box  sx={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
             height: '75vh',
             position: 'relative',
-        }}>
+        }} >
             <Box sx={{ width: '62vh', height: '15vh', padding: '17vh', border: '1px solid black', background: '#FCFCFC', borderRadius: '10px' }}>
                 <form onSubmit={formik.handleSubmit}>
                     <Typography sx={{ marginLeft: '-15vh', marginTop: '-15vh' , cursor:'pointer'}} onClick={() => navigate('/profile')} ><ArrowBackIcon /></Typography>
@@ -146,11 +146,26 @@ function Password_Current() {
                     ) : (
                         <Typography sx={{ visibility: 'hidden' }}>Correct Password</Typography>
                     )}
-                    <Box sx={{ mt: 2, padding: '2vh 0 0vh 0', minHeight: '2rem' }}>
-                        <Button variant="contained" type="submit" style={{ width: '100%', padding: '8px', fontSize: '15px', background: '#f4511e' }}>
-                            CONFIRM
-                        </Button>
-                    </Box>
+                  <Box sx={{ mt: 2, padding: '2vh 0 0vh 0', minHeight: '2rem' }}>
+                  <Button
+  variant="contained"
+  type="submit"
+  sx={{
+    width: '100%',
+    padding: '8px',
+    fontSize: '15px',
+    background: '#f4511e',
+    '&:hover': {
+     color:'white',
+     background:'#c2380f'
+    },
+  }}
+>
+  CONFIRM
+</Button>
+
+</Box>
+
 
               
                 </form>

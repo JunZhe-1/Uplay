@@ -15,6 +15,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UserContext from '../contexts/UserContext';
 import Rating from 'react-rating-stars-component';
+import { ContactSupport } from '@mui/icons-material';
 
 function EventDetail() {
     const { id } = useParams();
@@ -61,7 +62,7 @@ function EventDetail() {
         validationSchema: yup.object({
             Event_Review: yup.string().trim()
                 .min(3, 'Event review must be at least 3 characters')
-                .max(50, 'Event review must be below 50 characters for user conciseness.'),
+                .max(500, 'Event review must be below 50 characters for user conciseness.'),
             Rating: yup.number()
                 .min(1, 'Rating cannot be below 1')
                 .max(5, 'Rating cannot be above 5')
@@ -79,10 +80,13 @@ function EventDetail() {
             console.log(event);
             http.post("Event/review", event)
                 .then((res) => {
+                  console.log("enter")
                     setReviewSuccess(true);
                     getReview();
                     formik.setFieldValue('Event_Review', '');
                     formik.setFieldValue('Rating', 0);
+
+
 
 
                 })
@@ -426,13 +430,33 @@ function EventDetail() {
             </TableBody>
           </TableContainer>
 
+
+<br />
+<Box ><Typography variant='h4' style={{ color: "#E6533F", marginTop: "3vh", fontWeight:'bold' }}>User Reviews</Typography>
+<Box sx={{textAlign:"right", marginTop:'-6vh'}}> <Select
+                      name="Sort"
+                      value={formik.values.Sort}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={formik.touched.Sort && Boolean(formik.errors.Sort)}
+                      style={{ marginBottom: "10px", marginLeft: "auto" }}
+                    >
+                      <MenuItem value={"htl"}>
+                        Highest rating to Lowest
+                      </MenuItem>
+                      <MenuItem value={"lth"}>
+                        Lowest rating to highest
+                      </MenuItem>
+                      <MenuItem value={"nto"}>Newest to Oldest</MenuItem>
+                    </Select></Box></Box>
+
+
           <TableContainer style={{ height: "800px", marginTop: "9vh" }}>
             <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                {" "}
+              {/* <TableHead>
                 <TableRow>
+                  <TableCell><Typography variant='h4' style={{ color: "#E6533F", marginTop: "3vh", fontWeight:'bold' }}>User Reviews</Typography></TableCell>
                   <TableCell style={{ textAlign: "right" }}>
-                    {/*<InputLabel htmlFor="sort">Sort</InputLabel>*/}
 
                     <Select
                       name="Sort"
@@ -452,14 +476,14 @@ function EventDetail() {
                     </Select>
                   </TableCell>
                 </TableRow>
-              </TableHead>
+              </TableHead> */}
               <TableBody>
                 {rows
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
                     <TableRow hover role="checkbox" tabIndex={-1} key={row.no}>
                       <TableCell colSpan={3}>
-                        <Box style={{ width: "6%", marginTop: "2vh" }}>
+                        <Box style={{ width: "5%", marginTop: "0vh" }}>
                           <img
                             alt="data"
                             src={`/image/dp/${
@@ -467,9 +491,9 @@ function EventDetail() {
                             }.png`}
                             style={{
                               width: "100%",
-                              height: "9vh",
+                              height: "7.2vh",
                               objectFit: "cover",
-                              borderRadius: "70%",
+                              borderRadius: "100%",
                             }}
                           />
                         </Box>
@@ -481,12 +505,12 @@ function EventDetail() {
                         <Rating
                           value={parseFloat(row["rating"])}
                           readOnly
-                          size={36}
+                          size={20}
                           precision={1}
                           edit={false}
                         />
                         <br />
-                        <span style={{ fontSize: "14px" }}>
+                        <span style={{ fontSize: "16px" }}>
                           {row["eventReview"]}
                         </span>
                       </TableCell>

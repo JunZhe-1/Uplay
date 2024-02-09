@@ -200,7 +200,19 @@ function Password_Change() {
                     )}
 
                     <Box sx={{ mt: 2, padding: '2vh 0 0vh 0' }}>
-                        <Button variant="contained" type="submit" style={{ width: '100%', padding: '8px', fontSize: '15px', background: '#f4511e' }}>
+                        <Button  variant="contained"
+  type="submit"
+  sx={{
+    width: '100%',
+    padding: '8px',
+    fontSize: '15px',
+    background: '#f4511e',
+    '&:hover': {
+     color:'white',
+     background:'#c2380f'
+    },
+  }}
+>
                             CONFIRM
                         </Button>
                     </Box>
