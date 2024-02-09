@@ -15,10 +15,10 @@ import ContactMailIcon from '@mui/icons-material/ContactMail';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import UserContext from '../contexts/UserContext';
-
+  
 function MemberPurchase()
 {
-    const [user, setUser] = useState(null);
+const [user, setUser] = useState(null);
     const [defaultName, setDefaultName] = useState("");
     const [defaultNRIC, setDefaultNRIC] = useState("");
     const [defaultMemberStatus, setDefaultMemberStatus] = useState("");
@@ -73,7 +73,7 @@ function MemberPurchase()
             fetchUser();
         }
     }, []);
-    
+
 
 return (
    
@@ -191,7 +191,7 @@ return (
         //   border:'2px solid red'
         }}
       >
-        <Box sx={{border:'black solid 1px',padding:'0 0 0px 0', cursor:'pointer'}}>
+        <Box sx={{border:'black solid 1px',padding:'0 0 0px 0', cursor:'pointer'}} onc>
         <Box
           width={0}
           height={0}
@@ -229,8 +229,8 @@ return (
 
 
        
-        </Box>
-      
+            </Box>
+
 </Box>
 );
 }

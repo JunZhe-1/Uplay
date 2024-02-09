@@ -36,7 +36,7 @@ function Login() {
                 .then((res) => {
                     localStorage.setItem("accessToken", res.data.accessToken);
                     setUser(res.data.user);
-                    console.log(res.data.uplayuser);
+                    console.log(res.data);
                     var id = res.data.uplayuser.userId
                     console.log(id)
                     try {
@@ -114,7 +114,7 @@ function Login() {
                     error={formik.touched.password && Boolean(formik.errors.password)}
                     helperText={formik.touched.password && formik.errors.password}
                 />
-                <Button fullWidth variant="contained" sx={{ mt: 2 , background:'#f4511e', color:'white', fontWeight:'bold'}}
+                <Button fullWidth variant="contained" sx={{ mt: 2 , background: '#f4511e' , color:'white', fontWeight:'bold'}}
                     type="submit">
                     Login
                 </Button>

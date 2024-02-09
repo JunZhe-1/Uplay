@@ -19,7 +19,7 @@ function Profiles()
     const [profileList, setProfileList] = useState([]);
     const { user } = useContext(UserContext);
 
-
+console.log(user);
     const [user1, setUser1] = useState(null);
 
     const [getedit, setedit] = useState(true);
@@ -30,7 +30,6 @@ function Profiles()
     const [membername, setmembername] = useState(null);
     const [membernric, setmembernric] = useState(null);
     const navigate = useNavigate();
-
     useEffect(() => {
         const fetchUser = async () => {
             try {
@@ -47,10 +46,12 @@ function Profiles()
         }
     }, []);
 
+console.log(profileList.userName);
+
     const formik = useFormik({
         initialValues: {
-            userName: profileList.userName,
-            emailAddress: profileList.emailAddress,
+            userName:"",
+            emailAddress: "",
             // password: "",
             // oldpassword:""
 
@@ -75,10 +76,6 @@ function Profiles()
 
         }),
         onSubmit: async (data) => {
-
-
-          console.log("enter");
-
           
             data.userName = data.userName.trim();
             data.emailAddress = data.emailAddress.trim().toLowerCase();
@@ -99,9 +96,13 @@ function Profiles()
         }
     });
 
-    useEffect(() => {
 
-        if (user1) {
+
+    console.log('Formik Values:', formik.values);
+
+
+    useEffect(() => {
+        if (user) {
             const getProfile = async () => {
                 try {
                     const response = await http.get(`/UplayUser/${user.userId}`);
@@ -111,6 +112,8 @@ function Profiles()
                         userName: response.data.userName,
                         emailAddress: response.data.emailAddress
                     });
+                    setImageFile(response.data.imageFile);
+
                 } catch (error) {
                     console.error('Error fetching user profile:', error);
                 }
@@ -155,10 +158,15 @@ function Profiles()
 
 
 
+    console.log(formik);
 
 
     const [imageFile, setImageFile] = useState(null);
-
+    
+    const formik1 = useFormik({
+      initialValues: {
+        ImageFile: ""
+      }});
 
     const onFileChange = (e) => {
       let file = e.target.files[0];
@@ -170,23 +178,41 @@ function Profiles()
 
           let formData = new FormData();
           formData.append('file', file);
+          
           http.post('/file/upload', formData, {
               headers: {
                   'Content-Type': 'multipart/form-data'
               }
           })
               .then((res) => {
-                  setImageFile(res.data.filename);
-                  
+                
+                formik1.setValues({
+                  ImageFile: "fuivhuis"
+              });
+
+
+                setImageFile(res.data.filename);
+
+
+                  http.put(`/UplayUser/image/${user.userId}`, formik1.values)
+                  .then((res) => {
+                      console.log(res.data,"hodhvuisvjoivhisuhdhushduvh");
+                  })
+                  .catch(function (err) {
+
+                    console.log(err.response.data.message);
+                    console.log(err.response.data);
+
+                })
+              
               })
               .catch(function (error) {
-                  console.log(error.response);
-                  toast.error(`${error.response.data.message}`);
+                  console.log(error);
+                  console.log(`${error.response.data.message}`);
 
               });
       }
   };
-
 
     return (
 <Box>
@@ -215,16 +241,26 @@ function Profiles()
       onChange={onFileChange}
       style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, opacity: 0 }}
     />
-    <img
+{imageFile != null ? ( <img
       alt="data"
-      src={`/image/dp/${Math.floor(Math.random() * 7) + 1}.png`}
+      src={`${import.meta.env.VITE_FILE_BASE_URL}${imageFile}`}
       style={{
         width: '100%',
         height: '10.5vh',
         objectFit: 'cover',
         borderRadius: '70%',
       }}
-    />
+    />):  <img
+    alt="data"
+    src={`/image/user.jpg`}
+    style={{
+      width: '100%',
+      height: '10.5vh',
+      objectFit: 'cover',
+      borderRadius: '70%',
+    }}
+  />}
+   
                             </Button>
                         </form>
 </Box>
