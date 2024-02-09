@@ -7,11 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace LearningAPI.Migrations
 {
     /// <inheritdoc />
-<<<<<<<< HEAD:LearningAPI/LearningAPI/Migrations/20240208034907_InitialCreate.cs
     public partial class InitialCreate : Migration
-========
-    public partial class hello : Migration
->>>>>>>> 8dbab903a19062239bdc99a46e3c13b6ae312f45:LearningAPI/LearningAPI/Migrations/20240208151118_hello.cs
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

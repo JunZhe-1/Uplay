@@ -11,13 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-<<<<<<<< HEAD:LearningAPI/LearningAPI/Migrations/20240208034907_InitialCreate.Designer.cs
-    [Migration("20240208034907_InitialCreate")]
+    [Migration("20240209015644_InitialCreate")]
     partial class InitialCreate
-========
-    [Migration("20240208151118_hello")]
-    partial class hello
->>>>>>>> 8dbab903a19062239bdc99a46e3c13b6ae312f45:LearningAPI/LearningAPI/Migrations/20240208151118_hello.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
