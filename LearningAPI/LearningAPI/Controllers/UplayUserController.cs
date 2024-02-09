@@ -119,7 +119,7 @@ namespace LearningAPI.Controllers
 
 
         [HttpPut("image/{id}")]
-        public IActionResult UpdateImage(int id, [FromBody] UplayUser uplayUser)
+        public IActionResult UpdateImage(int id, [FromBody] string ImageFileName)
         {
             var user = _context.UplayUsers.Find(id);
 
@@ -128,12 +128,12 @@ namespace LearningAPI.Controllers
                 return NotFound();
             }
 
-            if (string.IsNullOrEmpty(uplayUser.ImageFile))
+            if (string.IsNullOrEmpty(ImageFileName))
             {
                 return BadRequest(new { message = "Image file name cannot be empty" });
             }
 
-            user.ImageFile = uplayUser.ImageFile;
+            user.ImageFile = ImageFileName;
             user.EmailAddress = user.EmailAddress;
             user.Password = user.Password;
             user.UserName   = user.UserName;

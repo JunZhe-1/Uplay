@@ -163,10 +163,7 @@ console.log(profileList.userName);
 
     const [imageFile, setImageFile] = useState(null);
     
-    const formik1 = useFormik({
-      initialValues: {
-        ImageFile: ""
-      }});
+
 
     const onFileChange = (e) => {
       let file = e.target.files[0];
@@ -186,22 +183,54 @@ console.log(profileList.userName);
           })
               .then((res) => {
                 
-                formik1.setValues({
-                  ImageFile: "fuivhuis"
-              });
+               
 
 
                 setImageFile(res.data.filename);
+                const imageFileName = res.data.filename;  
 
-
-                  http.put(`/UplayUser/image/${user.userId}`, formik1.values)
+                console.log(imageFileName);
+                http.put(`/UplayUser/image/${user.userId}`, imageFileName, {
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                })
                   .then((res) => {
+                    console.log(res.data, "Update successful");
+                  })
+                  .catch(function (err) {
+                    if (err.response && err.response.status === 400 && err.response.data.errors) {
+                      console.log("Validation errors:");
+                      for (const field in err.response.data.errors) {
+                        if (err.response.data.errors.hasOwnProperty(field)) {
+                          console.log(`${field}: ${err.response.data.errors[field]}`);
+                        }
+                      }
+                    } else {
+                      console.log("Error:", err.response ? err.response.data : err.message);
+                    }
+                  });
+                
+
+                http.put(`/UplayUser/image/${user.userId}`, imageFile, {
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                })                  .then((res) => {
                       console.log(res.data,"hodhvuisvjoivhisuhdhushduvh");
                   })
                   .catch(function (err) {
 
-                    console.log(err.response.data.message);
-                    console.log(err.response.data);
+                    if (err.response && err.response.status === 400 && err.response.data.errors) {
+                      console.log("Validation errors:");
+                      for (const field in err.response.data.errors) {
+                          if (err.response.data.errors.hasOwnProperty(field)) {
+                              console.log(`${field}: ${err.response.data.errors[field]}`);
+                          }
+                      }
+                  } else {
+                      console.log("Error:", err.response ? err.response.data : err.message);
+                  }
 
                 })
               
