@@ -247,8 +247,11 @@ console.log(profileList.userName);
 <Box>
   <Box sx={{ display: 'flex', flexDirection: 'column', marginTop: '0vh', position: 'relative', left: '-10px' }}>
     <Box sx={{padding:'29px'}}>
-                    <Box style={{ width: '7%', marginTop: '2vh', marginLeft: '-13.5vh', cursor: 'pointer', position: 'relative' }}>
-                        <form onSubmit={formik.handleSubmit}>
+
+
+
+    <Box style={{ width: '7%', marginTop: '2vh', marginLeft: '-16.5vh', cursor: 'pointer', position: 'relative' }}>
+  <form onSubmit={formik.handleSubmit}>
   <Button
     variant="contained"
     component="label"
@@ -273,6 +276,8 @@ console.log(profileList.userName);
 {imageFile != null ? ( <img
       alt="data"
       src={`${import.meta.env.VITE_FILE_BASE_URL}${imageFile}`}
+      className="hover-darken" 
+
       style={{
         width: '100%',
         height: '10.5vh',
@@ -281,7 +286,9 @@ console.log(profileList.userName);
       }}
     />):  <img
     alt="data"
-    src={`/image/user.jpg`}
+    src={`/image/user.png`}
+    className="hover-darken" 
+
     style={{
       width: '100%',
       height: '10.5vh',
@@ -294,7 +301,7 @@ console.log(profileList.userName);
                         </form>
 </Box>
 
-     <Typography sx={{ fontSize: '20px', marginLeft: '-2vh', fontWeight: 'bold', marginTop: '-6vh' }}>
+     <Typography sx={{ fontSize: '20px', marginLeft: '-1vh', fontWeight: 'bold', marginTop: '-6vh' }}>
     {user.userName}
   </Typography>
   </Box>

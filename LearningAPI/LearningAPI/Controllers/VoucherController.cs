@@ -456,9 +456,19 @@ namespace LearningAPI.Controllers
 
                     }
                 }
-                IQueryable<Voucher> result = _context.Vouchers.Where(x => x.Member_Type == member.MemberStatus && x.End_Date >= now && x.Voucher_Status == true);
-                return Ok(result);
+                else if (member.MemberStatus == "NTUC")
+                {
+                    IQueryable<Voucher> result1 = _context.Vouchers.Where(x => x.End_Date >= now && x.Voucher_Status == true);
+                    return Ok(result1);
 
+                }
+            
+                    // Uplay
+                    IQueryable<Voucher> result = _context.Vouchers.Where(x => (x.Member_Type == "Guest" || x.Member_Type == member.MemberStatus )&& x.End_Date >= now && x.Voucher_Status == true);
+                    return Ok(result);
+
+                
+                //IQueryable<Voucher> result = _context.Vouchers.Where(x => x.Member_Type == member.MemberStatus && x.End_Date >= now && x.Voucher_Status == true);
 
 
             }
