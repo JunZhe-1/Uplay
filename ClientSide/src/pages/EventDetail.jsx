@@ -49,6 +49,7 @@ function EventDetail() {
     const getReview = () => {
         http.get(`/Event/getreview/${id}`).then((res) => {
             setreview(res.data);
+            console.log(res.data);  
         });
     };
 
@@ -104,6 +105,8 @@ function EventDetail() {
         { id: 'name', label: 'User', minWidth: 2 }, // Update id to 'name'
         { id: 'rating', label: 'Rating', minWidth: 2 },
         { id: 'eventReview', label: 'Event Review', minWidth: 15 },
+        { id: 'userProfile', label: 'Profile', },
+
     ];
 
     const imgno = () => {
@@ -118,16 +121,17 @@ function EventDetail() {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(4);
 
-    function createData(rating, eventReview, name) {
-        return { rating, eventReview, name };
+    function createData(rating, eventReview, name, userProfile) {
+        return { rating, eventReview, name ,userProfile};
     }
 
     const rows = reviewData.map((item) => {
         const Rating = (item.rating).toString();
         const Event_Review = item.event_Review;
         const User = item.name;
-
-        return createData(Rating, Event_Review, User);
+        const userProfile = item.userProfile;
+console.log(userProfile);
+        return createData(Rating, Event_Review, User, userProfile);
     });
     let sortedRows = rows; // Create a copy of the original rows to avoid mutating the state directly
 
@@ -522,20 +526,31 @@ function EventDetail() {
                   .map((row) => (
                     <TableRow hover role="checkbox" tabIndex={-1} key={row.no}>
                       <TableCell colSpan={3}>
-                        <Box style={{ width: "5%", marginTop: "0vh" }}>
-                          <img
-                            alt="data"
-                            src={`/image/dp/${
-                              Math.floor(Math.random() * 7) + 1
-                            }.png`}
-                            style={{
-                              width: "100%",
-                              height: "7.2vh",
-                              objectFit: "cover",
-                              borderRadius: "100%",
-                            }}
-                          />
-                        </Box>
+                      <Box style={{ width: "5%", marginTop: "0vh" }}>
+          {row["userProfile"] !==  null ? (
+            <img
+              alt="data"
+              src={`${import.meta.env.VITE_FILE_BASE_URL}${row["userProfile"]}`}
+              style={{
+                width: "100%",
+                height: "7.2vh",
+                objectFit: "cover",
+                borderRadius: "100%",
+              }}
+            />
+          ) : (
+            <img
+              alt="data"
+              src={`/image/user.png`}
+              style={{
+                width: "100%",
+                height: "7.2vh",
+                objectFit: "cover",
+                borderRadius: "100%",
+              }}
+            />
+          )}
+        </Box>
 
                         <span style={{ fontSize: "16px", fontWeight: "bold" }}>
                           {row["name"]}

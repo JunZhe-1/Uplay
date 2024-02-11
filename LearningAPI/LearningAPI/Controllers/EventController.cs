@@ -184,7 +184,13 @@ namespace LearningAPI.Controllers
                 Name = _context.UplayUsers
                             .Where(y => y.UserId == x.User_ID)
                             .Select(y => y.UserName)
-                            .FirstOrDefault()
+                            .FirstOrDefault(),
+                userProfile = _context.UplayUsers
+                            .Where(y => y.UserId == x.User_ID)
+                            .Select(y => y.ImageFile)
+                            .FirstOrDefault(),
+
+
             });
 
             return Ok(finalResult);
