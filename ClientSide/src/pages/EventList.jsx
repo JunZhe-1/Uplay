@@ -60,9 +60,14 @@ function EventList() {
         var j = !status
         console.log(j,id);
 
-        http.put(`/Event/updateStatus/${id}`, j).then((res) => {
+        http.put(`/Event/updateStatus/${id}`, j)
+        .then((res) => {
+            if (search === ""){
             console.log("update status sucessfully");
             getEventList();
+        }else{
+            searchsender();
+        }
 
         })
             .catch(function (err) {
