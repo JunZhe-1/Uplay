@@ -29,6 +29,8 @@ namespace LearningAPI.Models
 
         public int? Points { get; set; }
 
+        public int? Year { get; set; }
+
 
         [Column(TypeName = "datetime")]
         public DateTime LastSubscriptionDate { get; set; }

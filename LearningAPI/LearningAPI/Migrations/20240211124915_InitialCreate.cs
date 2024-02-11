@@ -147,6 +147,7 @@ namespace LearningAPI.Migrations
                     DateOfBirth = table.Column<DateTime>(type: "date", nullable: false),
                     MemberStatus = table.Column<string>(type: "longtext", nullable: false),
                     Points = table.Column<int>(type: "int", nullable: true),
+                    Year = table.Column<int>(type: "int", nullable: true),
                     LastSubscriptionDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     ExpiredDate = table.Column<DateTime>(type: "datetime", nullable: false)
                 },

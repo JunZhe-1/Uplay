@@ -47,6 +47,7 @@ namespace LearningAPI.Controllers
                     MemberStatus = "NTUC",
                     LastSubscriptionDate = now,
                     ExpiredDate = now.AddYears(1),
+                    Year = 1
                 };
 
                 _context.Members.Add(myMember);
@@ -81,7 +82,7 @@ namespace LearningAPI.Controllers
                     MemberStatus = member.MemberStatus.Trim(),
                     LastSubscriptionDate = now,
                     ExpiredDate = now.AddYears(member.Years),
-
+                    Year = member.Years
                     
                 };
                 _context.Members.Add(myMember);

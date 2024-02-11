@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20240209143749_InitialCreate")]
+    [Migration("20240211124915_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -155,6 +155,9 @@ namespace LearningAPI.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.Property<int?>("Points")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Year")
                         .HasColumnType("int");
 
                     b.HasKey("UserId");

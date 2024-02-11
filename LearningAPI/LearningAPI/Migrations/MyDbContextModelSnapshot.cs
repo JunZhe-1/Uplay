@@ -154,6 +154,9 @@ namespace LearningAPI.Migrations
                     b.Property<int?>("Points")
                         .HasColumnType("int");
 
+                    b.Property<int?>("Year")
+                        .HasColumnType("int");
+
                     b.HasKey("UserId");
 
                     b.ToTable("Members");
