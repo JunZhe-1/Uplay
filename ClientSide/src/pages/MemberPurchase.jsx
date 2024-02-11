@@ -14,6 +14,8 @@ import InfoIcon from '@mui/icons-material/Info';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
 import UserContext from '../contexts/UserContext';
   
 function MemberPurchase()
@@ -26,24 +28,15 @@ const [user, setUser] = useState(null);
     const [formSubmitted, setFormSubmitted] = useState(false); // State to track form submission
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const response = await http.get('/UplayUser/auth');
-                setUser(response.data.user);
-                setDefaultName(localStorage.getItem("name"));
-                setDefaultNRIC(localStorage.getItem("nric"));
-                setDefaultMemberStatus(localStorage.getItem("memstate"));
-                setDefaultDateOfBirth(localStorage.getItem("dob"));
-            } catch (error) {
-                console.error('Error fetching user:', error);
-            }
-        };
+    const [userselect, setuserselect] = useState(null);
 
-        if (localStorage.getItem('accessToken')) {
-            fetchUser();
-        }
-    }, []);
+    const userselect_member = (selected_member) =>{
+      setuserselect(selected_member);
+    }
+
+    
+
+
     const formik = useFormik({
         initialValues: {
             name: '',
@@ -80,11 +73,14 @@ return (
 <Box > 
            
 
-                  <Typography variant="h5" sx={{ my: 2, textAlign:"center" }} >
+                 
+
+{userselect === null ?(
+
+    <Box >
+    <Typography variant="h5" sx={{ my: 2, textAlign:"center" , fontWeight:'bold'}} >
                      Purchase Membership
                 </Typography>
-    <Box >
-
         <Box sx={{
         display: 'flex',
         justifyContent: 'center',
@@ -105,7 +101,7 @@ return (
         //   border:'2px solid red'
         }}
       >
-        <Box sx={{border:'black solid 1px',padding:'0 0 0px 0', cursor:'pointer'}}>
+        <Box sx={{border:'black solid 1px',padding:'0 0 0px 0', cursor:'pointer'}} onClick={() => userselect_member("basic")} >
         <Box
           width={0}
           height={0}
@@ -149,7 +145,7 @@ return (
         //   border:'2px solid red'
         }}
       >
-        <Box sx={{border:'black solid 1px',padding:'0 0 0px 0', cursor:'pointer'}}>
+        <Box sx={{border:'black solid 1px',padding:'0 0 0px 0', cursor:'pointer'}} onClick={() => userselect_member("Standard")}>
         <Box
           width={0}
           height={0}
@@ -191,7 +187,7 @@ return (
         //   border:'2px solid red'
         }}
       >
-        <Box sx={{border:'black solid 1px',padding:'0 0 0px 0', cursor:'pointer'}} onc>
+        <Box sx={{border:'black solid 1px',padding:'0 0 0px 0', cursor:'pointer'}} onClick={() => userselect_member("Premium")}>
         <Box
           width={0}
           height={0}
@@ -226,10 +222,130 @@ return (
 </Table>
         </Box>
 
+            </Box>):(
+            
 
 
-       
+
+            <Typography> <Box  sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '75vh',
+            position: 'relative',
+        }} >
+            <Box sx={{ width: '62vh', marginTop: '15vh', padding: '17vh 16vh 10vh 16vh', border: '1px solid black', background: '#FCFCFC', borderRadius: '10px' }}>
+                <form onSubmit={formik.handleSubmit}>
+                    <Typography sx={{ marginLeft: '-15vh', marginTop: '-15vh' , cursor:'pointer'}} onClick={() => setuserselect(null)} ><ArrowBackIcon /></Typography>
+
+                    <Typography sx={{ my: 2, color: 'black', fontWeight: '600', textAlign: 'center', fontSize: '28px', padding: '0 0 2vh 0' }}>{userselect} Plan</Typography>
+                  
+                  
+                    <Box sx={{ marginTop: '1vh', display: 'flex', alignItems: 'center' , marginLeft:'2vh'}}  >
+  <Box sx={{ marginRight: '1rem' }}>
+    <InputLabel sx={{color:'black'}}><b > Name:</b></InputLabel>
+  </Box>
+
+                    <TextField
+                        fullWidth
+                        label="Name"
+                        margin="normal"
+                        fullWidth
+                        margin="dense"
+                        autoComplete="off"
+                        name="name"
+                        value={formik.values.name}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={formik.touched.name && Boolean(formik.errors.name)}
+                        helperText={formik.touched.name && formik.errors.name}
+                        style={{ width: '79%' }}
+                        />
+                    
+                    </Box>
+                    
+
+                    <Box sx={{ marginTop: '1vh', display: 'flex', alignItems: 'center' , marginLeft:'3vh'}}  >
+  <Box sx={{ marginRight: '1rem' }}>
+    <InputLabel sx={{color:'black'}}><b > NRIC:</b></InputLabel>
+  </Box>
+
+                    <TextField
+                        fullWidth
+                        label="NRIC"
+                        margin="normal"
+                        fullWidth
+                        margin="dense"
+                        autoComplete="off"
+                        name="nric"
+                        value={formik.values.nric}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={formik.touched.nric && Boolean(formik.errors.nric)}
+                        helperText={formik.touched.nric && formik.errors.nric}
+                        style={{ width: '80%' }}
+                        />
+                    
+                    </Box>
+
+
+
+                    <Box sx={{ marginTop: '1vh', display: 'flex', alignItems: 'center' , marginLeft:'-6vh'}}  >
+  <Box sx={{ marginRight: '1rem' }}>
+    <InputLabel sx={{color:'black'}}><b > Date Of Birth:</b></InputLabel>
+  </Box>
+
+                    <TextField
+                        fullWidth
+                        margin="dense"
+                        autoComplete="off"
+                        label="Date of Birth"
+                        type="date"
+                        name="dob"
+                        value={formik.values.dob}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={formik.touched.dob && Boolean(formik.errors.dob)}
+                        helperText={formik.touched.dob && formik.errors.dob}
+                        InputLabelProps={{ shrink: true }}
+                        style={{ width: '70%' }}
+                        />
+                    
+                    </Box>
+                    
+
+   {/* {GetError === false ? (
+                        <Typography sx={{ color: 'red' }}>{ErrorMsg}</Typography>
+                    ) : (
+                        <Typography sx={{ visibility: 'hidden' }}>Correct Password</Typography>
+                    )} */}
+                 <Typography sx={{marginLeft:'10vh', marginTop:'1vh',visibility: 'hidden' }}>Correct Password</Typography>
+                 <Typography sx={{marginLeft:'10vh',visibility: 'hidden' }}>Correct Password</Typography>
+
+                  <Box sx={{ mt: 2, padding: '2vh 0 0vh 0', minHeight: '2rem' }}>
+                  <Button
+                        variant="contained"
+                        type="submit"
+                        sx={{
+                          width: '100%',
+                          padding: '8px',
+                          fontSize: '15px',
+                          background: '#f4511e',
+                          marginBottom:'0vh',
+                          '&:hover': {
+                          color:'white',
+                          background:'#c2380f'
+                          },
+                        }}> CONFIRM</Button>
+
+</Box>
+
+
+              
+                </form>
             </Box>
+        </Box></Typography>)}
 
 </Box>
 );

@@ -295,11 +295,11 @@ function Profiles() {
                         </form>
                     </Box>
 
-                    <Typography sx={{ fontSize: '20px', marginLeft: '-2vh', fontWeight: 'bold', marginTop: '-6vh' }}>
-                        {user.userName}
-                    </Typography>
-                </Box>
-                <Typography sx={{ marginLeft: '2vh', marginTop: '1vh', color: '#f4511e', fontWeight: 'bold' }}>Your Profile</Typography>
+     <Typography sx={{ fontSize: '20px', marginLeft: '-2vh', fontWeight: 'bold', marginTop: '-6vh' }}>
+    {user.userName}
+  </Typography>
+  </Box>
+  <Typography sx={{  marginLeft: '2vh',marginTop:'1vh' ,color:'#f4511e', fontWeight:'bold'}}>Your Profile</Typography>
 
                 <Typography onClick={() => navigate('/password_current')}
                     sx={{

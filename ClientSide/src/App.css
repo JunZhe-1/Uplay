@@ -90,3 +90,8 @@
 .appbar2 Button :hover{
         background: #c2380f;
 }
+
+.hover-darken:hover {
+    filter: brightness(0.8); /* Adjust the brightness value to control the darkness */
+  }
+  

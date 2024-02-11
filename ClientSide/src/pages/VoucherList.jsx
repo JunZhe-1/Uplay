@@ -176,7 +176,8 @@ function VoucherList() {
                                     <TableCell>{data.Voucher_Name}</TableCell>
                                         <TableCell>{dayjs.utc(data.Start_Date).format(global.datetimeFormat)}</TableCell>
                                         <TableCell>{dayjs.utc(data.End_Date).format(global.datetimeFormat)}</TableCell>
-                                        <TableCell>{data.Member_Type}</TableCell>
+                                        <TableCell>  {data.Member_Type === 'Guest' ? 'All' : data.Member_Type}
+</TableCell>
                                         <TableCell>
                                             ${data.Discount_In_Value}
                                                  
