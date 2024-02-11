@@ -22,6 +22,7 @@ function EventDetail() {
     const [reviewSuccess, setReviewSuccess] = useState(null);
     const [imageFile, setimageFile] = useState(null);
     const { user } = useContext(UserContext);
+    const [sequence, setsequence] = useState("htl");
     const [EventDetail, setEvent] = useState({
         Event_ID: "",
         Event_Name: "",
@@ -76,7 +77,7 @@ function EventDetail() {
             event.Rating = parseInt(event.Rating);
             event.User_ID = user.userId;
             event.Event_ID = EventDetail.Event_ID;
-
+            console.log(sequence);
             console.log(event);
             http.post("Event/review", event)
                 .then((res) => {
@@ -128,12 +129,46 @@ function EventDetail() {
 
         return createData(Rating, Event_Review, User);
     });
+    let sortedRows = rows; // Create a copy of the original rows to avoid mutating the state directly
 
+    switch (formik.values.Sort) {
+        case "htl":
+        case "htl": // Highest to Lowest rating
+            for (let i = 0; i < sortedRows.length - 1; i++) {
+                for (let j = 0; j < sortedRows.length - i - 1; j++) {
+                    if (sortedRows[j].rating < sortedRows[j + 1].rating) {
+                        let temp = sortedRows[j];
+                        sortedRows[j] = sortedRows[j + 1];
+                        sortedRows[j + 1] = temp;
+                    }
+                }
+            }
+            
+            break;
+        case "lth":
+            for (let i = 0; i < sortedRows.length - 1; i++) {
+                for (let j = 0; j < sortedRows.length - i - 1; j++) {
+                    if (sortedRows[j].rating > sortedRows[j + 1].rating) {
+                        let temp = sortedRows[j];
+                        sortedRows[j] = sortedRows[j + 1];
+                        sortedRows[j + 1] = temp;
+                    }
+                }
+            }
+            break;
+        case "nto":
+            // No sorting needed as we are displaying reviews in the order they were fetched
+            sortedRows.reverse()
+            break;
+        default:
+            break;
+    }
 
 
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
+
     };
 
     const handleChangeRowsPerPage = (event) => {
@@ -436,10 +471,14 @@ function EventDetail() {
 <Box sx={{textAlign:"right", marginTop:'-6vh'}}> <Select
                       name="Sort"
                       value={formik.values.Sort}
-                      onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       error={formik.touched.Sort && Boolean(formik.errors.Sort)}
                       style={{ marginBottom: "10px", marginLeft: "auto" }}
+                      onChange={(event) => {
+                            formik.handleChange(event);
+                            setsequence(event.target.value); // Update sequence state
+                          console.log(event.target.value)
+                        }}
                     >
                       <MenuItem value={"htl"}>
                         Highest rating to Lowest
@@ -478,7 +517,7 @@ function EventDetail() {
                 </TableRow>
               </TableHead> */}
               <TableBody>
-                {rows
+                {sortedRows
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
                     <TableRow hover role="checkbox" tabIndex={-1} key={row.no}>
