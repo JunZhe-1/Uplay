@@ -44,12 +44,17 @@ function VoucherList() {
     const toggleSearchInput = (id) => {
     
 
-        http.put(`/Voucher/updateStatus/${id}`).then((res) => {
+        http.put(`/Voucher/updateStatus/${id}`)
+        .then((res) => {
+            if (search === ""){
             console.log("update status sucessfully");
             getVoucherList();
+            }else{
+                searchsender();
+            }
 
         })
-            .catch(function (err) {
+        .catch(function (err) {
                 toast.error(`${err.response.data.message}`);
             });
     };
