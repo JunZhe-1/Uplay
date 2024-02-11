@@ -99,22 +99,37 @@ namespace LearningAPI.Controllers
 
        
 
-    [HttpPut("{id}")]
+    [HttpPut]
 
-        public IActionResult UpdateMember(int id, Member member)
+        public IActionResult UpdateMember(int points)
         {
-            var mymember = _context.Members.Find(id);
+            try
+            {
+                int id = GetUserId();
+                var mymember = _context.Members.Find(id);
             
             if (mymember == null)
             {
                 return NotFound();
             }
             mymember.LastSubscriptionDate = DateTime.Now;
-
             mymember.ExpiredDate = mymember.ExpiredDate.AddYears(1);
+                if (mymember.Points == null)
+                {
+                    mymember.Points = points;
+                }
+                else
+                {
+                    mymember.Points = points+mymember.Points;
+                }
             _context.SaveChanges();
             return Ok(mymember);
-
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500);
+            }
         }
         [HttpPut("Set/{id}")]
 
