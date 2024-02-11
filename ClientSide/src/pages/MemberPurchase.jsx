@@ -41,19 +41,46 @@ const [user, setUser] = useState(null);
         initialValues: {
             name: '',
             nric: '',
-            dob: '',
+            dateofbirth: '',
             memberStatus: '',
+            years : 1,
+
             
         },
         validationSchema: yup.object({
-            years: yup.number().oneOf([1, 2, 3], 'Please select a valid number of years').required('Years is required'),
+            name: yup.string().trim()
+                .min(1, 'Name must be at least 3 characters')
+                .max(50, 'Name must be at most 50 characters')
+                .required('Name is required'),
+            nric: yup.string().trim()
+                .matches(/^\d{3}[a-zA-Z]$/, 'Invalid NRIC format')
+                .required('NRIC is required'),
+            dateofbirth: yup.date().required('Date of Birth is required'),
+
+
+
         }),
+
         onSubmit: (data) => {
             // Move the form submission logic here
-            data.name = defaultName;
-            data.nric = defaultNRIC;
-            data.memberStatus = defaultMemberStatus
-            data.dob = defaultDateOfBirth
+            data.name = data.name;
+            data.nric = data.nric;
+            data.memberStatus = "NTUC"
+            data.dateofbirth = data.dateofbirth
+            localStorage.removeItem("name")
+            localStorage.setItem("name", data.name);
+            localStorage.removeItem("nric")
+            localStorage.setItem("nric", data.nric);
+            localStorage.removeItem("dob")
+            localStorage.setItem("dob", data.dateofbirth)   
+            if (userselect == "Basic") {
+                data.years = 1
+            }
+            else if (userselect == "Standard") {
+                data.years = 2
+            }
+            else if (userselect == "Premium") {
+            data.years = 3}
             http.post("/Member", data)
                 .then((res) => {
                     console.log(res.data);
@@ -101,7 +128,7 @@ return (
         //   border:'2px solid red'
         }}
       >
-        <Box sx={{border:'black solid 1px',padding:'0 0 0px 0', cursor:'pointer'}} onClick={() => userselect_member("basic")} >
+        <Box sx={{border:'black solid 1px',padding:'0 0 0px 0', cursor:'pointer'}} onClick={() => userselect_member("Basic")} >
         <Box
           width={0}
           height={0}
@@ -266,9 +293,9 @@ return (
                     </Box>
                     
 
-                    <Box sx={{ marginTop: '1vh', display: 'flex', alignItems: 'center' , marginLeft:'3vh'}}  >
+                    <Box sx={{ marginTop: '1vh', display: 'flex', alignItems: 'center' , marginLeft:'-9.5vh'}}  >
   <Box sx={{ marginRight: '1rem' }}>
-    <InputLabel sx={{color:'black'}}><b > NRIC:</b></InputLabel>
+    <InputLabel sx={{color:'black'}}><b > NRIC last 4 digit:</b></InputLabel>
   </Box>
 
                     <TextField
@@ -284,7 +311,7 @@ return (
                         onBlur={formik.handleBlur}
                         error={formik.touched.nric && Boolean(formik.errors.nric)}
                         helperText={formik.touched.nric && formik.errors.nric}
-                        style={{ width: '80%' }}
+                        style={{ width: '67%' }}
                         />
                     
                     </Box>
@@ -302,12 +329,12 @@ return (
                         autoComplete="off"
                         label="Date of Birth"
                         type="date"
-                        name="dob"
-                        value={formik.values.dob}
+                        name="dateofbirth"
+                        value={formik.values.dateofbirth}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        error={formik.touched.dob && Boolean(formik.errors.dob)}
-                        helperText={formik.touched.dob && formik.errors.dob}
+                        error={formik.touched.dateofbirth && Boolean(formik.errors.dateofbirth)}
+                        helperText={formik.touched.dateofbirth && formik.errors.dateofbirth}
                         InputLabelProps={{ shrink: true }}
                         style={{ width: '70%' }}
                         />

@@ -355,7 +355,7 @@ function Profiles() {
                         </>
                     ) : (
                         <Typography variant="h6" style={{ marginTop: '3vh', fontSize: '18px', marginLeft: '1vh' }}>
-                            <p>Not a member yet? Click here to join <span ><Link to="/Event/EventClientSide" style={{ color: '#f4511e', fontWeight: 'bold' }}>Uplay</Link> or <Link Link to="/buymember" style={{ color: 'blue', fontWeight: 'bold' }}>NTUC</Link></span></p>
+                                <p>Not a member or friends of Uplay yet? Click here to beome <span ><Link to="/Event/EventClientSide" style={{ color: '#f4511e', fontWeight: 'bold' }}>Friends Of Uplay</Link> or <Link Link to="/memberpurchase" style={{ color: 'blue', fontWeight: 'bold' }}>NTUC Member</Link></span></p>
                         </Typography>
                     )}
 
