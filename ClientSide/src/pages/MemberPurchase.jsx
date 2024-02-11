@@ -31,6 +31,7 @@ const [user, setUser] = useState(null);
     const [userselect, setuserselect] = useState(null);
 
     const userselect_member = (selected_member) =>{
+      
       setuserselect(selected_member);
     }
 
@@ -43,7 +44,7 @@ const [user, setUser] = useState(null);
             nric: '',
             dateofbirth: '',
             memberStatus: '',
-            years : 1,
+years : 1,
 
             
         },
