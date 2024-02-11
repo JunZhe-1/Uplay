@@ -139,11 +139,11 @@ return (
           borderColor="#f4511e transparent transparent #f4511e" // Adjust the color as needed
         />
         <Box >
-            <Typography sx={{fontSize:'25px', color:'white', fontWeight:'bold', marginTop:'-10vh', textAlign:'center'}}> Basic</Typography>
+            <Typography sx={{fontSize:'25px', color:'white', fontWeight:'bold', marginTop:'-10vh', textAlign:'center'}}> 1 Years Member</Typography>
        
         </Box>
         <Box sx={{marginTop:'8vh'}}>
-        <Typography sx={{textAlign:'center', marginTop:'-2vh'}}> <span style={{fontSize:'40px', fontWeight:'bold'}}>$3.0</span><b> /12mo</b> </Typography>
+        <Typography sx={{textAlign:'center', marginTop:'-2vh'}}> <span style={{fontSize:'40px', fontWeight:'bold'}}>$117</span><b> for 12 months</b> </Typography>
 
 
             <Typography sx={{fontSize:'16px', padding:'5px', marginTop:'3vh'}}>Uplay Promotion :  &nbsp; <b>YES</b>  <CheckCircleRounded sx={{color:'#f4511e', marginBottom:'-5px'}}/> </Typography>
@@ -183,11 +183,11 @@ return (
           borderColor="#f4511e transparent transparent #f4511e" // Adjust the color as needed
         />
         <Box >
-            <Typography sx={{fontSize:'25px', color:'white', fontWeight:'bold', marginTop:'-10vh', textAlign:'center'}}> Standard</Typography>
+                                            <Typography sx={{ fontSize: '25px', color: 'white', fontWeight: 'bold', marginTop: '-10vh', textAlign: 'center' }}> 2 Years Member</Typography>
        
         </Box>
         <Box sx={{marginTop:'8vh'}}>
-        <Typography sx={{textAlign:'center', marginTop:'-2vh'}}> <span style={{fontSize:'40px', fontWeight:'bold'}}>$9.6</span><b>/ 24mo</b> </Typography>
+        <Typography sx={{textAlign:'center', marginTop:'-2vh'}}> <span style={{fontSize:'40px', fontWeight:'bold'}}>$234</span><b> for 24 months</b> </Typography>
 
 
             <Typography sx={{fontSize:'16px', padding:'5px', marginTop:'3vh'}}>Uplay Promotion :  &nbsp; <b>YES</b>  <CheckCircleRounded sx={{color:'#f4511e', marginBottom:'-5px'}}/> </Typography>
@@ -225,11 +225,11 @@ return (
           borderColor="#f4511e transparent transparent #f4511e" // Adjust the color as needed
         />
         <Box >
-            <Typography sx={{fontSize:'25px', color:'white', fontWeight:'bold', marginTop:'-10vh', textAlign:'center'}}> Premium</Typography>
+                                            <Typography sx={{ fontSize: '25px', color: 'white', fontWeight: 'bold', marginTop: '-10vh', textAlign: 'center' }}> 3 Years Member</Typography>
        
         </Box>
         <Box sx={{marginTop:'8vh'}}>
-        <Typography sx={{textAlign:'center', marginTop:'-2vh'}}> <span style={{fontSize:'40px', fontWeight:'bold'}}>$16.9</span><b>/ 36mo</b> </Typography>
+        <Typography sx={{textAlign:'center', marginTop:'-2vh'}}> <span style={{fontSize:'40px', fontWeight:'bold'}}>$351</span><b> for 36 months</b> </Typography>
 
 
             <Typography sx={{fontSize:'16px', padding:'5px', marginTop:'3vh'}}>Uplay Promotion :  &nbsp; <b>YES</b>  <CheckCircleRounded sx={{color:'#f4511e', marginBottom:'-5px'}}/> </Typography>
