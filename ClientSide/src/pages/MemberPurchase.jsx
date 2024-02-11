@@ -26,35 +26,6 @@ const [user, setUser] = useState(null);
     const [formSubmitted, setFormSubmitted] = useState(false); // State to track form submission
     const navigate = useNavigate();
 
-
-    const formik = useFormik({
-        initialValues: {
-            name: '',
-            nric: '',
-            dob: '',
-            memberStatus: '',
-            
-        },
-        validationSchema: yup.object({
-            years: yup.number().oneOf([1, 2, 3], 'Please select a valid number of years').required('Years is required'),
-        }),
-        onSubmit: (data) => {
-            // Move the form submission logic here
-            data.name = defaultName;
-            data.nric = defaultNRIC;
-            data.memberStatus = defaultMemberStatus
-            data.dob = defaultDateOfBirth
-            http.post("/Member", data, 2)
-                .then((res) => {
-                    console.log(res.data);
-                    navigate("/profile");
-                    localStorage.removeItem("memberStatus")
-                    localStorage.setItem("memberStatus", "NTUC")
-                });
-        }
-    });
-
-
     useEffect(() => {
         const fetchUser = async () => {
             try {
@@ -73,6 +44,35 @@ const [user, setUser] = useState(null);
             fetchUser();
         }
     }, []);
+    const formik = useFormik({
+        initialValues: {
+            name: '',
+            nric: '',
+            dob: '',
+            memberStatus: '',
+            
+        },
+        validationSchema: yup.object({
+            years: yup.number().oneOf([1, 2, 3], 'Please select a valid number of years').required('Years is required'),
+        }),
+        onSubmit: (data) => {
+            // Move the form submission logic here
+            data.name = defaultName;
+            data.nric = defaultNRIC;
+            data.memberStatus = defaultMemberStatus
+            data.dob = defaultDateOfBirth
+            http.post("/Member", data)
+                .then((res) => {
+                    console.log(res.data);
+                    navigate("/profile");
+                    localStorage.removeItem("memberStatus")
+                    localStorage.setItem("memberStatus", "NTUC")
+                });
+        }
+    });
+
+
+    
 
 
 return (

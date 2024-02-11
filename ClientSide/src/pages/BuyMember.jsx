@@ -70,14 +70,7 @@ function BuyMember() {
             localStorage.setItem("dob", data.dateOfBirth)   
             console.log(data)
             navigate("/memberpurchase")
-            http.post("/Member", data,2)
-                .then((res) => {
-                    console.log(res.data);
-                    navigate("/profile");
-                    localStorage.removeItem("memberStatus")
-                    localStorage.setItem("memberStatus","NTUC")
-
-                });
+           
         }
 
 
