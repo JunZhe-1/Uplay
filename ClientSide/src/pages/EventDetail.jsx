@@ -556,13 +556,15 @@ console.log(userProfile);
                           {row["name"]}
                         </span>
                         <br />
-                        <Rating
-                          value={parseFloat(row["rating"])}
-                          readOnly
-                          size={20}
-                          precision={1}
-                          edit={false}
-                        />
+                              <Rating
+                                  key={row["rating"]} 
+                              value={parseFloat(row["rating"])}
+                              readOnly
+                              size={20}
+                              precision={1}
+                              edit={false}
+                              /> 
+
                         <br />
                         <span style={{ fontSize: "16px" }}>
                           {row["eventReview"]}
