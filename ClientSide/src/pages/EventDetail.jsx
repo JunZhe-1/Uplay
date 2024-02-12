@@ -22,7 +22,10 @@ function EventDetail() {
     const [reviewSuccess, setReviewSuccess] = useState(null);
     const [imageFile, setimageFile] = useState(null);
     const { user } = useContext(UserContext);
+    console.log(user);
     const [sequence, setsequence] = useState("htl");
+    const [showMessage, setShowMessage] = useState(true);
+
     const [EventDetail, setEvent] = useState({
         Event_ID: "",
         Event_Name: "",
@@ -35,8 +38,31 @@ function EventDetail() {
         Vacancies: 0,
         User_ID: user.userId
     });
+console.log(localStorage["memberStatus"]);
+
+
+useEffect(() => {
+  let timeoutId;
+
+  if (reviewSuccess) {
+    timeoutId = setTimeout(() => {
+      setReviewSuccess(false);
+    }, 3000);
+  }
+
+  return () => {
+    clearTimeout(timeoutId);
+  };
+}, [reviewSuccess]);
 
     useEffect(() => {
+
+
+      if (localStorage.getItem("accessToken")) {
+        http.get('/UplayUser/auth').then((res) => {
+            setUser(res.data.user);
+      });
+    }
         http.get(`/Event/getEvent/${id}`).then((res) => {
             setimageFile(res.data.imageFile);
             console.log(res.data);
@@ -44,6 +70,16 @@ function EventDetail() {
         });
         getReview();
     }, []);
+
+    useEffect(() => {
+      // Set a timeout to hide the message after 3 seconds
+      const timeoutId = setTimeout(() => {
+        setShowMessage(false);
+      }, 3000);
+  
+      // Cleanup the timeout to avoid memory leaks
+      return () => clearTimeout(timeoutId);
+    }, []); 
 
 
     const getReview = () => {
@@ -278,37 +314,112 @@ console.log(userProfile);
                       padding: "0 20px",
                     }}
                   >
-                    <TableCell
-                      sx={{
-                        borderRight: "solid 1px #E0E0E0",
-                        textAlign: "center",
-                        padding: "5px 30px 5px 30px",
-                        marginLeft: "-2vh",
-                      }}
-                    >
-                      <Typography>
-                        Guest <br /> $ {EventDetail.Event_Fee_Guest}{" "}
-                      </Typography>
-                    </TableCell>
-                    <TableCell
-                      sx={{ textAlign: "center", padding: "5px 30px 5px 30px" }}
-                    >
-                      <Typography sx={{}}>
-                        Uplay <br />$ {EventDetail.Event_Fee_Uplay}
-                      </Typography>
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        borderLeft: "solid 1px #E0E0E0",
-                        textAlign: "center",
-                        padding: "5px 30px 5px 30px",
-                        marginRight: "-2vh",
-                      }}
-                    >
-                      <Typography sx={{}}>
-                        NTUC <br /> $ {EventDetail.Event_Fee_NTUC}
-                      </Typography>
-                    </TableCell>
+
+{localStorage["memberStatus"].toUpperCase() === "UPLAY" ? (
+  <>
+    <TableCell
+      sx={{
+        borderRight: "solid 1px #E0E0E0",
+        textAlign: "center",
+        padding: "5px 30px 5px 30px",
+        marginLeft: "-2vh",
+      }}
+    >
+      <Typography>
+        Guest <br /> $ {EventDetail.Event_Fee_Guest}{" "}
+      </Typography>
+    </TableCell>
+    <TableCell
+      sx={{ textAlign: "center", padding: "5px 30px 5px 30px" }}
+    >
+      <Typography sx={{ fontWeight: 'bold', fontSize: '20px', color: '#E6533F' }}>
+        Uplay <br />$ {EventDetail.Event_Fee_Uplay}
+      </Typography>
+    </TableCell>
+    <TableCell
+      sx={{
+        borderLeft: "solid 1px #E0E0E0",
+        textAlign: "center",
+        padding: "5px 30px 5px 30px",
+        marginRight: "-2vh",
+      }}
+    >
+      <Typography sx={{}}>
+        NTUC <br /> $ {EventDetail.Event_Fee_NTUC}
+      </Typography>
+    </TableCell>
+  </>
+) : localStorage["memberStatus"].toUpperCase() === "GUEST" ? (
+  <>
+    <TableCell
+      sx={{
+        borderRight: "solid 1px #E0E0E0",
+        textAlign: "center",
+        padding: "5px 30px 5px 30px",
+        marginLeft: "-2vh",
+      }}
+    >
+      <Typography>
+        Uplay <br />$ {EventDetail.Event_Fee_Uplay}
+      </Typography>
+    </TableCell>
+    <TableCell
+      sx={{ textAlign: "center", padding: "5px 30px 5px 30px" }}
+    >
+      <Typography sx={{ fontWeight: 'bold', fontSize: '20px', color: '#E6533F' }}>
+        Guest <br /> $ {EventDetail.Event_Fee_Guest}{" "}
+      </Typography>
+    </TableCell>
+    <TableCell
+      sx={{
+        borderLeft: "solid 1px #E0E0E0",
+        textAlign: "center",
+        padding: "5px 30px 5px 30px",
+        marginRight: "-2vh",
+      }}
+    >
+      <Typography sx={{}}>
+        NTUC <br /> $ {EventDetail.Event_Fee_NTUC}
+      </Typography>
+    </TableCell>
+  </>
+) : (
+  <>
+    <TableCell
+      sx={{
+        borderRight: "solid 1px #E0E0E0",
+        textAlign: "center",
+        padding: "5px 30px 5px 30px",
+        marginLeft: "-2vh",
+      }}
+    >
+      <Typography>
+        Guest <br /> $ {EventDetail.Event_Fee_Guest}{" "}
+      </Typography>
+    </TableCell>
+    <TableCell
+      sx={{ textAlign: "center", padding: "5px 30px 5px 30px" }}
+    >
+      <Typography sx={{ fontWeight: 'bold', fontSize: '20px', color: '#E6533F' }}>
+        NTUC <br /> $ {EventDetail.Event_Fee_NTUC}
+      </Typography>
+    </TableCell>
+    <TableCell
+      sx={{
+        borderLeft: "solid 1px #E0E0E0",
+        textAlign: "center",
+        padding: "5px 30px 5px 30px",
+        marginRight: "-2vh",
+      }}
+    >
+      <Typography sx={{}}>
+        Uplay <br />$ {EventDetail.Event_Fee_Uplay}
+      </Typography>
+    </TableCell>
+  </>
+)}
+
+                  
                   </Box>
                   <br />
                   <Link sx={{textDecoration:"none"}}   className="custom-link"
@@ -399,17 +510,18 @@ console.log(userProfile);
                     <br />
                     <b>Write Your Review</b>
                     &nbsp;
-                    {reviewSuccess && (
-                      <span
-                        style={{
-                          color: "green",
-                          fontWeight: "bold",
-                          fontSize: "20px",
-                        }}
-                      >
-                        <br /> Event Review Submitted Successfully!
-                      </span>
-                    )}
+                { reviewSuccess && (
+  <span
+    style={{
+      color: "green",
+      fontWeight: "bold",
+      fontSize: "20px",
+    }}
+  >
+    <br /> Event Review Submitted Successfully!
+  </span>
+)}
+
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -431,7 +543,7 @@ console.log(userProfile);
               <TableRow>
                 <TableCell>
                   <Grid container spacing={2}>
-                    <Grid item xs={12} md={100} lg={25}>
+                    <Grid item xs={12} md={1} lg={25}>
                       <TextField
                         fullWidth
                         multiline
@@ -525,7 +637,7 @@ console.log(userProfile);
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
                     <TableRow hover role="checkbox" tabIndex={-1} key={row.no}>
-                      <TableCell colSpan={3}>
+                      <TableCell colSpan={3} sx={{ backgroundColor: row["name"] === user.userName ? '#f0f0f0' : 'inherit' }}>
                       <Box style={{ width: "5%", marginTop: "0vh" }}>
           {row["userProfile"] !==  null ? (
             <img

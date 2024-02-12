@@ -282,7 +282,7 @@ function Profiles() {
                                     }}
                                 />) : <img
                                     alt="data"
-                                        src={`${import.meta.env.VITE_FILE_BASE_URL}${"account.jpg"}`}
+                                        src={`image/user.png`}
                                     style={{
                                         width: '100%',
                                         height: '10.5vh',
@@ -355,7 +355,7 @@ function Profiles() {
                         </>
                     ) : (
                         <Typography variant="h6" style={{ marginTop: '3vh', fontSize: '18px', marginLeft: '1vh' }}>
-                                <p>Not a member or friends of Uplay yet? Click here to beome <span ><Link to="/Event/EventClientSide" style={{ color: '#f4511e', fontWeight: 'bold' }}>Friends Of Uplay</Link> or <Link Link to="/memberpurchase" style={{ color: 'blue', fontWeight: 'bold' }}>NTUC Member</Link></span></p>
+                                <p>Not a member or friend of Uplay yet? Click here to become <span ><Link to="/Event/EventClientSide" style={{ color: '#f4511e', fontWeight: 'bold' }}>Friend Of Uplay</Link> or <Link Link to="/memberpurchase" style={{ color: 'blue', fontWeight: 'bold' }}>NTUC Member</Link></span></p>
                         </Typography>
                     )}
 

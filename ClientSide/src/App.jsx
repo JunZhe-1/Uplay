@@ -53,6 +53,7 @@ function App() {
     if (localStorage.getItem("accessToken")) {
         http.get('/UplayUser/auth').then((res) => {
             setUser(res.data.user);
+            console.log(res.data.user);
       });
     }
   }, []);   
@@ -183,7 +184,30 @@ function App() {
                             },
                           }}
                         >
-                          <MenuItem onClick={handleClose}>
+                          {user.memeber_type === "not Member"?(
+                    <MenuItem onClick={handleClose}>
+                    <Box
+                      sx={{
+                        borderBottom: "1px solid #E8533F",
+                        width: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          color: "#E8533F",
+                          fontWeight: "bold",
+                          fontSize: "12px",
+                        }}
+                      >
+                        {localStorage.getItem("memberStatus")}
+                      </Typography>
+                    </Box>
+                    </MenuItem>
+
+                          ):   <MenuItem onClick={handleClose}>
                             <Box
                               sx={{
                                 borderBottom: "1px solid #E8533F",
@@ -200,10 +224,12 @@ function App() {
                                   fontSize: "12px",
                                 }}
                               >
-                                {localStorage.getItem("memberStatus")}
+                                {localStorage.getItem("memberStatus")}: {user.points}
                               </Typography>
                             </Box>
-                          </MenuItem>
+                          </MenuItem>}
+                         
+                         
                           <MenuItem onClick={handleClose}>
                             <Link
                               to="/profile"
