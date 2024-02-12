@@ -208,14 +208,22 @@ namespace LearningAPI.Controllers
             .Select(c => c.Value).SingleOrDefault();
             var EmailAddress = User.Claims.Where(c => c.Type == ClaimTypes.Email)
             .Select(c => c.Value).SingleOrDefault();
+            var memeber_type = "member";
+            var userpoints = _context.Members.Find(UserId);
+            if ( userpoints == null)
+            {
+                memeber_type = "not Member";
+            }
             if (UserId != 0 && UserName != null && EmailAddress != null)
             {
                 var user = new
                 {
                     UserId,
                     EmailAddress,
-                    UserName
-                };
+                    UserName,
+                    Points = userpoints != null ? userpoints.Points ?? 0 : 0,
+                    memeber_type
+            };
                 return Ok(new { user });
             }
             else

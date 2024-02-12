@@ -114,13 +114,14 @@ namespace LearningAPI.Controllers
             }
             mymember.LastSubscriptionDate = DateTime.Now;
             mymember.ExpiredDate = mymember.ExpiredDate.AddYears(1);
+
                 if (mymember.Points == null)
                 {
                     mymember.Points = points;
                 }
                 else
                 {
-                    mymember.Points = points+mymember.Points;
+                    mymember.Points = points + mymember.Points;
                 }
             _context.SaveChanges();
             return Ok(mymember);

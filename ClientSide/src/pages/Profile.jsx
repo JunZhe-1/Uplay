@@ -282,7 +282,7 @@ function Profiles() {
                                     }}
                                 />) : <img
                                     alt="data"
-                                        src={`${import.meta.env.VITE_FILE_BASE_URL}${"account.jpg"}`}
+                                        src={`image/user.png`}
                                     style={{
                                         width: '100%',
                                         height: '10.5vh',
