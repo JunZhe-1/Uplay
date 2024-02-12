@@ -5,6 +5,7 @@ using LearningAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
 using System.Security.Claims;
 
 
@@ -210,12 +211,12 @@ namespace LearningAPI.Controllers
                 else if (start > end)
                 {
 
-                    string message = "End Date must be set after the Start Date";
+                    string message = "End date must be set after the start date";
                     return BadRequest(new { message });
                 }
                 else if (end < now)
                 {
-                    string message = "End Date must be set after today's Date";
+                    string message = "End date must be set after today's date";
                     return BadRequest(new { message });
                 }
                 else
@@ -295,21 +296,21 @@ namespace LearningAPI.Controllers
 
                 if (!allowedExtensions.Contains(fileExtension, StringComparer.OrdinalIgnoreCase))
                 {
-                    string message = "only image is allowedf";
+                    string message = "only images are allowed";
                     return BadRequest(new { message });
                 }
 
 
                 if (voucher.Discount_In_Value == 0)
                 {
-                    string message = "Discount value must be more than 0";
+                    string message = "Discount value must be more than $0";
                     return BadRequest(new { message });
 
                 }
                 else if (voucher.Limit_Value == 0)
 
                 {
-                    string message = "Limit value must be more than 0";
+                    string message = "Minimum spending value must be more than $0";
                     return BadRequest(new { message });
                 }
                 else
@@ -360,12 +361,12 @@ namespace LearningAPI.Controllers
                     else if (start > end)
                     {
 
-                        string message = "Voucher's End Date must set after Start Date ";
+                        string message = "End date must be set after the start date";
                         return BadRequest(new { message });
                     }
                     else if (end < now)
                     {
-                        string message = "Voucher's End Date must set after today's date";
+                        string message = "End date must be set after today's date";
                         return BadRequest(new { message });
                     }
                     else

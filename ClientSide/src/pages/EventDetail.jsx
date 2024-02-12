@@ -512,7 +512,7 @@ console.log(userProfile);
               <TableRow>
                 <TableCell>
                   <Grid container spacing={2}>
-                    <Grid item xs={12} md={100} lg={25}>
+                    <Grid item xs={12} md={1} lg={25}>
                       <TextField
                         fullWidth
                         multiline

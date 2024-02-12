@@ -209,16 +209,17 @@ return (
           borderColor="#f4511e transparent transparent #f4511e" // Adjust the color as needed
         />
         <Box >
-            <Typography sx={{fontSize:'25px', color:'white', fontWeight:'bold', marginTop:'-10vh', textAlign:'center'}}> 1 Years Member</Typography>
+            <Typography sx={{fontSize:'25px', color:'white', fontWeight:'bold', marginTop:'-10vh', textAlign:'center'}}>Basic</Typography>
        
         </Box>
         <Box sx={{marginTop:'8vh'}}>
         <Typography sx={{textAlign:'center', marginTop:'-2vh'}}> <span style={{fontSize:'40px', fontWeight:'bold'}}>$117</span><b> for 12 months</b> </Typography>
 
 
-            <Typography sx={{fontSize:'16px', padding:'5px', marginTop:'3vh'}}>Uplay Promotion :  &nbsp; <b>YES</b>  <CheckCircleRounded sx={{color:'#f4511e', marginBottom:'-5px'}}/> </Typography>
-            <Typography sx={{fontSize:'16px', padding:'5px'}}>Special Voucher :  &nbsp; <b>YES</b>  <CheckCircleRounded sx={{color:'#f4511e', marginBottom:'-5px'}}/></Typography>
-            <Typography sx={{fontSize:'16px', padding:'5px'}}>Uplay Points : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>No</b>  <Cancel sx={{color:'#f4511e', marginBottom:'-5px'}}/></Typography>
+            <Typography sx={{fontSize:'16px', padding:'5px', marginTop:'3vh'}}>Uplay Promotion : &nbsp;<b></b>  <CheckCircleRounded sx={{color:'#f4511e', marginBottom:'-5px'}}/> </Typography>
+            <Typography sx={{fontSize:'16px', padding:'5px'}}>Special Voucher :  &nbsp; <b></b>  <CheckCircleRounded sx={{color:'#f4511e', marginBottom:'-5px'}}/></Typography>
+            <Typography sx={{fontSize:'16px', padding:'5px'}}>Uplay Points : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b></b>  <Cancel sx={{color:'#f4511e', marginBottom:'-5px'}}/></Typography>
+            <Typography sx={{fontSize:'16px', padding:'5px'}}>Points Mutiplier: &nbsp;&nbsp;&nbsp;&nbsp;<Cancel sx={{color:'#f4511e', marginBottom:'-5px'}}/>   </Typography>
 
             <Typography sx={{fontSize:'16px', padding:'5px', marginBottom:'5vh'}}></Typography>
             <Typography sx={{fontSize:'20px', padding:'10px' ,background:'#f4511e',color:'white', marginTop:'0vh', textAlign:'center'}}> <b>Select</b>  </Typography>
@@ -253,16 +254,17 @@ return (
           borderColor="#f4511e transparent transparent #f4511e" // Adjust the color as needed
         />
         <Box >
-                                            <Typography sx={{ fontSize: '25px', color: 'white', fontWeight: 'bold', marginTop: '-10vh', textAlign: 'center' }}> 2 Years Member</Typography>
+                                            <Typography sx={{ fontSize: '25px', color: 'white', fontWeight: 'bold', marginTop: '-10vh', textAlign: 'center' }}> Standard</Typography>
        
         </Box>
         <Box sx={{marginTop:'8vh'}}>
         <Typography sx={{textAlign:'center', marginTop:'-2vh'}}> <span style={{fontSize:'40px', fontWeight:'bold'}}>$234</span><b> for 24 months</b> </Typography>
 
 
-            <Typography sx={{fontSize:'16px', padding:'5px', marginTop:'3vh'}}>Uplay Promotion :  &nbsp; <b>YES</b>  <CheckCircleRounded sx={{color:'#f4511e', marginBottom:'-5px'}}/> </Typography>
-            <Typography sx={{fontSize:'16px', padding:'5px'}}>Special Voucher :  &nbsp; <b>YES</b>  <CheckCircleRounded sx={{color:'#f4511e', marginBottom:'-5px'}}/></Typography>
-            <Typography sx={{fontSize:'16px', padding:'5px'}}>Uplay Points : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Yes</b>  <CheckCircleRounded sx={{color:'#f4511e', marginBottom:'-5px'}}/></Typography>
+            <Typography sx={{fontSize:'16px', padding:'5px', marginTop:'3vh'}}>Uplay Promotion :  &nbsp; <b></b>  <CheckCircleRounded sx={{color:'#f4511e', marginBottom:'-5px'}}/> </Typography>
+            <Typography sx={{fontSize:'16px', padding:'5px'}}>Special Voucher :  &nbsp; <b></b>  <CheckCircleRounded sx={{color:'#f4511e', marginBottom:'-5px'}}/></Typography>
+            <Typography sx={{fontSize:'16px', padding:'5px'}}>Uplay Points : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b></b>  <CheckCircleRounded sx={{color:'#f4511e', marginBottom:'-5px'}}/></Typography>
+            <Typography sx={{fontSize:'16px', padding:'5px'}}>Points Mutiplier: &nbsp;&nbsp;&nbsp;&nbsp; <b>x1</b>   </Typography>
 
             <Typography sx={{fontSize:'16px', padding:'5px', marginBottom:'5vh'}}></Typography>
             <Typography sx={{fontSize:'20px', padding:'10px' ,background:'#f4511e',color:'white', marginTop:'0vh', textAlign:'center'}}> <b>Select</b>  </Typography>
@@ -295,17 +297,20 @@ return (
           borderColor="#f4511e transparent transparent #f4511e" // Adjust the color as needed
         />
         <Box >
-                                            <Typography sx={{ fontSize: '25px', color: 'white', fontWeight: 'bold', marginTop: '-10vh', textAlign: 'center' }}> 3 Years Member</Typography>
+                                            <Typography sx={{ fontSize: '25px', color: 'white', fontWeight: 'bold', marginTop: '-10vh', textAlign: 'center' }}> Premium</Typography>
        
         </Box>
         <Box sx={{marginTop:'8vh'}}>
         <Typography sx={{textAlign:'center', marginTop:'-2vh'}}> <span style={{fontSize:'40px', fontWeight:'bold'}}>$351</span><b> for 36 months</b> </Typography>
 
 
-            <Typography sx={{fontSize:'16px', padding:'5px', marginTop:'3vh'}}>Uplay Promotion :  &nbsp; <b>YES</b>  <CheckCircleRounded sx={{color:'#f4511e', marginBottom:'-5px'}}/> </Typography>
-            <Typography sx={{fontSize:'16px', padding:'5px'}}>Special Voucher :  &nbsp; <b>YES</b>  <CheckCircleRounded sx={{color:'#f4511e', marginBottom:'-5px'}}/></Typography>
-            <Typography sx={{fontSize:'16px', padding:'5px'}}>Uplay Points : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Yes</b>  <CheckCircleRounded sx={{color:'#f4511e', marginBottom:'-5px'}}/></Typography>
+            <Typography sx={{fontSize:'16px', padding:'5px', marginTop:'3vh'}}>Uplay Promotion :  &nbsp; <b></b>  <CheckCircleRounded sx={{color:'#f4511e', marginBottom:'-5px'}}/> </Typography>
+            <Typography sx={{fontSize:'16px', padding:'5px'}}>Special Voucher :  &nbsp; <b></b>  <CheckCircleRounded sx={{color:'#f4511e', marginBottom:'-5px'}}/></Typography>
+            <Typography sx={{fontSize:'16px', padding:'5px'}}>Uplay Points : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <CheckCircleRounded sx={{color:'#f4511e', marginBottom:'-5px'}}/></Typography>
+            <Typography sx={{fontSize:'16px', padding:'5px'}}>Points Mutiplier: &nbsp;&nbsp;&nbsp;&nbsp; <b>x2</b>   </Typography>
 
+{/* <Typography sx={{fontSize:'12px', fontWeight:'bold', marginTop:'-1vh'}}>&nbsp;*Points earned will be doubled
+</Typography> */}
             <Typography sx={{fontSize:'16px', padding:'5px', marginBottom:'5vh'}}></Typography>
             <Typography sx={{fontSize:'20px', padding:'10px' ,background:'#f4511e',color:'white', marginTop:'0vh', textAlign:'center'}}> <b>Select</b>  </Typography>
 
@@ -477,12 +482,12 @@ position: 'relative',
       
         <Box sx={{ marginTop: '1vh', display: 'flex', alignItems: 'center' , marginLeft:'-5vh'}}  >
 <Box sx={{ marginRight: '1rem' }}>
-<InputLabel sx={{color:'black'}}><b > Card Name:</b></InputLabel>
+<InputLabel sx={{color:'black'}}><b > Your Name:</b></InputLabel>
 </Box>
 
         <TextField
             fullWidth
-            label="Card Name"
+            label="Email"
             margin="normal"
             fullWidth
             margin="dense"
@@ -568,7 +573,7 @@ position: 'relative',
 
         <Box sx={{ marginTop: '1vh', display: 'flex', alignItems: 'center' , marginLeft:'-5vh'}}  >
 <Box sx={{ marginRight: '1rem' }}>
-<InputLabel sx={{color:'black'}}><b > Card Name:</b></InputLabel>
+<InputLabel sx={{color:'black'}}><b >Your Email:</b></InputLabel>
 </Box>
 
         <TextField
