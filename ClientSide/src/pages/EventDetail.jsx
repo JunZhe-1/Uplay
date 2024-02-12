@@ -24,6 +24,8 @@ function EventDetail() {
     const { user } = useContext(UserContext);
     console.log(user);
     const [sequence, setsequence] = useState("htl");
+    const [showMessage, setShowMessage] = useState(true);
+
     const [EventDetail, setEvent] = useState({
         Event_ID: "",
         Event_Name: "",
@@ -37,7 +39,25 @@ function EventDetail() {
         User_ID: user.userId
     });
 console.log(localStorage["memberStatus"]);
+
+
+useEffect(() => {
+  let timeoutId;
+
+  if (reviewSuccess) {
+    timeoutId = setTimeout(() => {
+      setReviewSuccess(false);
+    }, 3000);
+  }
+
+  return () => {
+    clearTimeout(timeoutId);
+  };
+}, [reviewSuccess]);
+
     useEffect(() => {
+
+
       if (localStorage.getItem("accessToken")) {
         http.get('/UplayUser/auth').then((res) => {
             setUser(res.data.user);
@@ -50,6 +70,16 @@ console.log(localStorage["memberStatus"]);
         });
         getReview();
     }, []);
+
+    useEffect(() => {
+      // Set a timeout to hide the message after 3 seconds
+      const timeoutId = setTimeout(() => {
+        setShowMessage(false);
+      }, 3000);
+  
+      // Cleanup the timeout to avoid memory leaks
+      return () => clearTimeout(timeoutId);
+    }, []); 
 
 
     const getReview = () => {
@@ -480,17 +510,18 @@ console.log(userProfile);
                     <br />
                     <b>Write Your Review</b>
                     &nbsp;
-                    {reviewSuccess && (
-                      <span
-                        style={{
-                          color: "green",
-                          fontWeight: "bold",
-                          fontSize: "20px",
-                        }}
-                      >
-                        <br /> Event Review Submitted Successfully!
-                      </span>
-                    )}
+                { reviewSuccess && (
+  <span
+    style={{
+      color: "green",
+      fontWeight: "bold",
+      fontSize: "20px",
+    }}
+  >
+    <br /> Event Review Submitted Successfully!
+  </span>
+)}
+
                   </Typography>
                 </TableCell>
               </TableRow>
