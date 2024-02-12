@@ -7,7 +7,12 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
-
+using Microsoft.Extensions.Configuration;
+using GoogleReCaptcha.V3;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using System.Text.Json;
 
 
 namespace LearningAPI.Controllers
@@ -18,12 +23,53 @@ namespace LearningAPI.Controllers
     {
         private readonly MyDbContext _context;
         private readonly IConfiguration _configuration;
-        public UplayUserController(MyDbContext context, IConfiguration configuration)
+        private readonly HttpClient _httpClient; // Inject HttpClient
+
+        private static readonly HashSet<string> _processedTokens = new HashSet<string>();
+        public UplayUserController(MyDbContext context, IConfiguration configuration, HttpClient httpClient)
         {
             _context = context;
             _configuration = configuration;
+            _httpClient = httpClient; // Assign the injected HttpClient
+
+            _httpClient.Timeout = TimeSpan.FromSeconds(15); // 15 seconds timeout
         }
-        
+
+        // Your other controller actions...
+
+        private async Task<bool> VerifyRecaptchaToken(string token)
+        {
+            var secretKey = "6LdMGV8pAAAAAL3gcsIM5YrOFq4ERQvJKpcCpAoJ";
+            var verificationUrl = $"https://www.google.com/recaptcha/api/siteverify?secret={secretKey}&response={token}";
+
+            try
+            {
+                var response = await _httpClient.PostAsync(verificationUrl, null);
+                response.EnsureSuccessStatusCode();
+
+                var responseBody = await response.Content.ReadAsStringAsync();
+                var captchaResponse = JsonSerializer.Deserialize<ReCaptchaResponse>(responseBody); // Deserialize the response
+
+                // Log the reCAPTCHA response
+                Console.WriteLine($"reCAPTCHA Response: {responseBody}");
+
+                return captchaResponse.Success;
+            }
+            catch (HttpRequestException ex)
+            {
+                // Handle timeout exception
+                // Log the exception or return an appropriate error response
+                Console.WriteLine($"Error while verifying reCAPTCHA token: {ex.Message}");
+                return false;
+            }
+        }
+
+
+        public class ReCaptchaResponse
+        {
+            public bool Success { get; set; }
+        }
+
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -66,35 +112,76 @@ namespace LearningAPI.Controllers
             return Ok(myUplayUser);
         }
         [HttpPost("login")]
-        public IActionResult Login(LoginRequest request)
+        public async Task<IActionResult> Login(LoginRequest request)
         {
-            // Trim string values
+            var recaptchaToken = request.RecaptchaToken;
+
+            // Check for duplicate request
+            lock (_processedTokens)
+            {
+                if (_processedTokens.Contains(recaptchaToken))
+                {
+                    return BadRequest(new { message = "Duplicate request detected." });
+                }
+                _processedTokens.Add(recaptchaToken);
+            }
+
+            // Verify reCAPTCHA token
+            var isCaptchaPassed = await VerifyRecaptchaToken(recaptchaToken);
+
+            
+
+            // Reset processed token to prevent memory leak
+            lock (_processedTokens)
+            {
+                _processedTokens.Remove(recaptchaToken);
+            }
+
             request.EmailAddress = request.EmailAddress.Trim().ToLower();
             request.Password = request.Password.Trim();
+
             // Check email and password
             string message = "Email or password is not correct.";
-            var foundUser = _context.UplayUsers.Where(
-            x => x.EmailAddress == request.EmailAddress).FirstOrDefault();
-            if (foundUser == null)
+            var foundUser = _context.UplayUsers.FirstOrDefault(x => x.EmailAddress == request.EmailAddress);
+
+            if (foundUser == null || !BCrypt.Net.BCrypt.Verify(request.Password, foundUser.Password))
             {
                 return BadRequest(new { message });
             }
-            bool verified = BCrypt.Net.BCrypt.Verify(
-            request.Password, foundUser.Password);
-            if (!verified)
-            {
-                return BadRequest(new { message });
-            }
- 
+
             var uplayuser = new
-            { 
+            {
                 foundUser.UserId,
                 foundUser.EmailAddress,
                 foundUser.UserName
             };
+
             string accessToken = CreateToken(foundUser);
-            return Ok(new { uplayuser, accessToken });
+
+            // Return user data and access token
+            return Ok(new { user = uplayuser, accessToken });
         }
+
+
+        private string CreateToken(Claim[] userClaims)
+        {
+            string secret = _configuration.GetValue<string>("Authentication:Secret");
+            int tokenExpiresDays = _configuration.GetValue<int>("Authentication:TokenExpiresDays");
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(secret);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(userClaims),
+                Expires = DateTime.UtcNow.AddDays(tokenExpiresDays),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var securityToken = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(securityToken);
+        }
+
         [HttpPost("validatePassword")]
         public IActionResult ValidatePassword(ValidatePasswordRequest request)
         {

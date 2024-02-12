@@ -38,6 +38,10 @@ import Password_Current from './pages/Password_Current';
 import Password_Change from './pages/Password_Change';
 import Userprofile from './pages/UserProfile';
 import MemberPurchase from './pages/MemberPurchase';
+import {
+    GoogleReCaptchaProvider,
+    useGoogleReCaptcha
+} from 'react-google-recaptcha-v3';
 function App() {
     const [user, setUser] = useState(null);
     const imageUrl = './../image/testing.png';
@@ -75,10 +79,18 @@ function App() {
         setAnchorEl1(event.currentTarget);
     };
     const handleClose1 = () => {
-        setAnchorEl1(null);
+        setAnchorEl1(null);A
     };
 
-  return (
+    return (
+            <GoogleReCaptchaProvider
+            reCaptchaKey="6LdMGV8pAAAAAHGw5LEUvR-VOfzFbGWKBeyT5dJN"
+            language="en"
+            useRecaptchaNet={true}
+        // Other props you may need
+        >
+           
+       
     <UserContext.Provider value={{ user, setUser }}>
       <Router>
         <ThemeProvider theme={MyTheme}>
@@ -405,7 +417,9 @@ function App() {
           </Container>
         </ThemeProvider>
       </Router>
-    </UserContext.Provider>
+      </UserContext.Provider>
+
+        </GoogleReCaptchaProvider>
   );
 
 }
