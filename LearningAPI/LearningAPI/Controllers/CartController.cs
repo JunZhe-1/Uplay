@@ -168,35 +168,6 @@ namespace LearningAPI.Controllers
 			public List<SessionLineItemOptions>? LineItems { get; set; }
 		}
 
-<<<<<<< Updated upstream
-        [HttpDelete("removevoucher/{id}")]
-        public async Task<IActionResult> RemoveVoucher(int id)
-        {
-            var userId = GetUserId(); 
-            var cartItem = await _context.Carts.FindAsync(id);
-
-            if (cartItem == null || cartItem.UserId != userId)
-            {
-                return NotFound();
-            }
-
-            // Remove the voucher reference
-            cartItem.Voucher_ID = null;
-            cartItem.UpdatedAt = DateTime.UtcNow;
-
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        [HttpPost("checkout")]
-        public async Task<IActionResult> Checkout()
-        {
-            var userId = GetUserId();
-            var cartItems = await _context.Carts
-                .Where(c => c.UserId == userId)
-                .ToListAsync();
-=======
 		[HttpPost("checkout")]
 		public async Task<IActionResult> Checkout([FromBody] CheckoutRequest request)
 		{
@@ -204,7 +175,6 @@ namespace LearningAPI.Controllers
 			{
 				var successUrl = "https://localhost:3000/success";
 				var cancelUrl = "https://localhost:3000";
->>>>>>> Stashed changes
 
 				StripeConfiguration.ApiKey = _stripeSettings.SecretKey;
 
