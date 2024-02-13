@@ -423,7 +423,7 @@ console.log(userProfile);
                   </Box>
                   <br />
                   <Link sx={{textDecoration:"none"}}   className="custom-link"
- to={"/Cart/adduser" }state = {{event_ID: EventDetail.Event_ID, userId: user.userId}}>
+ to={"/Cart/addcart" }state = {{event_ID: EventDetail.Event_ID, userId: user.userId}}>
                     <Typography
                       variant="h5"
                       sx={{ textDecoration:"none",
