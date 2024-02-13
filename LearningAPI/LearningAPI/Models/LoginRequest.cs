@@ -11,5 +11,8 @@ namespace LearningAPI.Models
         // Regular expression to enforce password complexity
         [RegularExpression(@"^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$", ErrorMessage = "At least 1 letter and 1 number")]
         public string Password { get; set; } = string.Empty;
+
+        [Required]
+        public string RecaptchaToken { get; set; }
     }
 }
