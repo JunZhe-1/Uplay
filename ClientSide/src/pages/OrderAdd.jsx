@@ -87,7 +87,7 @@ function OrderAdd() {
   return (
     <Box>
       <Typography variant="h5" sx={{ my: 2 }}>
-        Add Cart
+        Add Order
       </Typography>
       <Box component="form" onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>

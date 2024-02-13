@@ -25,29 +25,31 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UserContext from "../contexts/UserContext";
 
-function CartEdit() {
+function OrderEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
   console.log(id);
 
   const [cartinfo, setCart] = useState({
-    Booking_Date: new Date(),
-    Booking_Quantity: 0,
-    UserId: 0,
+    UserId: 1,
+    Booking_Date: "",
+    Booking_Quantity: 1,
     Event_ID: 0,
+    Price: 0,
   });
 
   useEffect(() => {
     http
-      .get(`/Cart/get/${id}`)
+      .get(`/Order/get/${id}`)
       .then((res) => {
         console.log(res.data);
          const bookingDate = new Date(res.data.Booking_Date.replace(" ", "T"));
         setCart({
+          UserId: res.data.userId,
           Booking_Date: bookingDate,
           Booking_Quantity: res.data.Booking_Quantity,
-          UserId: res.data.userId,
           Event_ID: res.data.event_ID,
+          Price: res.data.Price,
         });
       })
       .catch(function (err) {
@@ -60,33 +62,40 @@ function CartEdit() {
     enableReinitialize: true,
 
     validationSchema: yup.object({
+      UserId: yup
+        .number()
+        .min(0, "UserId cannot be below 0")
+        .max(100000, "UserId cannot be above 100000")
+        .required("UserId is required"),
       Booking_Date: yup.date().required("Booking date is required"),
       Booking_Quantity: yup
         .number()
         .min(0, "Booking Quantity cannot be below 0")
         .max(10, "Booking Quantity cannot be above 10")
         .required("Booking Quantity is required"),
-      UserId: yup
-        .number()
-        .min(0, "User ID cannot be below than 0")
-        .max(1000, "User ID cannot be above 1000"),
       Event_ID: yup
         .number()
         .min(0, "Event ID cannot be below 0")
         .max(1000, "Event ID cannot be above 1000")
         .required("Event ID is required"),
+      Price: yup
+        .number()
+        .min(0, "Price cannot be below 0")
+        .max(100000, "Price cannot be above 1000")
+        .required("Price is required"),
     }),
     onSubmit: (data) => {
-      data.Booking_Quantity = parseInt(data.Booking_Quantity);
       data.UserId = parseInt(data.UserId);
+      data.Booking_Quantity = parseInt(data.Booking_Quantity);
       data.Event_ID = parseInt(data.Event_ID);
-
+      data.Price = parseInt(data.Price);
       console.log("onsubmit:", data);
+
       http
-        .put(`/Cart/update/${id}`, data)
+        .put(`/Order/update/${id}`, data)
         .then((res) => {
           console.log(res.data);
-          navigate("/Cart");
+          navigate("/Order");
         })
         .catch(function (err) {
           toast.error(`${err.response.data.message}`);
@@ -99,13 +108,26 @@ function CartEdit() {
   return (
     <Box>
       <Typography variant="h5" sx={{ my: 2 }}>
-        Edit Cart
+        Edit Order
       </Typography>
       <Box component="form" onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={6} lg={8}>
             <Grid container spacing={2}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <TextField
+                  fullWidth
+                  margin="dense"
+                  autoComplete="off"
+                  label="UserId"
+                  name="UserId"
+                  value={formik.values.UserId}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  type="number"
+                  error={Boolean(formik.touched.UserId && formik.errors.UserId)}
+                  helperText={formik.touched.UserId && formik.errors.UserId}
+                />
                 <DatePicker
                   value={formik.values.Booking_Date}
                   onChange={(date) =>
@@ -156,20 +178,6 @@ function CartEdit() {
                 fullWidth
                 margin="dense"
                 autoComplete="off"
-                label="User ID"
-                name="UserId"
-                value={formik.values.UserId}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                type="number"
-                error={Boolean(formik.touched.UserId && formik.errors.UserId)}
-                helperText={formik.touched.UserId && formik.errors.UserId}
-              />
-
-              <TextField
-                fullWidth
-                margin="dense"
-                autoComplete="off"
                 label="Event ID"
                 name="Event_ID"
                 value={formik.values.Event_ID}
@@ -180,6 +188,20 @@ function CartEdit() {
                   formik.touched.Event_ID && formik.errors.Event_ID
                 )}
                 helperText={formik.touched.Event_ID && formik.errors.Event_ID}
+              />
+
+              <TextField
+                fullWidth
+                margin="dense"
+                autoComplete="off"
+                label="Price"
+                name="Price"
+                value={formik.values.Price}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                type="number"
+                error={Boolean(formik.touched.Price && formik.errors.Price)}
+                helperText={formik.touched.Price && formik.errors.Price}
               />
             </Grid>
           </Grid>
@@ -199,4 +221,4 @@ function CartEdit() {
     </Box>
   );
 }
-export default CartEdit;
+export default OrderEdit;
