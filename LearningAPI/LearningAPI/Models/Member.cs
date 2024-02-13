@@ -37,7 +37,7 @@ namespace LearningAPI.Models
         
 
         [JsonIgnore]
-        public UplayUser UplayUser { get; set; }
+        public UplayUser? UplayUser { get; set; }
 
     }
 }
