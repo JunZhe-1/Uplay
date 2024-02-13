@@ -177,22 +177,25 @@ function VoucherListUser() {
                                     {data.Voucher_Description}
                                 </Typography>
                                 <Box sx={{ flexGrow: 1 }}></Box>
-                                <Button className="add_btn"
+                                <Link to={`/Cart/getcart/:id?discount=${data.Discount_In_Value}`} style={{ textDecoration: 'none' }}>
+                                <Button
+                                    className="add_btn"
                                     sx={{
-                                        fontSize: '16px',
-                                        padding: '1px',
-                                        border: '1px #E6533F solid',
-                                        backgroundColor: 'white',
-                                        color: '#E6533F',
-                                        transition: 'background-color 0.2s ease-in-out, color 0.5s ease-in-out',
-                                        '&:hover': {
-                                                    backgroundColor: '#E6533F',
-                                                    color: 'white',
-                                                },
-                                            }}
+                                    fontSize: '16px',
+                                    padding: '1px',
+                                    border: '1px #E6533F solid',
+                                    backgroundColor: 'white',
+                                    color: '#E6533F',
+                                    transition: 'background-color 0.2s ease-in-out, color 0.5s ease-in-out',
+                                    '&:hover': {
+                                        backgroundColor: '#E6533F',
+                                        color: 'white',
+                                    },
+                                    }}
                                 >
                                     <b>Add</b>
                                 </Button>
+                                </Link>
                                 <Typography
                                     sx={{
                                         color: 'text.secondary',

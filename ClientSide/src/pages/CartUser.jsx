@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -65,11 +65,14 @@ const theme = createTheme({
 function CartUser() {
   const navigate = useNavigate();
   const [openDialog, setOpenDialog] = useState(false);
-  const [totalCost, setTotalCost] = useState(0);
   const [CartList, setCartList] = useState([]);
   const [cart_id, setid] = useState("");
   const { user } = useContext(UserContext);
   const [memberstatus, setMemberStatus] = useState("");
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const discount = searchParams.get("discount");
 
   useEffect(() => {
     http
@@ -211,6 +214,11 @@ const handleCloseDialog = () => {
     );
   }, 0);
 
+  const totalPriceAfterDiscount =
+    totalPrice - (discount ? parseFloat(discount) : 0);
+
+  const Discount = discount ? parseFloat(discount) : 0;
+
   return (
     <ThemeProvider theme={theme}>
       <br />
@@ -265,7 +273,9 @@ const handleCloseDialog = () => {
                       <TableCell>
                         $
                         {memberstatus === "NTUC"
-                          ? (data.eventntucFee * data.Booking_Quantity).toFixed(2)
+                          ? (data.eventntucFee * data.Booking_Quantity).toFixed(
+                              2
+                            )
                           : (data.eventFee * data.Booking_Quantity).toFixed(2)}
                       </TableCell>
                       <TableCell>
@@ -299,11 +309,29 @@ const handleCloseDialog = () => {
         <br />
 
         <Box sx={{ display: "flex", justifyContent: "center", my: 1 }}>
-          <Typography variant="h5" sx={{ color: "#E8533F" }}>
-            Total Price:
+          <Typography variant="h6">
+            Subtotal:
           </Typography>
-          <Typography variant="h5" sx={{ ml: 1 }}>
+          <Typography variant="h6" sx={{ ml: 1, color: "#E8533F" }}>
             ${totalPrice.toFixed(2)}
+          </Typography>
+        </Box>
+
+        <Box sx={{ display: "flex", justifyContent: "center", my: 1 }}>
+          <Typography variant="h6">
+            Voucher:
+          </Typography>
+          <Typography variant="h6" sx={{ ml: 1, color: "#E8533F" }}>
+            - ${Discount.toFixed(2)}
+          </Typography>
+        </Box>
+
+        <Box sx={{ display: "flex", justifyContent: "center", my: 1 }}>
+          <Typography variant="h4">
+            Total:
+          </Typography>
+          <Typography variant="h4" sx={{ ml: 1, color: "#E8533F" }}>
+            ${totalPriceAfterDiscount.toFixed(2)}
           </Typography>
         </Box>
 
@@ -350,7 +378,7 @@ const handleCloseDialog = () => {
             <Box textAlign="center">
               <Typography variant="h4">Order Confirmed</Typography>
               <Typography variant="h5">
-                Total Price: ${totalPrice.toFixed(2)}
+                Total Price: ${totalPriceAfterDiscount.toFixed(2)}
               </Typography>
             </Box>
           </DialogContent>

@@ -266,7 +266,7 @@ namespace LearningAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error when update tutorial");
+                _logger.LogError(ex, "Error when update voucher");
                 return StatusCode(500);
             }
 

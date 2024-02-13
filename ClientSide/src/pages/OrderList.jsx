@@ -171,7 +171,7 @@ function OrderList() {
                   <TableCell>Order ID</TableCell>
                   <TableCell>Booking Date</TableCell>
                   <TableCell>Booking Quantity</TableCell>
-                  <TableCell>Price</TableCell>
+                  <TableCell>Price Per Person</TableCell>
                   <TableCell>User ID</TableCell>
                   <TableCell>Event ID</TableCell>
                 </TableRow>
@@ -189,7 +189,7 @@ function OrderList() {
                           .format(global.datetimeFormat)}
                       </TableCell>
                       <TableCell>{data.Booking_Quantity}</TableCell>
-                      <TableCell>{data.Price}</TableCell>
+                      <TableCell>${data.Price.toFixed(2)}</TableCell>
                       <TableCell>{data.userId}</TableCell>
                       <TableCell>{data.event_ID}</TableCell>
 
