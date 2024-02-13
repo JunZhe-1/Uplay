@@ -38,6 +38,7 @@ import Password_Current from './pages/Password_Current';
 import Password_Change from './pages/Password_Change';
 import Userprofile from './pages/UserProfile';
 import MemberPurchase from './pages/MemberPurchase';
+import ReviewList from './pages/ReviewList';
 import {
     GoogleReCaptchaProvider,
     useGoogleReCaptcha
@@ -224,7 +225,7 @@ function App() {
                                   fontSize: "12px",
                                 }}
                               >
-                                {localStorage.getItem("memberStatus")}: {user.points}
+                               {localStorage.getItem("memberStatus")}: {localStorage.getItem("points")}
                               </Typography>
                             </Box>
                           </MenuItem>}
@@ -237,6 +238,16 @@ function App() {
                             >
                               <Typography sx={{ color: "black" }}>
                                 My Profile
+                              </Typography>
+                            </Link>
+                                                        </MenuItem>
+                                                    <MenuItem onClick={handleClose}>
+                            <Link
+                              to="/reviewlist"
+                              style={{ textDecoration: "none" }}
+                            >
+                              <Typography sx={{ color: "black" }}>
+                                My Reviews
                               </Typography>
                             </Link>
                           </MenuItem>
@@ -433,6 +444,7 @@ function App() {
               <Route path={"/profile"} element={<Profile />} />
               <Route path={"/buymember"} element={<BuyMember />} />
               <Route path={"/userlist"} element={<UserList />} />
+              <Route path={"/reviewlist"} element={<ReviewList />} />
               <Route path={"/Cart/add"} element={<CartAdd />} />
               <Route path={"/Cart/adduser"} element={<CartAddUser />} />
               <Route path={"/Cart"} element={<CartList />} />

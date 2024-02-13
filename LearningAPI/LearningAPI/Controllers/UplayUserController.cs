@@ -32,7 +32,7 @@ namespace LearningAPI.Controllers
             _configuration = configuration;
             _httpClient = httpClient; // Assign the injected HttpClient
 
-            _httpClient.Timeout = TimeSpan.FromSeconds(15); // 15 seconds timeout
+            _httpClient.Timeout = TimeSpan.FromSeconds(1000); // 1000 seconds timeout
         }
 
         // Your other controller actions...

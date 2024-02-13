@@ -82,9 +82,14 @@ const [user, setUser] = useState(null);
  http.post("/Member", userprofile )
                .then((res) => {
                    console.log(res.data);
-                 navigate("/profile");
+                   navigate("/");
                    localStorage.removeItem("memberStatus");
-                  localStorage.setItem("memberStatus", "NTUC");
+                   localStorage.removeItem("points");
+                   window.location.reload();
+
+                   localStorage.setItem("memberStatus", "NTUC");
+                  
+                   localStorage.setItem("points",0)
               })
                .catch((error) => {
                    console.error("Error:", error);
