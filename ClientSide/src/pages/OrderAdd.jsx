@@ -14,7 +14,7 @@ import {
   MenuItem,
   FormHelperText,
 } from "@mui/material";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -24,71 +24,59 @@ import http from "../http";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UserContext from "../contexts/UserContext";
+import da from "date-fns/locale/da";
 
-function CartEdit() {
-  const { id } = useParams();
+function OrderAdd() {
   const navigate = useNavigate();
-  console.log(id);
-
-  const [cartinfo, setCart] = useState({
-    Booking_Date: new Date(),
-    Booking_Quantity: 0,
-    UserId: 0,
-    Event_ID: 0,
-  });
-
-  useEffect(() => {
-    http
-      .get(`/Cart/get/${id}`)
-      .then((res) => {
-        console.log(res.data);
-         const bookingDate = new Date(res.data.Booking_Date.replace(" ", "T"));
-        setCart({
-          Booking_Date: bookingDate,
-          Booking_Quantity: res.data.Booking_Quantity,
-          UserId: res.data.userId,
-          Event_ID: res.data.event_ID,
-        });
-      })
-      .catch(function (err) {
-        toast.error(`${err.response.data.message}`);
-      });
-  }, []);
 
   const formik = useFormik({
-    initialValues: cartinfo,
-    enableReinitialize: true,
-
+    initialValues: {
+      UserId: 1,
+      Booking_Date: "",
+      Booking_Quantity: 1,
+      Event_ID: 0,
+      Price: 0,
+    },
     validationSchema: yup.object({
+      UserId: yup
+        .number()
+        .min(0, "UserId cannot be below 0")
+        .max(100000, "UserId cannot be above 100000")
+        .required("UserId is required"),
       Booking_Date: yup.date().required("Booking date is required"),
       Booking_Quantity: yup
         .number()
         .min(0, "Booking Quantity cannot be below 0")
         .max(10, "Booking Quantity cannot be above 10")
         .required("Booking Quantity is required"),
-      UserId: yup
-        .number()
-        .min(0, "User ID cannot be below than 0")
-        .max(1000, "User ID cannot be above 1000"),
       Event_ID: yup
         .number()
         .min(0, "Event ID cannot be below 0")
         .max(1000, "Event ID cannot be above 1000")
         .required("Event ID is required"),
+      Price: yup
+        .number()
+        .min(0, "Price cannot be below 0")
+        .max(100000, "Price cannot be above 1000")
+        .required("Price is required"),
     }),
-    onSubmit: (data) => {
-      data.Booking_Quantity = parseInt(data.Booking_Quantity);
-      data.UserId = parseInt(data.UserId);
-      data.Event_ID = parseInt(data.Event_ID);
 
+    onSubmit: (data) => {
+      data.UserId = parseInt(data.UserId);
+      data.Booking_Quantity = parseInt(data.Booking_Quantity);
+      data.Event_ID = parseInt(data.Event_ID);
+      data.Price = parseInt(data.Price);
       console.log("onsubmit:", data);
+
       http
-        .put(`/Cart/update/${id}`, data)
+        .post("/Order/add", data)
         .then((res) => {
-          console.log(res.data);
-          navigate("/Cart");
+          console.log("Success");
+          toast.success("Order added successfully");
+          navigate("/Order");
         })
         .catch(function (err) {
+          console.log(err.response.data);
           toast.error(`${err.response.data.message}`);
         });
     },
@@ -99,13 +87,26 @@ function CartEdit() {
   return (
     <Box>
       <Typography variant="h5" sx={{ my: 2 }}>
-        Edit Cart
+        Add Cart
       </Typography>
       <Box component="form" onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={6} lg={8}>
             <Grid container spacing={2}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <TextField
+                  fullWidth
+                  margin="dense"
+                  autoComplete="off"
+                  label="UserId"
+                  name="UserId"
+                  value={formik.values.UserId}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  type="number"
+                  error={Boolean(formik.touched.UserId && formik.errors.UserId)}
+                  helperText={formik.touched.UserId && formik.errors.UserId}
+                />
                 <DatePicker
                   value={formik.values.Booking_Date}
                   onChange={(date) =>
@@ -156,20 +157,6 @@ function CartEdit() {
                 fullWidth
                 margin="dense"
                 autoComplete="off"
-                label="User ID"
-                name="UserId"
-                value={formik.values.UserId}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                type="number"
-                error={Boolean(formik.touched.UserId && formik.errors.UserId)}
-                helperText={formik.touched.UserId && formik.errors.UserId}
-              />
-
-              <TextField
-                fullWidth
-                margin="dense"
-                autoComplete="off"
                 label="Event ID"
                 name="Event_ID"
                 value={formik.values.Event_ID}
@@ -181,6 +168,20 @@ function CartEdit() {
                 )}
                 helperText={formik.touched.Event_ID && formik.errors.Event_ID}
               />
+
+              <TextField
+                fullWidth
+                margin="dense"
+                autoComplete="off"
+                label="Price"
+                name="Price"
+                value={formik.values.Price}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                type="number"
+                error={Boolean(formik.touched.Price && formik.errors.Price)}
+                helperText={formik.touched.Price && formik.errors.Price}
+              />
             </Grid>
           </Grid>
         </Grid>
@@ -188,9 +189,9 @@ function CartEdit() {
           <Button
             variant="contained"
             type="submit"
-            style={{ width: "100%", background: "#1e4bf4" }}
+            style={{ backgroundColor: "#1e4bf4", width: "100%" }}
           >
-            Update
+            Add
           </Button>
         </Box>
       </Box>
@@ -199,4 +200,4 @@ function CartEdit() {
     </Box>
   );
 }
-export default CartEdit;
+export default OrderAdd;

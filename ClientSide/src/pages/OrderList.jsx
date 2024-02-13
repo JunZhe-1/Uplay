@@ -44,10 +44,10 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#E8533F", // Orange
+      main: "#1e4bf4", // Blue
     },
     secondary: {
-      main: "#0096ff", // Orange
+      main: "#0096ff",
     },
   },
 });
@@ -139,7 +139,7 @@ function OrderList() {
           variant="h5"
           sx={{ my: 2, color: "black", fontWeight: "bold" }}
         >
-          Cart Item Management
+          Order Item Management
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
           <Input
@@ -205,7 +205,7 @@ function OrderList() {
                       <TableCell>
                         {" "}
                         <IconButton
-                          color="primary"
+                          color="error"
                           onClick={() => handleOpen(data.Order_ID)}
                         >
                           <Clear />

@@ -44,10 +44,10 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#E8533F", // Orange
+      main: "#1e4bf4", // Blue
     },
     secondary: {
-      main: "#0096ff", // Orange
+      main: "#0096ff",
     },
   },
 });
@@ -203,7 +203,7 @@ function CartList() {
                       <TableCell>
                         {" "}
                         <IconButton
-                          color="primary"
+                          color="error"
                           onClick={() => handleOpen(data.Cart_ID)}
                         >
                           <Clear />

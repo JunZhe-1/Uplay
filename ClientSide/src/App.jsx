@@ -32,6 +32,8 @@ import CartList from './pages/CartList';
 import CartUser from './pages/CartUser';
 import OrderUser from "./pages/OrderUser";
 import OrderList from "./pages/OrderList";
+import OrderEdit from "./pages/OrderEdit";
+import OrderAdd from "./pages/OrderAdd";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import HomePage from './pages/Homepage';
@@ -462,6 +464,8 @@ function App() {
               <Route path={"/Cart/getcart/:id"} element={<CartUser />} />
               <Route path={"/Order/getorder/:id"} element={<OrderUser />} />
               <Route path={"/Order"} element={<OrderList />} />
+              <Route path={"/Order/update/:id"} element={<OrderEdit />} />
+              <Route path={"/Order/add"} element={<OrderAdd />} />
             </Routes>
           </Container>
         </ThemeProvider>

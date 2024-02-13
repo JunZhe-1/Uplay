@@ -148,7 +148,7 @@ function CartAdd() {
           <Button
             variant="contained"
             type="submit"
-            style={{ backgroundColor: "#E8533F", width: "100%" }}
+            style={{ backgroundColor: "#1e4bf4", width: "100%" }}
           >
             Add
           </Button>
