@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using Stripe;
+using LearningAPI.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddDbContext<MyDbContext>();
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("StripeSettings"));
 
 // Auto Mapper
 var mappingConfig = new MapperConfiguration(mc =>

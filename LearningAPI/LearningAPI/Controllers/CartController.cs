@@ -9,6 +9,11 @@ using System.Security.Claims;
 using MySqlX.XDevAPI.Relational;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using System.Globalization;
+using Stripe;
+using Stripe.Checkout;
+using System.Net.Http;
+using Newtonsoft.Json;
+using Microsoft.Extensions.Options;
 
 namespace LearningAPI.Controllers
 {
@@ -18,12 +23,14 @@ namespace LearningAPI.Controllers
     {
         private readonly MyDbContext _context;
 		private readonly ILogger<EventController> _logger;
+		private readonly StripeSettings _stripeSettings;
 
-		public CartController(MyDbContext context, ILogger<EventController> logger)
+		public CartController(MyDbContext context, ILogger<EventController> logger, IOptions<StripeSettings> stripeSettings)
         {
             _context = context;
             _logger = logger;
-        }
+			_stripeSettings = stripeSettings.Value;
+		}
 
         private int GetUserId()
         {
@@ -203,25 +210,45 @@ namespace LearningAPI.Controllers
             cartItem.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
-
             return NoContent();
         }
+        
+		public class CheckoutRequest
+		{
+			public List<SessionLineItemOptions>? LineItems { get; set; }
+		}
 
-        [HttpPost("checkout")]
-        public async Task<IActionResult> Checkout()
-        {
-            var userId = GetUserId();
-            var cartItems = await _context.Carts
-                .Where(c => c.UserId == userId)
-                .ToListAsync();
+		[HttpPost("checkout")]
+		public async Task<IActionResult> Checkout([FromBody] CheckoutRequest request)
+		{
+			try
+			{
+				var successUrl = "https://localhost:3000/success";
+				var cancelUrl = "https://localhost:3000";
 
-            // Perform checkout logic here (e.g., calculate total, apply discounts, etc.)
+				StripeConfiguration.ApiKey = _stripeSettings.SecretKey;
 
-            // Delete the cart after successful checkout
-            _context.Carts.RemoveRange(cartItems);
-            await _context.SaveChangesAsync();
+				var options = new SessionCreateOptions
+				{
+					PaymentMethodTypes = new List<string> { "card" },
+					LineItems = request.LineItems,
+					Mode = "payment",
+					SuccessUrl = successUrl,
+					CancelUrl = cancelUrl,
+				};
 
-            return Ok(new { message = "Checkout successful." });
-        }
-    }
+				var service = new SessionService();
+				var session = service.Create(options);
+
+
+				return Redirect(session.Url);
+			}
+			catch (Exception ex)
+			{
+				// Log the error
+				_logger.LogError(ex, "Error when checking out");
+				return StatusCode(500);
+			}
+		}
+	}
 }
