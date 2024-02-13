@@ -34,14 +34,11 @@ import {
   Delete,
   Block,
 } from "@mui/icons-material";
-import axios from "axios";
 import http from "../http";
 import dayjs from "dayjs";
 import global from "../global";
-import UserContext from "../contexts/UserContext";
 import Pagination from "@mui/material/Pagination";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
 
 // Create a custom theme
 const theme = createTheme({
@@ -50,61 +47,56 @@ const theme = createTheme({
       main: "#E8533F", // Orange
     },
     secondary: {
-      main: "#0096ff", // Blue
+      main: "#0096ff", // Orange
     },
   },
 });
 
-function OrderUser() {
+function OrderList() {
   const navigate = useNavigate();
-  const [openDialog, setOpenDialog] = useState(false);
-  const [totalCost, setTotalCost] = useState(0);
-  const [OrderList, setOrderList] = useState([]);
-  const [order_id, setid] = useState("");
-  const { user } = useContext(UserContext);
-  const [memberstatus, setMemberStatus] = useState("");
+  const [CartList, setCartList] = useState([]);
+  const [search, setSearch] = useState("");
+  const [cart_id, setid] = useState("");
 
   useEffect(() => {
-    http
-      .get(`/Member/${user.userId}`)
-      .then((memberRes) => {
-        const memberstatus = memberRes.data.memberStatus;
-        setMemberStatus(memberstatus);
-        console.log(memberRes.data.memberStatus);
-      })
-      .catch((error) => {
-        console.error("Error fetching member status:", error);
-      });
-
-    getOrderList();
+    getCartList();
   }, []);
 
+  const getCartList = () => {
+    http
+      .get("/Order")
+      .then((res) => {
+        setCartList(res.data);
+      })
+      .catch(function (err) {
+        toast.error(`${err.response.data.message}`);
+      });
+  };
 
+  const onSearchChange = (e) => {
+    setSearch(e.target.value);
+  };
+  const onSearchKeyDown = (e) => {
+    if (e.key === "Enter") {
+      searchsender();
+    }
+  };
 
-  const getOrderList = () => {
-    http.get(`/Order/getorder/${user.userId}`).then((res) => {
-      const orderItems = res.data;
-      console.log(res.data);
-      Promise.all(
-        orderItems.map(
-          (item) =>
-            http.get(`/Event/getEvent/${item.event_ID}`).then((eventRes) => ({
-              ...item,
-              eventName: eventRes.data.Event_Name,
-              eventImage: eventRes.data.imageFile,
-              eventFee: eventRes.data.Event_Fee_Guest,
-              eventuplayFee: eventRes.data.Event_Fee_Uplay,
-              eventntucFee: eventRes.data.Event_Fee_NTUC,
-            })),
-        )
-      )
-        .then((updatedOrderItems) => {
-          setOrderList(updatedOrderItems);
-        })
-        .catch((err) => {
-          toast.error(`${err.response.data.message}`);
-        });
-    });
+  const onClickSearch = () => {
+    searchsender();
+  };
+
+  const onClickClear = () => {
+    setSearch("");
+    getCartList();
+  };
+
+  const searchsender = () => {
+    if (search.trim() !== "") {
+      http.get(`/Order?search=${search}`).then((res) => {
+        setCartList(res.data);
+      });
+    }
   };
 
   const [open, setOpen] = useState(false);
@@ -113,7 +105,7 @@ function OrderUser() {
     setOpen(true);
     setid(id);
     console.log("id: " + id);
-    console.log("order: " + order_id);
+    console.log("order: " + cart_id);
   };
 
   const handleClose = () => {
@@ -121,11 +113,15 @@ function OrderUser() {
     setid(null);
   };
 
-  const deleteOrder = (id) => {
+  const deleteCart = (id) => {
     http.delete(`/Order/removeitem/${id}`).then((res) => {
       setOpen(false);
-      getOrderList();
+      getCartList();
     });
+  };
+
+  const onAddClick = () => {
+    navigate("/Order/add");
   };
 
   // Pagination
@@ -136,63 +132,84 @@ function OrderUser() {
     setPage(newPage);
   };
 
-  const totalPrice = OrderList.reduce((total, item) => {
-    return (
-      total + (memberstatus === "NTUC" ? item.eventntucFee : item.eventFee)
-    );
-  }, 0);
-
   return (
     <ThemeProvider theme={theme}>
-      <br />
-
       <Box>
         <Typography
           variant="h5"
           sx={{ my: 2, color: "black", fontWeight: "bold" }}
         >
-          Booking History
+          Cart Item Management
         </Typography>
+        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+          <Input
+            value={search}
+            placeholder="Search"
+            onChange={onSearchChange}
+            onKeyDown={onSearchKeyDown}
+          />
+          <IconButton color="primary" onClick={onClickSearch}>
+            <Search />
+          </IconButton>
+          <IconButton color="primary" onClick={onClickClear}>
+            <Clear />
+          </IconButton>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={onAddClick}
+            sx={{ marginLeft: 2 }}
+          >
+            Add
+          </Button>
+        </Box>
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
-          <TableContainer sx={{ maxHeight: 500 }}>
+          <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
                   <TableCell>Order ID</TableCell>
-                  <TableCell>Image</TableCell>
-                  <TableCell>Event Name</TableCell>
                   <TableCell>Booking Date</TableCell>
                   <TableCell>Booking Quantity</TableCell>
                   <TableCell>Price</TableCell>
+                  <TableCell>User ID</TableCell>
+                  <TableCell>Event ID</TableCell>
                 </TableRow>
               </TableHead>
 
               <TableBody>
-                {OrderList.slice((page - 1) * itemsPerPage, page * itemsPerPage)
-                  .sort((a, b) => new Date(a.CreatedAt) - new Date(b.CreatedAt))
+                {CartList.slice((page - 1) * itemsPerPage, page * itemsPerPage)
+                  .sort((a, b) => new Date(a.UpdatedAt) - new Date(b.UpdatedAt))
                   .map((data, index) => (
-                    <TableRow key={index + (page - 1) * itemsPerPage}>
+                    <TableRow key={index}>
                       <TableCell>{data.Order_ID}</TableCell>
-                      <TableCell>
-                        {data.eventImage && (
-                          <img
-                            src={`${import.meta.env.VITE_FILE_BASE_URL}${
-                              data.eventImage
-                            }`}
-                            alt="Event"
-                            style={{ width: 50, height: 50 }}
-                          />
-                        )}
-                      </TableCell>
-                      <TableCell>{data.eventName}</TableCell>
                       <TableCell>
                         {dayjs
                           .utc(data.Booking_Date)
                           .format(global.datetimeFormat)}
                       </TableCell>
                       <TableCell>{data.Booking_Quantity}</TableCell>
+                      <TableCell>{data.Price}</TableCell>
+                      <TableCell>{data.userId}</TableCell>
+                      <TableCell>{data.event_ID}</TableCell>
+
                       <TableCell>
-                        ${(data.Price * data.Booking_Quantity).toFixed(2)}
+                        {" "}
+                        <Link to={`/Order/update/${data.Order_ID}`}>
+                          <IconButton color="secondary" sx={{ padding: "4px" }}>
+                            <Edit />
+                          </IconButton>
+                        </Link>
+                      </TableCell>
+
+                      <TableCell>
+                        {" "}
+                        <IconButton
+                          color="primary"
+                          onClick={() => handleOpen(data.Order_ID)}
+                        >
+                          <Clear />
+                        </IconButton>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -201,23 +218,14 @@ function OrderUser() {
           </TableContainer>
           <Box sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
             <Pagination
-              count={Math.ceil(OrderList.length / itemsPerPage)}
+              count={Math.ceil(CartList.length / itemsPerPage)}
               page={page}
               onChange={handleChangePage}
             />
           </Box>
         </Paper>
-        <br></br>
-        <Typography color = "primary"
-          variant="h6"
-          sx={{ my: 2 }}
-        >
-          To request a booking cancellation, please <a href = "mailto: uplayhelp@gmail.com">email us</a> with the corresponding Order ID of the booking you would like to cancel. We will get back to you during our working hours. 
-          T&Cs apply.
-        </Typography>
-        <br />
         <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Delete Order Item</DialogTitle>
+          <DialogTitle>Delete Order</DialogTitle>
           <DialogContent>
             <DialogContentText>
               Are you sure you want to Delete this Order Item?
@@ -230,16 +238,16 @@ function OrderUser() {
             <Button
               variant="contained"
               color="error"
-              onClick={() => deleteOrder(order_id)}
+              onClick={() => deleteCart(cart_id)}
             >
               Delete
             </Button>
           </DialogActions>
         </Dialog>
-        <ToastContainer />
+        <ToastContainer />{" "}
       </Box>
     </ThemeProvider>
   );
 }
 
-export default OrderUser;
+export default OrderList;

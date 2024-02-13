@@ -31,6 +31,7 @@ import CartUserEdit from "./pages/CartUserEdit";
 import CartList from './pages/CartList';
 import CartUser from './pages/CartUser';
 import OrderUser from "./pages/OrderUser";
+import OrderList from "./pages/OrderList";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import HomePage from './pages/Homepage';
@@ -82,7 +83,7 @@ function App() {
         setAnchorEl1(event.currentTarget);
     };
     const handleClose1 = () => {
-        setAnchorEl1(null);A
+        setAnchorEl1(null);
     };
 
     return (
@@ -327,6 +328,13 @@ function App() {
                             </Link>
                           </MenuItem>
                           <MenuItem onClick={handleClose1}>
+                            <Link to="/Order" style={{ textDecoration: "none" }}>
+                              <Typography sx={{ color: "black" }}>
+                                Order Item Management
+                              </Typography>
+                            </Link>
+                          </MenuItem>
+                          <MenuItem onClick={handleClose1}>
                             <Link to="/Cart" style={{ textDecoration: "none" }}>
                               <Typography sx={{ color: "black" }}>
                                 Cart Item Management
@@ -453,6 +461,7 @@ function App() {
               <Route path={"/Cart/updatecart/:id"} element={<CartUserEdit />} />
               <Route path={"/Cart/getcart/:id"} element={<CartUser />} />
               <Route path={"/Order/getorder/:id"} element={<OrderUser />} />
+              <Route path={"/Order"} element={<OrderList />} />
             </Routes>
           </Container>
         </ThemeProvider>
