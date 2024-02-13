@@ -149,12 +149,13 @@ function VoucherList() {
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                             <TableRow>
-                                <TableCell>imageFile</TableCell>
-                            <TableCell>Voucher Name</TableCell>
+                                <TableCell>Image</TableCell>
+                            <TableCell> Name</TableCell>
                             <TableCell>Start Date</TableCell>
                             <TableCell>End Date</TableCell>
-                                <TableCell>member type</TableCell>
+                                <TableCell>Member type</TableCell>
                                 <TableCell>Discount</TableCell>
+                                <TableCell>Min Spending Req</TableCell>
 
                             </TableRow>
                         </TableHead>
@@ -166,7 +167,7 @@ function VoucherList() {
 
 
                                     <TableRow key={index}>
-                                        <TableCell style={{ width: '20%', height: '20%' }}> {
+                                        <TableCell style={{ width: '15%', height: '18%' }}> {
                                             data.ImageFile && (
                                                 <Box  >
                                                     <img
@@ -185,6 +186,13 @@ function VoucherList() {
 </TableCell>
                                         <TableCell>
                                             ${data.Discount_In_Value}
+                                                 
+                                              
+                                            
+
+                                        </TableCell>
+                                        <TableCell>
+                                            ${data.Limit_Value}
                                                  
                                               
                                             

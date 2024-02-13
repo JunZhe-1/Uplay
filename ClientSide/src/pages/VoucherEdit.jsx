@@ -290,7 +290,7 @@ function VoucherEdit() {
                                 fullWidth
                                 margin="dense"
                                 autoComplete="off"
-                                label="Spending Limit"
+                                label="Minimum Spending Requirement"
                                 name="Limit_Value"
                                 value={formik.values.Limit_Value}
                                 onChange={formik.handleChange}
