@@ -207,7 +207,6 @@ namespace LearningAPI.Controllers
             var cartItem = await _context.Carts.FindAsync(id);
 
             _context.Carts.Remove(cartItem);
-            cartItem.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
             return NoContent();

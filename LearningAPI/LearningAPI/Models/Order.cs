@@ -20,7 +20,11 @@ namespace LearningAPI.Models
         [JsonPropertyName("Booking_Quantity")]
         public int Booking_Quantity { get; set; } = 0;
 
-        [Required]
+		[Required]
+		[JsonPropertyName("Price")]
+		public int Price { get; set; } = 0;
+
+		[Required]
         [ForeignKey("UplayUser")]
         public int UserId { get; set; }
 

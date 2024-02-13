@@ -318,7 +318,7 @@ function Profiles() {
                 >
                     Change Password
                 </Typography>
-                <Typography
+                <Typography onClick={() => navigate('/Order/getorder/:id')}
                     sx={{
                         cursor: 'pointer',
                         marginLeft: '2vh',

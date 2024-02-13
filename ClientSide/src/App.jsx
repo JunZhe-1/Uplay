@@ -30,6 +30,7 @@ import CartEdit from './pages/CartEdit';
 import CartUserEdit from "./pages/CartUserEdit";
 import CartList from './pages/CartList';
 import CartUser from './pages/CartUser';
+import OrderUser from "./pages/OrderUser";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import HomePage from './pages/Homepage';
@@ -141,7 +142,7 @@ function App() {
                         </Link>
 
                         <Link
-                          to={`/Cart/getuser/:id`}
+                          to={`/Cart/getcart/:id`}
                           style={{ textDecoration: "none" }}
                         >
                           <Button
@@ -449,8 +450,9 @@ function App() {
               <Route path={"/Cart/adduser"} element={<CartAddUser />} />
               <Route path={"/Cart"} element={<CartList />} />
               <Route path={"/Cart/update/:id"} element={<CartEdit />} />
-              <Route path={"/Cart/updateuser/:id"} element={<CartUserEdit />} />
-              <Route path={"/Cart/getuser/:id"} element={<CartUser />} />
+              <Route path={"/Cart/updatecart/:id"} element={<CartUserEdit />} />
+              <Route path={"/Cart/getcart/:id"} element={<CartUser />} />
+              <Route path={"/Order/getorder/:id"} element={<OrderUser />} />
             </Routes>
           </Container>
         </ThemeProvider>

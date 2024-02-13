@@ -29,7 +29,9 @@ namespace LearningAPI
 
         public DbSet<Cart> Carts { get; set; }
 
-        public DbSet<Member> Members { get; set; }
+		public DbSet<Order> Orders { get; set; }
+
+		public DbSet<Member> Members { get; set; }
 
         public DbSet<Voucher> Vouchers { get; set; }
 

@@ -98,7 +98,7 @@ function CartAddUser() {
   return (
     <Box>
       <Typography variant="h3" align="center" sx={{ my: 1 }}>
-        Add {EventDetail.Event_Name.toUpperCase()} to Cart
+        Add {EventDetail.Event_Name} to Cart
       </Typography>
       <Box
         sx={{

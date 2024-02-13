@@ -41,13 +41,6 @@ import global from "../global";
 import UserContext from "../contexts/UserContext";
 import Pagination from "@mui/material/Pagination";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { CheckCircle } from "@mui/icons-material";
-import { loadStripe } from "@stripe/stripe-js";
-import {
-  PaymentElement,
-  useStripe,
-  useElements,
-} from "@stripe/react-stripe-js";
 
 
 // Create a custom theme
@@ -62,12 +55,12 @@ const theme = createTheme({
   },
 });
 
-function CartUser() {
+function OrderUser() {
   const navigate = useNavigate();
   const [openDialog, setOpenDialog] = useState(false);
   const [totalCost, setTotalCost] = useState(0);
-  const [CartList, setCartList] = useState([]);
-  const [cart_id, setid] = useState("");
+  const [OrderList, setOrderList] = useState([]);
+  const [order_id, setid] = useState("");
   const { user } = useContext(UserContext);
   const [memberstatus, setMemberStatus] = useState("");
 
@@ -83,17 +76,17 @@ function CartUser() {
         console.error("Error fetching member status:", error);
       });
 
-    getCartList();
+    getOrderList();
   }, []);
 
 
 
-  const getCartList = () => {
-    http.get(`/Cart/getuser/${user.userId}`).then((res) => {
-      const cartItems = res.data;
+  const getOrderList = () => {
+    http.get(`/Order/getorder/${user.userId}`).then((res) => {
+      const orderItems = res.data;
       console.log(res.data);
       Promise.all(
-        cartItems.map(
+        orderItems.map(
           (item) =>
             http.get(`/Event/getEvent/${item.event_ID}`).then((eventRes) => ({
               ...item,
@@ -105,8 +98,8 @@ function CartUser() {
             })),
         )
       )
-        .then((updatedCartItems) => {
-          setCartList(updatedCartItems);
+        .then((updatedOrderItems) => {
+          setOrderList(updatedOrderItems);
         })
         .catch((err) => {
           toast.error(`${err.response.data.message}`);
@@ -120,7 +113,7 @@ function CartUser() {
     setOpen(true);
     setid(id);
     console.log("id: " + id);
-    console.log("cart: " + cart_id);
+    console.log("order: " + order_id);
   };
 
   const handleClose = () => {
@@ -128,71 +121,12 @@ function CartUser() {
     setid(null);
   };
 
-  const deleteCart = (id) => {
-    http.delete(`/Cart/removeitem/${id}`).then((res) => {
+  const deleteOrder = (id) => {
+    http.delete(`/Order/removeitem/${id}`).then((res) => {
       setOpen(false);
-      getCartList();
+      getOrderList();
     });
   };
-
-
-  const handleCheckout = async () => {
-    setOpenDialog(true);
-    try {
-      for (const item of CartList) {
-        const order = {
-          Booking_Date: item.Booking_Date,
-          Booking_Quantity: item.Booking_Quantity,
-          Price: memberstatus === "NTUC" ? item.eventntucFee : item.eventFee,
-          Event_ID: item.event_ID,
-          UserId: item.userId,
-        };
-
-        const res = await http.post("/Order/add", order);
-        http.delete(`/Cart/removeitem/${item.Cart_ID}`).then((res) => {
-          setOpen(false);
-          console.log("Cart item deleted successfully");
-        });
-        console.log("Order added successfully:", res.data);
-      }
-      console.log("All orders added successfully");
-
-    } catch (error) {
-      console.error("Error adding orders:", error);
-    }
-  };
-
-const handleCloseDialog = () => {
-  setOpenDialog(false);
-  navigate("/Order/getorder/:id");
-};
-
-
-
-  // const handleCheckout = async () => {
-  //   const LineItems = CartList.map((item) => {
-  //     return {
-  //       price_data: {
-  //         currency: "usd",
-  //         product_data: {
-  //           name: item.eventName,
-  //         },
-  //         unit_amount: item.eventFee * 100, // Convert to cents
-  //       },
-  //       quantity: item.Booking_Quantity,
-  //     };
-  //   });
-
-    // http
-    //   .post("/Cart/checkout", LineItems)
-    //   .then((res) => {
-    //     console.log("Success");
-    //   })
-    //   .catch(function (err) {
-    //     console.log(err.response.data);
-    //     toast.error(`${err.response.data.message}`);
-    //   });
-  // };
 
   // Pagination
   const itemsPerPage = 5;
@@ -202,7 +136,7 @@ const handleCloseDialog = () => {
     setPage(newPage);
   };
 
-  const totalPrice = CartList.reduce((total, item) => {
+  const totalPrice = OrderList.reduce((total, item) => {
     return (
       total + (memberstatus === "NTUC" ? item.eventntucFee : item.eventFee)
     );
@@ -217,7 +151,7 @@ const handleCloseDialog = () => {
           variant="h5"
           sx={{ my: 2, color: "black", fontWeight: "bold" }}
         >
-          Your Cart
+          Your Orders
         </Typography>
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
           <TableContainer sx={{ maxHeight: 500 }}>
@@ -234,7 +168,7 @@ const handleCloseDialog = () => {
               </TableHead>
 
               <TableBody>
-                {CartList.slice((page - 1) * itemsPerPage, page * itemsPerPage)
+                {OrderList.slice((page - 1) * itemsPerPage, page * itemsPerPage)
                   .sort((a, b) => new Date(a.CreatedAt) - new Date(b.CreatedAt))
                   .map((data, index) => (
                     <TableRow key={index + (page - 1) * itemsPerPage}>
@@ -261,21 +195,12 @@ const handleCloseDialog = () => {
                       <TableCell>{data.Booking_Quantity}</TableCell>
                       <TableCell>
                         $
-                        {memberstatus === "NTUC"
-                          ? data.eventntucFee.toFixed(2)
-                          : data.eventFee.toFixed(2)}
-                      </TableCell>
-                      <TableCell>
-                        <Link to={`/Cart/updatecart/${data.Cart_ID}`}>
-                          <IconButton color="secondary" sx={{ padding: "4px" }}>
-                            <Edit />
-                          </IconButton>
-                        </Link>
+                        {data.Price.toFixed(2)}
                       </TableCell>
                       <TableCell>
                         <IconButton
                           color="primary"
-                          onClick={() => handleOpen(data.Cart_ID)}
+                          onClick={() => handleOpen(data.Order_ID)}
                         >
                           <Clear />
                         </IconButton>
@@ -287,41 +212,18 @@ const handleCloseDialog = () => {
           </TableContainer>
           <Box sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
             <Pagination
-              count={Math.ceil(CartList.length / itemsPerPage)}
+              count={Math.ceil(OrderList.length / itemsPerPage)}
               page={page}
               onChange={handleChangePage}
             />
           </Box>
         </Paper>
         <br />
-
-        <Box sx={{ display: "flex", justifyContent: "center", my: 1 }}>
-          <Typography variant="h5" sx={{ color: "#E8533F" }}>
-            Total Price:
-          </Typography>
-          <Typography variant="h5" sx={{ ml: 1 }}>
-            ${totalPrice.toFixed(2)}
-          </Typography>
-        </Box>
-
-        <br />
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ width: "60%" }}
-            onClick={handleCheckout}
-            disabled={CartList.length === 0} // Disable button if CartList is empty
-          >
-            Checkout
-          </Button>
-        </Box>
-
         <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Delete Cart Item</DialogTitle>
+          <DialogTitle>Delete Order Item</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Are you sure you want to Delete this Cart Item?
+              Are you sure you want to Delete this Order Item?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -331,36 +233,10 @@ const handleCloseDialog = () => {
             <Button
               variant="contained"
               color="error"
-              onClick={() => deleteCart(cart_id)}
+              onClick={() => deleteOrder(order_id)}
             >
               Delete
             </Button>
-          </DialogActions>
-        </Dialog>
-        <Dialog open={openDialog} onClose={handleCloseDialog}>
-          <DialogTitle>
-            <Box display="flex" alignItems="center" justifyContent="center">
-              <CheckCircle sx={{ color: "#23A26D", fontSize: 64, mr: 1 }} />
-            </Box>
-          </DialogTitle>
-          <DialogContent>
-            <Box textAlign="center">
-              <Typography variant="h4">Order Confirmed</Typography>
-              <Typography variant="h5">
-                Total Price: ${totalPrice.toFixed(2)}
-              </Typography>
-            </Box>
-          </DialogContent>
-          <DialogActions>
-            <Box display="flex" justifyContent="center" width="100%">
-              <Button
-                onClick={handleCloseDialog}
-                color="primary"
-                variant="contained"
-              >
-                OK
-              </Button>
-            </Box>
           </DialogActions>
         </Dialog>
         <ToastContainer />
@@ -369,4 +245,4 @@ const handleCloseDialog = () => {
   );
 }
 
-export default CartUser;
+export default OrderUser;
