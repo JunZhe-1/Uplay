@@ -56,10 +56,10 @@ function CartUserEdit() {
 
       console.log("onsubmit:", data);
       http
-        .put(`/Cart/updateuser/${id}`, data)
+        .put(`/Cart/updatecart/${id}`, data)
         .then((res) => {
           console.log(res.data);
-          navigate("/Cart/getuser/:id");
+          navigate("/Cart/getcart/:id");
         })
         .catch(function (err) {
           toast.error(`${err.response.data.message}`);

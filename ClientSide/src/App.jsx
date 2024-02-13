@@ -447,7 +447,7 @@ function App() {
               <Route path={"/userlist"} element={<UserList />} />
               <Route path={"/reviewlist"} element={<ReviewList />} />
               <Route path={"/Cart/add"} element={<CartAdd />} />
-              <Route path={"/Cart/adduser"} element={<CartAddUser />} />
+              <Route path={"/Cart/addcart"} element={<CartAddUser />} />
               <Route path={"/Cart"} element={<CartList />} />
               <Route path={"/Cart/update/:id"} element={<CartEdit />} />
               <Route path={"/Cart/updatecart/:id"} element={<CartUserEdit />} />

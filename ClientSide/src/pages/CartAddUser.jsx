@@ -84,7 +84,7 @@ function CartAddUser() {
         .then((res) => {
           console.log("Success");
           toast.success("Cart added successfully");
-          navigate("/Cart/getuser/:id");
+          navigate("/Cart/getcart/:id");
         })
         .catch(function (err) {
           console.log(err.response.data);

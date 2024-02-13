@@ -89,7 +89,7 @@ function CartUser() {
 
 
   const getCartList = () => {
-    http.get(`/Cart/getuser/${user.userId}`).then((res) => {
+    http.get(`/Cart/getcart/${user.userId}`).then((res) => {
       const cartItems = res.data;
       console.log(res.data);
       Promise.all(
@@ -204,7 +204,10 @@ const handleCloseDialog = () => {
 
   const totalPrice = CartList.reduce((total, item) => {
     return (
-      total + (memberstatus === "NTUC" ? item.eventntucFee : item.eventFee)
+      total +
+      (memberstatus === "NTUC"
+        ? item.eventntucFee * item.Booking_Quantity
+        : item.eventFee * item.Booking_Quantity)
     );
   }, 0);
 
@@ -262,8 +265,8 @@ const handleCloseDialog = () => {
                       <TableCell>
                         $
                         {memberstatus === "NTUC"
-                          ? data.eventntucFee.toFixed(2)
-                          : data.eventFee.toFixed(2)}
+                          ? (data.eventntucFee * data.Booking_Quantity).toFixed(2)
+                          : (data.eventFee * data.Booking_Quantity).toFixed(2)}
                       </TableCell>
                       <TableCell>
                         <Link to={`/Cart/updatecart/${data.Cart_ID}`}>
