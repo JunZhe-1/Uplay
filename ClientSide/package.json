@@ -21,6 +21,8 @@
     "@mui/lab": "^5.0.0-alpha.158",
     "@mui/material": "^5.15.2",
     "@mui/x-date-pickers": "^6.18.6",
+    "@stripe/react-stripe-js": "^2.4.0",
+    "@stripe/stripe-js": "^2.4.0",
     "axios": "^1.2.6",
     "card-validator": "^9.1.0",
     "date-fns": "^2.30.0",
@@ -34,6 +36,7 @@
     "react-recaptcha-v3": "^2.0.1",
     "react-router-dom": "^6.8.0",
     "react-toastify": "^9.1.1",
+    "stripe": "^14.15.0",
     "yup": "^1.2.0"
   },
   "devDependencies": {

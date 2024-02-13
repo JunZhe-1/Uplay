@@ -34,12 +34,20 @@ import {
   Delete,
   Block,
 } from "@mui/icons-material";
+import axios from "axios";
 import http from "../http";
 import dayjs from "dayjs";
 import global from "../global";
 import UserContext from "../contexts/UserContext";
 import Pagination from "@mui/material/Pagination";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  PaymentElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
+
 
 // Create a custom theme
 const theme = createTheme({
@@ -124,6 +132,32 @@ function CartUser() {
     });
   };
 
+
+  const handleCheckout = async () => {
+    const LineItems = CartList.map((item) => {
+      return {
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: item.eventName,
+          },
+          unit_amount: item.eventFee * 100, // Convert to cents
+        },
+        quantity: item.Booking_Quantity,
+      };
+    });
+
+    http
+      .post("/Cart/checkout", LineItems)
+      .then((res) => {
+        console.log("Success");
+      })
+      .catch(function (err) {
+        console.log(err.response.data);
+        toast.error(`${err.response.data.message}`);
+      });
+  };
+
   // Pagination
   const itemsPerPage = 5;
   const [page, setPage] = React.useState(1);
@@ -140,6 +174,8 @@ function CartUser() {
 
   return (
     <ThemeProvider theme={theme}>
+      <br />
+
       <Box>
         <Typography
           variant="h5"
@@ -221,6 +257,8 @@ function CartUser() {
             />
           </Box>
         </Paper>
+        <br />
+
         <Box sx={{ display: "flex", justifyContent: "center", my: 1 }}>
           <Typography variant="h5" sx={{ color: "#E8533F" }}>
             Total Price:
@@ -229,6 +267,19 @@ function CartUser() {
             ${totalPrice.toFixed(2)}
           </Typography>
         </Box>
+
+        <br />
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ width: "60%" }}
+            onClick={handleCheckout}
+          >
+            Checkout
+          </Button>
+        </Box>
+
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>Delete Cart Item</DialogTitle>
           <DialogContent>
