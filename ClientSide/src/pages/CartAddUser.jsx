@@ -14,7 +14,7 @@ import {
   MenuItem,
   FormHelperText,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -26,14 +26,39 @@ import "react-toastify/dist/ReactToastify.css";
 import UserContext from "../contexts/UserContext";
 import da from "date-fns/locale/da";
 
-function CartAdd() {
+function CartAddUser() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [imageFile, setimageFile] = useState(null);
+  const { user } = useContext(UserContext);
+  const { event_ID } = location.state;
+
+  const [EventDetail, setEvent] = useState({
+    Event_ID: "",
+    Event_Name: "",
+    Event_Description: "",
+    Event_Location: "",
+    Event_Category: "Sports & Wellness",
+    Event_Fee_Guest: 0,
+    Event_Fee_Uplay: 0,
+    Event_Fee_NTUC: 0,
+    Vacancies: 0,
+    User_ID: user.userId,
+  });
+
+  useEffect(() => {
+    http.get(`/Event/getEvent/${event_ID}`).then((res) => {
+      setimageFile(res.data.imageFile);
+      console.log(res.data);
+      setEvent(res.data);
+    });
+  }, []);
 
   const formik = useFormik({
     initialValues: {
       Booking_Date: "",
       Booking_Quantity: 1,
-      Event_ID: 0,
+      Event_ID: event_ID || 0,
     },
     validationSchema: yup.object({
       Booking_Date: yup.date().required("Booking date is required"),
@@ -59,7 +84,7 @@ function CartAdd() {
         .then((res) => {
           console.log("Success");
           toast.success("Cart added successfully");
-          navigate("/Cart");
+          navigate("/Cart/getuser/:id");
         })
         .catch(function (err) {
           console.log(err.response.data);
@@ -72,9 +97,28 @@ function CartAdd() {
 
   return (
     <Box>
-      <Typography variant="h5" sx={{ my: 2 }}>
-        Add Cart
+      <Typography variant="h3" align="center" sx={{ my: 1 }}>
+        Add {EventDetail.Event_Name.toUpperCase()} to Cart
       </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "60vh",
+        }}
+      >
+        <img
+          alt="Event"
+          src={`${import.meta.env.VITE_FILE_BASE_URL}${imageFile}`}
+          style={{
+            width: "90%",
+            height: "80%",
+            objectFit: "cover",
+            borderRadius: "10px",
+          }}
+        />
+      </Box>
       <Box component="form" onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={6} lg={8}>
@@ -135,7 +179,8 @@ function CartAdd() {
                 value={formik.values.Event_ID}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                type="number"
+                type="hidden"
+                sx={{ display: "none" }}
                 error={Boolean(
                   formik.touched.Event_ID && formik.errors.Event_ID
                 )}
@@ -145,12 +190,8 @@ function CartAdd() {
           </Grid>
         </Grid>
         <Box sx={{ mt: 5 }}>
-          <Button
-            variant="contained"
-            type="submit"
-            style={{ backgroundColor: "#E8533F", width: "100%" }}
-          >
-            Add
+          <Button variant="contained" type="submit" style={{ width: "100%", background: "#E8533F" }} >
+            Add to Cart
           </Button>
         </Box>
       </Box>
@@ -159,4 +200,4 @@ function CartAdd() {
     </Box>
   );
 }
-export default CartAdd;
+export default CartAddUser;

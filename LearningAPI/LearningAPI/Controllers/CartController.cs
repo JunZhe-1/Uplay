@@ -50,7 +50,6 @@ namespace LearningAPI.Controllers
                 Booking_Quantity = request.Booking_Quantity,
                 UserId = userId,
                 Event_ID = request.Event_ID,
-                Voucher_ID = request.Voucher_ID,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             };
@@ -61,7 +60,28 @@ namespace LearningAPI.Controllers
             return Ok(cart);
         }
 
-        [HttpGet]
+		[HttpPost("adduser")]
+		public async Task<ActionResult<Cart>> AddCartUser(Cart request)
+		{
+			int userId = GetUserId();
+			DateTime book = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(request.Booking_Date, "Singapore Standard Time");
+			var cart = new Cart()
+			{
+				Booking_Date = book,
+				Booking_Quantity = request.Booking_Quantity,
+				UserId = userId,
+				Event_ID = request.Event_ID,
+				CreatedAt = DateTime.Now,
+				UpdatedAt = DateTime.Now
+			};
+
+			_context.Carts.Add(cart);
+			await _context.SaveChangesAsync();
+
+			return Ok(cart);
+		}
+
+		[HttpGet]
         public IActionResult GetAll(String? search)
         {
 
@@ -136,8 +156,8 @@ namespace LearningAPI.Controllers
                 // Update relevant properties based on request
                 cartItem.Booking_Date = book;
                 cartItem.Booking_Quantity = request.Booking_Quantity;
-                cartItem.Event_ID = request.Event_ID;
-                cartItem.Voucher_ID = request.Voucher_ID;
+				cartItem.UserId = request.UserId;
+				cartItem.Event_ID = request.Event_ID;
                 cartItem.UpdatedAt = DateTime.UtcNow;
 
                 await _context.SaveChangesAsync();
@@ -151,7 +171,37 @@ namespace LearningAPI.Controllers
 			}
 		}
 
-        [HttpDelete("removeitem/{id}")]
+		[HttpPut("updateuser/{id}")]
+		public async Task<IActionResult> UpdateCartItemUser(int id, CartUser request)
+		{
+			try
+			{
+				var cartItem = await _context.Carts.FindAsync(id);
+				DateTime book = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(request.Booking_Date, "Singapore Standard Time");
+
+				if (cartItem == null)
+				{
+					return NotFound();
+				}
+
+				// Update relevant properties based on request
+				cartItem.Booking_Date = book;
+				cartItem.Booking_Quantity = request.Booking_Quantity;
+				cartItem.UpdatedAt = DateTime.UtcNow;
+
+				await _context.SaveChangesAsync();
+
+				return Ok(cartItem);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error when updating cart");
+				return StatusCode(500);
+			}
+		}
+
+
+		[HttpDelete("removeitem/{id}")]
         public async Task<IActionResult> RemoveCartItem(int id)
         {
             var cartItem = await _context.Carts.FindAsync(id);
@@ -160,9 +210,9 @@ namespace LearningAPI.Controllers
             cartItem.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
-
             return NoContent();
         }
+        
 		public class CheckoutRequest
 		{
 			public List<SessionLineItemOptions>? LineItems { get; set; }

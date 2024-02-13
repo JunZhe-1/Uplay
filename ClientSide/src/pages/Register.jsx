@@ -65,7 +65,7 @@ function Register() {
             flexDirection: 'column',
             alignItems: 'center'
         }}>
-            <Typography variant="h5" sx={{ my: 2 }}>
+            <Typography variant="h4" sx={{ my: 2, color:'#f4511e', fontWeight:'bold' }}>
                 Register
             </Typography>
             <Box component="form" sx={{ maxWidth: '500px' }}
@@ -110,7 +110,7 @@ function Register() {
                     error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
                     helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
                 />
-                <Button fullWidth variant="contained" sx={{ mt: 2 }}
+                <Button fullWidth variant="contained" sx={{ mt: 2 , fontWeight:'bold', background:'#f4511e'}}
                     type="submit">
                     Register
                 </Button>

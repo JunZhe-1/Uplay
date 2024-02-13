@@ -27,7 +27,11 @@ function VoucherListUser() {
         getVoucherUser();
     }, []);
 
+    const [vouchercatname, setvouchercategory] = useState("all");
+
+
     const filterVouchers = (search) => {
+        setvouchercategory(search);
         if (search === 'expiring') {
             const currentDate = new Date();
             const currentDayOfWeek = currentDate.getDay();
@@ -72,13 +76,46 @@ function VoucherListUser() {
             <AppBar position="static" className="AppBar2" style={{ backgroundColor: 'white', padding: '0px 0px 3vh 0px', marginLeft: '-3vh' }} elevation={0}>
                 <Container>
                     <Toolbar disableGutters={true}>
-                        <Button onClick={() => filterVouchers('all')} sx={{ color: '#E6533F', margin: '0 30px', borderRadius: '10px', border: 'solid 2px #E6533F', padding: '8px 20px', transition: 'transform 0.3s ease-in-out' }}>
+                        <Button onClick={() => filterVouchers('all')}  sx={{
+    backgroundColor: vouchercatname === "all" ? "#E6533F" : "white",
+    color: vouchercatname === "all" ? "white" : "#E6533F",
+    transform: vouchercatname === "all" ? "scale(1)" : "scale(1)",
+    margin: '0 10px 0 0',
+    borderRadius: '10px',
+    border: 'solid 2px #E6533F',
+    padding: '8px 20px',
+    transition: 'transform 0.3s ease-in-out',
+    '&:hover': {
+        transform: vouchercatname === "all" ? "scale(1)" : "scale(1.07)", 
+      } }}>
                             All Vouchers
                         </Button>
-                        <Button onClick={() => filterVouchers('lastest')} sx={{ color: '#E6533F', margin: '0 30px', borderRadius: '10px', border: 'solid 2px #E6533F', padding: '8px 20px', transition: 'transform 0.3s ease-in-out' }}>
-                            Lastest
+                        <Button onClick={() => filterVouchers('lastest')} sx={{
+    backgroundColor: vouchercatname === "lastest" ? "#E6533F" : "white",
+    color: vouchercatname === "lastest" ? "white" : "#E6533F",
+    transform: vouchercatname === "lastest" ? "scale(1)" : "scale(1)",
+    margin: '0 10px 0 0',
+    borderRadius: '10px',
+    border: 'solid 2px #E6533F',
+    padding: '8px 20px',
+    transition: 'transform 0.3s ease-in-out',
+    '&:hover': {
+        transform: vouchercatname === "lastest" ? "scale(1)" : "scale(1.07)", 
+      } }}>
+                            Newest
                         </Button>
-                        <Button onClick={() => filterVouchers('expiring')} sx={{ color: '#E6533F', margin: '0 30px', borderRadius: '10px', border: 'solid 2px #E6533F', padding: '8px 20px', transition: 'transform 0.3s ease-in-out' }}>
+                        <Button onClick={() => filterVouchers('expiring')} sx={{
+    backgroundColor: vouchercatname === "expiring" ? "#E6533F" : "white",
+    color: vouchercatname === "expiring" ? "white" : "#E6533F",
+    transform: vouchercatname === "expiring" ? "scale(1)" : "scale(1)",
+    margin: '0 10px 0 0',
+    borderRadius: '10px',
+    border: 'solid 2px #E6533F',
+    padding: '8px 20px',
+    transition: 'transform 0.3s ease-in-out',
+    '&:hover': {
+        transform: vouchercatname === "expiring" ? "scale(1)" : "scale(1.07)", 
+      } }}>
                             Expiring
                         </Button>
                     </Toolbar>

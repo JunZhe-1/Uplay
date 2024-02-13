@@ -47,6 +47,7 @@ namespace LearningAPI.Controllers
                     MemberStatus = "NTUC",
                     LastSubscriptionDate = now,
                     ExpiredDate = now.AddYears(1),
+                    Year = 1
                 };
 
                 _context.Members.Add(myMember);
@@ -81,7 +82,7 @@ namespace LearningAPI.Controllers
                     MemberStatus = member.MemberStatus.Trim(),
                     LastSubscriptionDate = now,
                     ExpiredDate = now.AddYears(member.Years),
-
+                    Year = member.Years
                     
                 };
                 _context.Members.Add(myMember);
@@ -98,22 +99,41 @@ namespace LearningAPI.Controllers
 
        
 
-    [HttpPut("{id}")]
+           [HttpPut("earnpoint/{id}")]
 
-        public IActionResult UpdateMember(int id, Member member)
+        public IActionResult UpdateMember(int id,int points)
         {
-            var mymember = _context.Members.Find(id);
-            
-            if (mymember == null)
+            try
             {
-                return NotFound();
-            }
-            mymember.LastSubscriptionDate = DateTime.Now;
+                //int id = GetUserId();
+                var mymember = _context.Members.Find(id);
 
-            mymember.ExpiredDate = mymember.ExpiredDate.AddYears(1);
+                if (mymember == null)
+                {
+                    return NotFound();
+                }
+                mymember.LastSubscriptionDate = DateTime.Now;
+                mymember.ExpiredDate = mymember.ExpiredDate.AddYears(1);
+                if (mymember.Year == 3 || mymember.Year == 2)
+                {
+
+                    if (mymember.Points == null || mymember.Points == 0)
+                    {
+                        mymember.Points = points;
+                    }
+                    else
+                    {
+                        mymember.Points = points + mymember.Points;
+                    }
+                }
             _context.SaveChanges();
             return Ok(mymember);
-
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500);
+            }
         }
         [HttpPut("Set/{id}")]
 

@@ -28,9 +28,6 @@ namespace LearningAPI.Models
         [ForeignKey("Event")]
         public int Event_ID { get; set; } = 0;
 
-        [ForeignKey("Voucher")]
-        public int? Voucher_ID { get; set; } = 0;
-
         [Column(TypeName = "datetime")]
         public DateTime CreatedAt { get; set; }
 

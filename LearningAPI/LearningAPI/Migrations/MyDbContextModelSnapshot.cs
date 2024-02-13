@@ -46,9 +46,6 @@ namespace LearningAPI.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Voucher_ID")
-                        .HasColumnType("int");
-
                     b.HasKey("Cart_ID");
 
                     b.ToTable("Carts");
@@ -154,6 +151,12 @@ namespace LearningAPI.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<int?>("Points")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Year")
+                        .HasColumnType("int");
+
                     b.HasKey("UserId");
 
                     b.ToTable("Members");
@@ -237,6 +240,9 @@ namespace LearningAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
+
+                    b.Property<string>("ImageFile")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Password")
                         .IsRequired()

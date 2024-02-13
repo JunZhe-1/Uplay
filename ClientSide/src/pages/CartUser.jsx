@@ -48,6 +48,7 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 
+
 // Create a custom theme
 const theme = createTheme({
   palette: {
@@ -131,6 +132,7 @@ function CartUser() {
     });
   };
 
+
   const handleCheckout = async () => {
     const LineItems = CartList.map((item) => {
       return {
@@ -155,6 +157,7 @@ function CartUser() {
         toast.error(`${err.response.data.message}`);
       });
   };
+
   // Pagination
   const itemsPerPage = 5;
   const [page, setPage] = React.useState(1);
@@ -172,6 +175,7 @@ function CartUser() {
   return (
     <ThemeProvider theme={theme}>
       <br />
+
       <Box>
         <Typography
           variant="h5"
@@ -254,6 +258,7 @@ function CartUser() {
           </Box>
         </Paper>
         <br />
+
         <Box sx={{ display: "flex", justifyContent: "center", my: 1 }}>
           <Typography variant="h5" sx={{ color: "#E8533F" }}>
             Total Price:
@@ -262,6 +267,7 @@ function CartUser() {
             ${totalPrice.toFixed(2)}
           </Typography>
         </Box>
+
         <br />
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <Button
@@ -273,6 +279,7 @@ function CartUser() {
             Checkout
           </Button>
         </Box>
+
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>Delete Cart Item</DialogTitle>
           <DialogContent>

@@ -44,12 +44,17 @@ function VoucherList() {
     const toggleSearchInput = (id) => {
     
 
-        http.put(`/Voucher/updateStatus/${id}`).then((res) => {
+        http.put(`/Voucher/updateStatus/${id}`)
+        .then((res) => {
+            if (search === ""){
             console.log("update status sucessfully");
             getVoucherList();
+            }else{
+                searchsender();
+            }
 
         })
-            .catch(function (err) {
+        .catch(function (err) {
                 toast.error(`${err.response.data.message}`);
             });
     };
@@ -144,12 +149,13 @@ function VoucherList() {
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                             <TableRow>
-                                <TableCell>imageFile</TableCell>
-                            <TableCell>Voucher Name</TableCell>
+                                <TableCell>Image</TableCell>
+                            <TableCell> Name</TableCell>
                             <TableCell>Start Date</TableCell>
                             <TableCell>End Date</TableCell>
-                                <TableCell>member type</TableCell>
+                                <TableCell>Member type</TableCell>
                                 <TableCell>Discount</TableCell>
+                                <TableCell>Min Spending Req</TableCell>
 
                             </TableRow>
                         </TableHead>
@@ -161,7 +167,7 @@ function VoucherList() {
 
 
                                     <TableRow key={index}>
-                                        <TableCell style={{ width: '20%', height: '20%' }}> {
+                                        <TableCell style={{ width: '15%', height: '18%' }}> {
                                             data.ImageFile && (
                                                 <Box  >
                                                     <img
@@ -176,9 +182,17 @@ function VoucherList() {
                                     <TableCell>{data.Voucher_Name}</TableCell>
                                         <TableCell>{dayjs.utc(data.Start_Date).format(global.datetimeFormat)}</TableCell>
                                         <TableCell>{dayjs.utc(data.End_Date).format(global.datetimeFormat)}</TableCell>
-                                        <TableCell>{data.Member_Type}</TableCell>
+                                        <TableCell>  {data.Member_Type === 'Guest' ? 'All' : data.Member_Type}
+</TableCell>
                                         <TableCell>
                                             ${data.Discount_In_Value}
+                                                 
+                                              
+                                            
+
+                                        </TableCell>
+                                        <TableCell>
+                                            ${data.Limit_Value}
                                                  
                                               
                                             

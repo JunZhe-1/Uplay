@@ -184,7 +184,38 @@ namespace LearningAPI.Controllers
                 Name = _context.UplayUsers
                             .Where(y => y.UserId == x.User_ID)
                             .Select(y => y.UserName)
-                            .FirstOrDefault()
+                            .FirstOrDefault(),
+                userProfile = _context.UplayUsers
+                            .Where(y => y.UserId == x.User_ID)
+                            .Select(y => y.ImageFile)
+                            .FirstOrDefault(),
+
+
+            });
+
+            return Ok(finalResult);
+        }
+        [HttpGet("getuserreview/{id}")]
+        public IActionResult GetUserReview(int id)
+        {
+            IQueryable<Review> result = _context.Reviews.Where(x => x.User_ID == id);
+
+            var finalResult = result.Select(x => new
+            {
+                x.Review_ID,
+                x.Rating,
+                x.Event_ID,
+                x.Event_Review,
+                Event_Name = _context.Events
+                            .Where(y => y.Event_ID == x.Event_ID)
+                            .Select(y => y.Event_Name)
+                            .FirstOrDefault(),
+                Imagefile = _context.Events
+                            .Where(y => y.Event_ID == x.Event_ID)
+                            .Select(y => y.ImageFile)
+                            .FirstOrDefault(),
+
+
             });
 
             return Ok(finalResult);

@@ -207,7 +207,7 @@ function VoucherAdd() {
                                 >
                                     <MenuItem value="Uplay">Uplay</MenuItem>
                                     <MenuItem value="NTUC">NTUC</MenuItem>
-                                    <MenuItem value="Guest">Guest</MenuItem>
+                                    <MenuItem value="Guest">All</MenuItem>
                                 </Select>
                                 {formik.touched.Member_Type && formik.errors.Member_Type && (
                                     <FormHelperText>{formik.errors.Member_Type}</FormHelperText>
@@ -232,7 +232,7 @@ function VoucherAdd() {
                                 fullWidth
                                 margin="dense"
                                 autoComplete="off"
-                                label="Spending Limit"
+                                label="Minimum Spending Requirement"
                                 name="Limit_Value"
                                 value={formik.values.Limit_Value}
                                 onChange={formik.handleChange}

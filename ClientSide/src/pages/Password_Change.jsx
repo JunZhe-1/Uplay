@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import {
     Box, Typography, Grid, Card, CardContent, Input, IconButton, Button,
     Paper, TableContainer, Table, TableHead, TableBody, TableRow, TableCell
-    , TextField, Dialog, InputLabel, TablePagination, DialogTitle, DialogContent, DialogContentText, DialogActions, Select, MenuItem 
+    , TextField, Dialog, InputLabel, TablePagination, DialogTitle, DialogContent, DialogContentText, DialogActions, Select, MenuItem, Tooltip  
 } from '@mui/material';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -64,14 +64,14 @@ function Password_Change() {
         initialValues: Getpassword,
         enableReinitialize: true,
         validationSchema: yup.object({
-            password: yup.string().trim()
-                .min(8, 'Password must be at least 8 characters')
-                .max(250, 'Password must be at most 50 characters')
-                .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, "At least 1 letter and 1 number"),
+            password: yup.string().trim(),
+                // .min(8, 'Password must be at least 8 characters')
+                // .max(250, 'Password must be at most 50 characters')
+                // .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, "At least 1 letter and 1 number"),
             confirmPassword: yup.string().trim()
-                .min(8, 'Password must be at least 8 characters')
-                .max(250, 'Password must be at most 50 characters')
-                .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, "At least 1 letter and 1 number")
+                // .min(8, 'Password must be at least 8 characters')
+                // .max(250, 'Password must be at most 50 characters')
+                // .matches(/^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/, "At least 1 letter and 1 number")
         }),
         onSubmit: (data) => {
 
@@ -160,7 +160,7 @@ function Password_Change() {
         }}>
             <Box sx={{ width: '63vh', height: '27.5vh', padding: '17vh', border: '1px solid black', background: '#FCFCFC', borderRadius: '10px' }}>
                 <form onSubmit={formik.handleSubmit}>
-                    <Typography sx={{ marginLeft: '-15vh', marginTop: '-15vh' }}><ArrowBackIcon /></Typography>
+                <Typography sx={{ marginLeft: '-15vh', marginTop: '-15vh' , cursor:'pointer'}} onClick={() => navigate('/profile')} ><ArrowBackIcon /></Typography>
 
                     <Typography sx={{ my: 2, color: 'black', fontWeight: '600', textAlign: 'center', fontSize: '32px', padding: '0 0 2vh 0' }}>Enter Your New Password</Typography>
                     <TextField
@@ -199,11 +199,44 @@ function Password_Change() {
                         <Typography sx={{ visibility: 'hidden' }}>Correct Password</Typography>
                     )}
 
-                    <Box sx={{ mt: 2, padding: '3vh 0 0vh 0' }}>
-                        <Button variant="contained" type="submit" style={{ width: '100%', padding: '8px', fontSize: '15px', background: '#f4511e' }}>
+                    <Box sx={{ mt: 2, padding: '2vh 0 0vh 0' }}>
+                        <Button  variant="contained"
+  type="submit"
+  sx={{
+    width: '100%',
+    padding: '8px',
+    fontSize: '15px',
+    background: '#f4511e',
+    '&:hover': {
+     color:'white',
+     background:'#c2380f'
+    },
+  }}
+>
                             CONFIRM
                         </Button>
                     </Box>
+
+
+                    <Box sx={{ mt: 2, marginTop: '-2vh'}}>
+   
+<Tooltip   placement="right" title="At least 1 digit and 8 characters" arrow>
+  <Typography
+    sx={{
+      cursor: 'pointer',
+      marginLeft: '2vh',
+      marginTop: '3vh',
+      textAlign:'right',
+      transition: 'color 0.2s',
+      '&:hover': {
+        color: '#f4511e'
+      },
+    }}
+  >
+    Password Requirement?
+  </Typography>
+</Tooltip></Box>
+
                 </form>
             </Box>
         </Box>
