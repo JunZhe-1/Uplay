@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import {    Drawer, List, ListItem, ListItemIcon, ListItemText,
     TextField, Button, Box, Typography, Grid, Card, CardContent, Input, IconButton,
     Paper, TableContainer, Table, TableHead, TableBody, TableRow, TableCell
-    , Dialog, InputLabel, TablePagination, DialogTitle, DialogContent, DialogContentText, DialogActions, Select, MenuItem } from '@mui/material';
+    , Dialog, InputLabel, TablePagination, DialogTitle, DialogContent, DialogContentText, DialogActions, Select, MenuItem, FormControl, InputAdornment } from '@mui/material';
 import http from '../http';
 import { ToastContainer, toast } from 'react-toastify';
 import CheckCircleRounded from '@mui/icons-material/CheckCircleRounded';
@@ -18,10 +18,12 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import UserContext from '../contexts/UserContext';
 import { tr } from 'date-fns/locale';
-  
+import cardValidator from 'card-validator';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCcVisa, faCcMastercard } from '@fortawesome/free-brands-svg-icons';
 function MemberPurchase()
 {
-const [user, setUser] = useState(null);
+    const [user, setUser] = useState(null);
     const [defaultName, setDefaultName] = useState("");
     const [defaultNRIC, setDefaultNRIC] = useState("");
     const [defaultMemberStatus, setDefaultMemberStatus] = useState("");
@@ -44,9 +46,10 @@ const [user, setUser] = useState(null);
     const [paymentinfo, setpaymentinfo] = useState({
       Card_Name: "",
       Card_No: "",
-      CVV: "",
+        CVV: "",
+      Card_Type:'visa',
       Expire_Date: new Date(),  
-      Email: "",
+      
 
   });
 
@@ -56,10 +59,24 @@ const [user, setUser] = useState(null);
       .max(50, 'Card Name must be at most 50 characters')
       .required('Card Name is required'),
     
-    Card_No: yup.string()
-      .matches(/^\d{16}$/, 'Invalid Card Number format')
-      .required('Card Number is required'),
-  
+      Card_No: yup.string().trim().min(16, "The length should be 16")
+          .required('card number is rquired')
+          .matches(/^\S*$/, 'Whitespace is not allowed')
+          .test('credit-card', 'Invalid credit card number', (value, context) => {
+              const selectedCardType = context.parent.Card_Type; // Assuming you have a cardType field in your form data
+              const validation = cardValidator.number(value);
+
+              if (!validation.isValid) {
+                  return false;
+              }
+
+              // Check if the card type matches the selected type
+              if (validation.card && validation.card.type !== selectedCardType) {
+                  return false;
+              }
+
+              return true;
+          }),
     CVV: yup.string()
       .matches(/^\d{3,4}$/, 'Invalid CVV format')
       .required('CVV is required'),
@@ -67,10 +84,7 @@ const [user, setUser] = useState(null);
     Expire_Date: yup.date()
       .required('Expiration Date is required'),
 
-    Email: yup.string().trim()
-      .matches(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/, 'Enter a valid email address')
-      .max(50, 'Email must be at most 50 characters')
-      .required('Email is required'),
+      Card_Type: yup.string().required('Card Type is required'),
   });
 
 
@@ -492,7 +506,7 @@ position: 'relative',
 
         <TextField
             fullWidth
-            label="Email"
+            label="Name"
             margin="normal"
             fullWidth
             margin="dense"
@@ -532,7 +546,37 @@ position: 'relative',
             />
         
         </Box>
+                                    <Box sx={{ marginTop: '1vh', display: 'flex', alignItems: 'center', marginLeft: '-4vh' }}  >
+                                        <Box sx={{ marginRight: '1rem' }}>
+                                            <InputLabel sx={{ color: 'black' }}><b > Card Type:</b></InputLabel>
+                                        </Box>
 
+                                        <FormControl fullWidth margin="normal">
+                                            
+                                            <Select
+                                                label="Card Type"
+                                                name="Card_Type"
+                                                value={formik1.values.Card_Type}
+                                                onChange={formik1.handleChange}
+                                                error={formik1.touched.Card_Type && Boolean(formik1.errors.Card_Type)}
+                                                helperText={formik1.touched.Card_Type && formik1.errors.Card_Type}
+                                                startAdornment={
+                                                    <InputAdornment position="start">
+                                                        {formik1.values.Card_Type === 'visa' ? (
+                                                            <FontAwesomeIcon icon={faCcVisa} style={{ color: 'navy' }} />
+                                                        ) : (
+                                                            <FontAwesomeIcon icon={faCcMastercard} style={{ color: 'red' }} />
+                                                        )}
+                                                    </InputAdornment>
+                                                }
+                                            >
+                                                <MenuItem value="visa">Visa</MenuItem>
+                                                <MenuItem value="mastercard">Mastercard</MenuItem>
+                                                {/* Add more card types as needed */}
+                                            </Select>
+                                        </FormControl>
+
+                                    </Box>
 
 
         <Box sx={{ marginTop: '1vh', display: 'flex', alignItems: 'center' , marginLeft:'-3vh'}}  >
@@ -576,28 +620,7 @@ position: 'relative',
             />
         </Box>
 
-        <Box sx={{ marginTop: '1vh', display: 'flex', alignItems: 'center' , marginLeft:'-5vh'}}  >
-<Box sx={{ marginRight: '1rem' }}>
-<InputLabel sx={{color:'black'}}><b >Your Email:</b></InputLabel>
-</Box>
 
-        <TextField
-            fullWidth
-            label="Email"
-            margin="normal"
-            fullWidth
-            margin="dense"
-            autoComplete="off"
-            name="Email"
-            value={formik1.values.Email}
-            onChange={formik1.handleChange}
-            onBlur={formik1.handleBlur}
-            error={formik1.touched.Email && Boolean(formik1.errors.Email)}
-            helperText={formik1.touched.Email && formik1.errors.Email}
-            style={{ width: '79%' }}
-            />
-        
-        </Box>
         
 
 {/* {GetError === false ? (
