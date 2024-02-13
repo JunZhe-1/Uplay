@@ -114,6 +114,7 @@ function EventClientSide() {
                 display: 'flex', alignItems: 'center', mb: 2, borderRadius: '8px', justifyContent: 'center', width: '100%', border: '1px #ECECEC solid', padding: '20px', backgroundColor: '#ECECEC'
             }}>
                 {/*        <Box style={{ border: 'black 1px solid', borderRadius: '10px' }}>*/}
+                <Typography sx={{fontWeight:'bold'}}>Search Event  &nbsp; </Typography>
                 <Input
                     value={search}
                     placeholder="Search for events"
