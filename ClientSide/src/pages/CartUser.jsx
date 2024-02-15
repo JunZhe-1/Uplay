@@ -141,6 +141,15 @@ function CartUser() {
 
   const handleCheckout = async () => {
     setOpenDialog(true);
+    http
+      .post("/Cart/checkout")
+      .then((res) => {
+        console.log("Success");
+      })
+      .catch(function (err) {
+        console.log(err.response.data);
+        toast.error(`${err.response.data.message}`);
+      });
     try {
       for (const item of CartList) {
         const order = {
@@ -159,7 +168,6 @@ function CartUser() {
         console.log("Order added successfully:", res.data);
       }
       console.log("All orders added successfully");
-
     } catch (error) {
       console.error("Error adding orders:", error);
     }
@@ -167,7 +175,7 @@ function CartUser() {
 
 const handleCloseDialog = () => {
   setOpenDialog(false);
-  navigate("/Order/getorder/:id");
+  // navigate("/Order/getorder/:id");
 };
 
 

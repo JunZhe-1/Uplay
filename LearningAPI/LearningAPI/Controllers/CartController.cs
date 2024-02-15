@@ -14,6 +14,8 @@ using Stripe.Checkout;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Options;
+using Event = LearningAPI.Models.Event;
+using System.Reflection;
 
 namespace LearningAPI.Controllers
 {
@@ -207,29 +209,82 @@ namespace LearningAPI.Controllers
 			return NoContent();
 		}
 
-		public class CheckoutRequest
-		{
-			public List<SessionLineItemOptions>? LineItems { get; set; }
-		}
-
 		[HttpPost("checkout")]
-		public async Task<IActionResult> Checkout([FromBody] CheckoutRequest request)
+		public async Task<IActionResult> Checkout()
 		{
+			int userId = GetUserId();
 			try
 			{
-				var successUrl = "https://localhost:3000/success";
-				var cancelUrl = "https://localhost:3000";
+				var cartItems = await _context.Carts
+					.Where(c => c.UserId == userId)
+					.ToListAsync();
+
+				Member? member = _context.Members.Find(userId);
+
+				List<ProductEntity> productList = new List<ProductEntity>();
+				// logic to retrieve the data from foreign key in cart table
+
+				// Join the Event table to retrieve Event details for each Cart item
+				var joinedItems = from cart in cartItems
+								  join myEvent in _context.Events on cart.Event_ID equals myEvent.Event_ID
+								  select new { cart, myEvent };
+
+				foreach (var joinedItem in joinedItems)
+				{
+					var cartItem = joinedItem.cart;
+					var myEvent = joinedItem.myEvent;
+					var price = 0;
+					if (member?.MemberStatus == "NTUC")
+					{
+						price = myEvent.Event_Fee_NTUC;
+					}
+					else
+					{
+						price = myEvent.Event_Fee_Guest;
+					}
+					productList.Add(new ProductEntity
+					{
+						ImageFile = myEvent.ImageFile,
+						Event_Name = myEvent.Event_Name,
+						Booking_Quantity = cartItem.Booking_Quantity,
+						Price = price
+					});
+				}
+				UplayUser? user = _context.UplayUsers.Find(userId);
+
+				var successUrl = "https://localhost:3000/Order/getorder/"+$"{userId}";
+				var cancelUrl = "https://localhost:3000/Cart/getcart/"+$"{userId}";
 
 				StripeConfiguration.ApiKey = _stripeSettings.SecretKey;
 
 				var options = new SessionCreateOptions
 				{
-					PaymentMethodTypes = new List<string> { "card" },
-					LineItems = request.LineItems,
+					LineItems = new List<SessionLineItemOptions>(),
 					Mode = "payment",
 					SuccessUrl = successUrl,
 					CancelUrl = cancelUrl,
+					CustomerEmail = user?.EmailAddress,
 				};
+
+				foreach (var item in productList)
+				{
+					var sessionListItem = new SessionLineItemOptions
+					{
+						PriceData = new SessionLineItemPriceDataOptions
+						{	
+
+							UnitAmount = (long)(item.Price * 100),
+							Currency = "sgd",
+							ProductData = new SessionLineItemPriceDataProductDataOptions
+							{
+								Name = item.Event_Name.ToString(),
+								Images = new List<string> { $"https://localhost:7157/uploads/{ item.ImageFile }" }
+							}
+						},
+						Quantity = item.Booking_Quantity,
+					};
+					options.LineItems.Add(sessionListItem);
+				}
 
 				var service = new SessionService();
 				var session = service.Create(options);
