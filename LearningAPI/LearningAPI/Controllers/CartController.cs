@@ -252,8 +252,8 @@ namespace LearningAPI.Controllers
 				}
 				UplayUser? user = _context.UplayUsers.Find(userId);
 
-				var successUrl = "https://localhost:3000/Order/getorder/"+$"{userId}";
-				var cancelUrl = "https://localhost:3000/Cart/getcart/"+$"{userId}";
+				var successUrl = "http://localhost:3000/success";
+				var cancelUrl = "http://localhost:3000/cancel";
 
 				StripeConfiguration.ApiKey = _stripeSettings.SecretKey;
 
@@ -271,14 +271,14 @@ namespace LearningAPI.Controllers
 					var sessionListItem = new SessionLineItemOptions
 					{
 						PriceData = new SessionLineItemPriceDataOptions
-						{	
+						{
 
 							UnitAmount = (long)(item.Price * 100),
 							Currency = "sgd",
 							ProductData = new SessionLineItemPriceDataProductDataOptions
 							{
 								Name = item.Event_Name.ToString(),
-								Images = new List<string> { $"https://localhost:7157/uploads/{ item.ImageFile }" }
+								// Images = new List<string> { $"https://localhost:7157/uploads/{ item.ImageFile }" } blocked by CORS	
 							}
 						},
 						Quantity = item.Booking_Quantity,
@@ -290,7 +290,7 @@ namespace LearningAPI.Controllers
 				var session = service.Create(options);
 
 
-				return Redirect(session.Url);
+				return Ok(new {RedirectUrl = session.Url });
 			}
 			catch (Exception ex)
 			{

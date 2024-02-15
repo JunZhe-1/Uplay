@@ -34,6 +34,8 @@ import OrderUser from "./pages/OrderUser";
 import OrderList from "./pages/OrderList";
 import OrderEdit from "./pages/OrderEdit";
 import OrderAdd from "./pages/OrderAdd";
+import Success from "./pages/success";
+import Cancel from "./pages/cancel";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import HomePage from './pages/Homepage';
@@ -89,391 +91,425 @@ function App() {
     };
 
     return (
-            <GoogleReCaptchaProvider
-            reCaptchaKey="6LdMGV8pAAAAAHGw5LEUvR-VOfzFbGWKBeyT5dJN"
-            language="en"
-            useRecaptchaNet={true}
+      <GoogleReCaptchaProvider
+        reCaptchaKey="6LdMGV8pAAAAAHGw5LEUvR-VOfzFbGWKBeyT5dJN"
+        language="en"
+        useRecaptchaNet={true}
         // Other props you may need
-        >
-           
-       
-    <UserContext.Provider value={{ user, setUser }}>
-      <Router>
-        <ThemeProvider theme={MyTheme}>
-          <AppBar
-            position="static"
-            className="AppBar"
-            sx={{ backgroundColor: "white" }}
-          >
-            <Container>
-              <Toolbar disableGutters={true}>
-                <Link to="/" style={{ textDecoration: "none" }}>
-                  <img
-                    alt="tutorial"
-                    src={"./image/uplaylogo.png"}
-                    style={{
-                      width: "70%",
-                      height: "100%",
-                      objectFit: "cover",
-                      borderRadius: "10px",
-                    }}
-                  />
-                </Link>
-
-                {/*<Link to="/tutorials" ><Typography>Home page</Typography></Link>*/}
-                <Box sx={{ flexGrow: 1 }}></Box>
-                {user && (
-                  <>
-                    {user.emailAddress != "admin@gmail.com" ? (
-                      <div>
-                        <Link
-                          to={`/Event/EventClientSide`}
-                          style={{ textDecoration: "none" }}
-                        >
-                          <Button
-                            className="appbarbutton"
-                            variant="contained"
-                            disableElevation
-                            size="small"
-                            style={{
-                              backgroundColor: "white",
-                              fontSize: "14px",
-                            }}
-                          >
-                            All Experiences
-                          </Button>
-                        </Link>
-
-                        <Link
-                          to={`/Cart/getcart/:id`}
-                          style={{ textDecoration: "none" }}
-                        >
-                          <Button
-                            className="appbarbutton"
-                            variant="contained"
-                            disableElevation
-                            size="small"
-                            style={{
-                              backgroundColor: "white",
-                              fontSize: "14px",
-                            }}
-                          >
-                            {" "}
-                            <ShoppingCartIcon sx={{ fontSize: "27px" }} />
-                          </Button>
-                        </Link>
-
-                        <Button
-                          id="fade-button"
-                          aria-controls={open ? "fade-menu" : undefined}
-                          aria-haspopup="true"
-                          aria-expanded={open ? "true" : undefined}
-                          onClick={handleClick}
-                          sx={{ color: "#8C1AFF" }}
-                        >
-                          {" "}
-                          <AccountCircleIcon sx={{ fontSize: "30px" }} />
-                        </Button>
-                        <Menu
-                          id="fade-menu"
-                          MenuListProps={{
-                            "aria-labelledby": "fade-button",
-                          }}
-                          anchorEl={anchorEl}
-                          open={open}
-                          onClose={handleClose}
-                          TransitionComponent={Fade}
-                          PaperProps={{
-                            sx: {
-                              backgroundColor: "white",
-                            },
-                          }}
-                        >
-                          {user.memeber_type === "not Member"?(
-                    <MenuItem onClick={handleClose}>
-                    <Box
-                      sx={{
-                        borderBottom: "1px solid #E8533F",
-                        width: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          color: "#E8533F",
-                          fontWeight: "bold",
-                          fontSize: "12px",
+      >
+        <UserContext.Provider value={{ user, setUser }}>
+          <Router>
+            <ThemeProvider theme={MyTheme}>
+              <AppBar
+                position="static"
+                className="AppBar"
+                sx={{ backgroundColor: "white" }}
+              >
+                <Container>
+                  <Toolbar disableGutters={true}>
+                    <Link to="/" style={{ textDecoration: "none" }}>
+                      <img
+                        alt="tutorial"
+                        src={"./image/uplaylogo.png"}
+                        style={{
+                          width: "70%",
+                          height: "100%",
+                          objectFit: "cover",
+                          borderRadius: "10px",
                         }}
-                      >
-                        {localStorage.getItem("memberStatus")}
-                      </Typography>
-                    </Box>
-                    </MenuItem>
+                      />
+                    </Link>
 
-                          ):   <MenuItem onClick={handleClose}>
-                            <Box
-                              sx={{
-                                borderBottom: "1px solid #E8533F",
-                                width: "100%",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                              }}
+                    {/*<Link to="/tutorials" ><Typography>Home page</Typography></Link>*/}
+                    <Box sx={{ flexGrow: 1 }}></Box>
+                    {user && (
+                      <>
+                        {user.emailAddress != "admin@gmail.com" ? (
+                          <div>
+                            <Link
+                              to={`/Event/EventClientSide`}
+                              style={{ textDecoration: "none" }}
                             >
-                              <Typography
-                                sx={{
-                                  color: "#E8533F",
-                                  fontWeight: "bold",
-                                  fontSize: "12px",
+                              <Button
+                                className="appbarbutton"
+                                variant="contained"
+                                disableElevation
+                                size="small"
+                                style={{
+                                  backgroundColor: "white",
+                                  fontSize: "14px",
                                 }}
                               >
-                               {localStorage.getItem("memberStatus")}: {localStorage.getItem("points")}
-                              </Typography>
-                            </Box>
-                          </MenuItem>}
-                         
-                         
-                          <MenuItem onClick={handleClose}>
-                            <Link
-                              to="/profile"
-                              style={{ textDecoration: "none" }}
-                            >
-                              <Typography sx={{ color: "black" }}>
-                                My Profile
-                              </Typography>
+                                All Experiences
+                              </Button>
                             </Link>
-                                                        </MenuItem>
-                                                    <MenuItem onClick={handleClose}>
-                            <Link
-                              to="/reviewlist"
-                              style={{ textDecoration: "none" }}
-                            >
-                              <Typography sx={{ color: "black" }}>
-                                My Reviews
-                              </Typography>
-                            </Link>
-                          </MenuItem>
-                          <MenuItem onClick={handleClose}>
-                            <Link
-                              to="/Voucher/uservoucher/:id"
-                              style={{ textDecoration: "none" }}
-                            >
-                              <Typography sx={{ color: "black" }}>
-                                My Vouchers
-                              </Typography>
-                            </Link>
-                          </MenuItem>
 
-                          <MenuItem onClick={handleClose}>
-                            <Typography
-                              sx={{ color: "black", cursor: "pointer" }}
-                              onClick={logout}
+                            <Link
+                              to={`/Cart/getcart/:id`}
+                              style={{ textDecoration: "none" }}
                             >
-                              Logout
-                            </Typography>
-                          </MenuItem>
-                        </Menu>
-                      </div>
-                    ) : null}
-                  </>
-                )}
+                              <Button
+                                className="appbarbutton"
+                                variant="contained"
+                                disableElevation
+                                size="small"
+                                style={{
+                                  backgroundColor: "white",
+                                  fontSize: "14px",
+                                }}
+                              >
+                                {" "}
+                                <ShoppingCartIcon sx={{ fontSize: "27px" }} />
+                              </Button>
+                            </Link>
 
-                {user && (
-                  <>
-                    {user.emailAddress === "admin@gmail.com" && (
-                      <div>
-                        <Button
-                          id="admin-fade-button"
-                          aria-controls={open1 ? "admin-fade-menu" : undefined}
-                          aria-haspopup="true"
-                          aria-expanded={open1 ? "true" : undefined}
-                          onClick={handleClick1}
-                          sx={{ color: "#8C1AFF" }}
-                        >
-                          System Management
-                        </Button>
-                        <Menu
-                          id="admin-fade-menu"
-                          MenuListProps={{
-                            "aria-labelledby": "admin-fade-button",
-                          }}
-                          anchorEl={anchorEl1}
-                          open={open1}
-                          onClose={handleClose1}
-                          TransitionComponent={Fade}
-                          PaperProps={{
-                            sx: {
-                              backgroundColor: "#FAD5A5",
-                            },
-                          }}
-                        >
-                          <MenuItem onClick={handleClose1}>
-                            <Link
-                              to="/Event"
-                              style={{ textDecoration: "none" }}
+                            <Button
+                              id="fade-button"
+                              aria-controls={open ? "fade-menu" : undefined}
+                              aria-haspopup="true"
+                              aria-expanded={open ? "true" : undefined}
+                              onClick={handleClick}
+                              sx={{ color: "#8C1AFF" }}
                             >
-                              <Typography sx={{ color: "black" }}>
-                                Event Management
-                              </Typography>
-                            </Link>
-                          </MenuItem>
-                          <MenuItem onClick={handleClose1}>
-                            <Link
-                              to="/Voucher"
-                              style={{ textDecoration: "none" }}
+                              {" "}
+                              <AccountCircleIcon sx={{ fontSize: "30px" }} />
+                            </Button>
+                            <Menu
+                              id="fade-menu"
+                              MenuListProps={{
+                                "aria-labelledby": "fade-button",
+                              }}
+                              anchorEl={anchorEl}
+                              open={open}
+                              onClose={handleClose}
+                              TransitionComponent={Fade}
+                              PaperProps={{
+                                sx: {
+                                  backgroundColor: "white",
+                                },
+                              }}
                             >
-                              <Typography sx={{ color: "black" }}>
-                                Voucher Management
-                              </Typography>
-                            </Link>
-                          </MenuItem>
-                          <MenuItem onClick={handleClose1}>
-                            <Link to="/Order" style={{ textDecoration: "none" }}>
-                              <Typography sx={{ color: "black" }}>
-                                Order Item Management
-                              </Typography>
-                            </Link>
-                          </MenuItem>
-                          <MenuItem onClick={handleClose1}>
-                            <Link to="/Cart" style={{ textDecoration: "none" }}>
-                              <Typography sx={{ color: "black" }}>
-                                Cart Item Management
-                              </Typography>
-                            </Link>
-                          </MenuItem>
-                          <MenuItem onClick={handleClose1}>
-                            <Link
-                              to="/userlist"
-                              style={{ textDecoration: "none" }}
-                            >
-                              <Typography sx={{ color: "black" }}>
-                                User List
-                              </Typography>
-                            </Link>
-                          </MenuItem>
-                          {/* Add more menu items as needed */}
-                        </Menu>
+                              {user.memeber_type === "not Member" ? (
+                                <MenuItem onClick={handleClose}>
+                                  <Box
+                                    sx={{
+                                      borderBottom: "1px solid #E8533F",
+                                      width: "100%",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                    }}
+                                  >
+                                    <Typography
+                                      sx={{
+                                        color: "#E8533F",
+                                        fontWeight: "bold",
+                                        fontSize: "12px",
+                                      }}
+                                    >
+                                      {localStorage.getItem("memberStatus")}
+                                    </Typography>
+                                  </Box>
+                                </MenuItem>
+                              ) : (
+                                <MenuItem onClick={handleClose}>
+                                  <Box
+                                    sx={{
+                                      borderBottom: "1px solid #E8533F",
+                                      width: "100%",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                    }}
+                                  >
+                                    <Typography
+                                      sx={{
+                                        color: "#E8533F",
+                                        fontWeight: "bold",
+                                        fontSize: "12px",
+                                      }}
+                                    >
+                                      {localStorage.getItem("memberStatus")}:{" "}
+                                      {localStorage.getItem("points")}
+                                    </Typography>
+                                  </Box>
+                                </MenuItem>
+                              )}
 
-                        <Button
-                          id="administrator-fade-button"
-                          aria-controls={open ? "admin-fade-menu" : undefined}
-                          aria-haspopup="true"
-                          aria-expanded={open ? "true" : undefined}
-                          onClick={handleClick}
-                          sx={{ color: "#8C1AFF" }}
-                        >
-                          Administrator
-                        </Button>
-                        <Menu
-                          id="admin-fade-menu"
-                          MenuListProps={{
-                            "aria-labelledby": "administrator-fade-button",
-                          }}
-                          anchorEl={anchorEl}
-                          open={open}
-                          onClose={handleClose}
-                          TransitionComponent={Fade}
-                          PaperProps={{
-                            sx: {
-                              backgroundColor: "#FAD5A5",
-                            },
-                          }}
-                        >
-                          <MenuItem onClick={handleClose}>
-                            <Link
-                              to="/profile"
-                              style={{ textDecoration: "none" }}
-                            >
-                              <Typography sx={{ color: "black" }}>
-                                My Profile
-                              </Typography>
-                            </Link>
-                          </MenuItem>
-                          <MenuItem onClick={handleClose}>
-                            <Typography
-                              sx={{ color: "black", cursor: "pointer" }}
-                              onClick={logout}
-                            >
-                              Logout
-                            </Typography>
-                          </MenuItem>
-                          {/* Add more menu items as needed */}
-                        </Menu>
-                      </div>
+                              <MenuItem onClick={handleClose}>
+                                <Link
+                                  to="/profile"
+                                  style={{ textDecoration: "none" }}
+                                >
+                                  <Typography sx={{ color: "black" }}>
+                                    My Profile
+                                  </Typography>
+                                </Link>
+                              </MenuItem>
+                              <MenuItem onClick={handleClose}>
+                                <Link
+                                  to="/reviewlist"
+                                  style={{ textDecoration: "none" }}
+                                >
+                                  <Typography sx={{ color: "black" }}>
+                                    My Reviews
+                                  </Typography>
+                                </Link>
+                              </MenuItem>
+                              <MenuItem onClick={handleClose}>
+                                <Link
+                                  to="/Voucher/uservoucher/:id"
+                                  style={{ textDecoration: "none" }}
+                                >
+                                  <Typography sx={{ color: "black" }}>
+                                    My Vouchers
+                                  </Typography>
+                                </Link>
+                              </MenuItem>
+
+                              <MenuItem onClick={handleClose}>
+                                <Typography
+                                  sx={{ color: "black", cursor: "pointer" }}
+                                  onClick={logout}
+                                >
+                                  Logout
+                                </Typography>
+                              </MenuItem>
+                            </Menu>
+                          </div>
+                        ) : null}
+                      </>
                     )}
-                  </>
-                )}
 
-                {!user && (
-                  <>
-                    <Link to="/register">
-                      <Typography>Register</Typography>
-                    </Link>
-                    <Link to="/login">
-                      <Typography>Login</Typography>
-                    </Link>
-                  </>
-                )}
-              </Toolbar>
-            </Container>
-          </AppBar>
+                    {user && (
+                      <>
+                        {user.emailAddress === "admin@gmail.com" && (
+                          <div>
+                            <Button
+                              id="admin-fade-button"
+                              aria-controls={
+                                open1 ? "admin-fade-menu" : undefined
+                              }
+                              aria-haspopup="true"
+                              aria-expanded={open1 ? "true" : undefined}
+                              onClick={handleClick1}
+                              sx={{ color: "#8C1AFF" }}
+                            >
+                              System Management
+                            </Button>
+                            <Menu
+                              id="admin-fade-menu"
+                              MenuListProps={{
+                                "aria-labelledby": "admin-fade-button",
+                              }}
+                              anchorEl={anchorEl1}
+                              open={open1}
+                              onClose={handleClose1}
+                              TransitionComponent={Fade}
+                              PaperProps={{
+                                sx: {
+                                  backgroundColor: "#FAD5A5",
+                                },
+                              }}
+                            >
+                              <MenuItem onClick={handleClose1}>
+                                <Link
+                                  to="/Event"
+                                  style={{ textDecoration: "none" }}
+                                >
+                                  <Typography sx={{ color: "black" }}>
+                                    Event Management
+                                  </Typography>
+                                </Link>
+                              </MenuItem>
+                              <MenuItem onClick={handleClose1}>
+                                <Link
+                                  to="/Voucher"
+                                  style={{ textDecoration: "none" }}
+                                >
+                                  <Typography sx={{ color: "black" }}>
+                                    Voucher Management
+                                  </Typography>
+                                </Link>
+                              </MenuItem>
+                              <MenuItem onClick={handleClose1}>
+                                <Link
+                                  to="/Order"
+                                  style={{ textDecoration: "none" }}
+                                >
+                                  <Typography sx={{ color: "black" }}>
+                                    Order Item Management
+                                  </Typography>
+                                </Link>
+                              </MenuItem>
+                              <MenuItem onClick={handleClose1}>
+                                <Link
+                                  to="/Cart"
+                                  style={{ textDecoration: "none" }}
+                                >
+                                  <Typography sx={{ color: "black" }}>
+                                    Cart Item Management
+                                  </Typography>
+                                </Link>
+                              </MenuItem>
+                              <MenuItem onClick={handleClose1}>
+                                <Link
+                                  to="/userlist"
+                                  style={{ textDecoration: "none" }}
+                                >
+                                  <Typography sx={{ color: "black" }}>
+                                    User List
+                                  </Typography>
+                                </Link>
+                              </MenuItem>
+                              {/* Add more menu items as needed */}
+                            </Menu>
 
-          <Container>
-            <Routes>
-              <Route path={"/"} element={<HomePage />} />
-              <Route path={"/tutorials"} element={<Tutorials />} />
-              <Route path={"/addtutorial"} element={<AddTutorial />} />
+                            <Button
+                              id="administrator-fade-button"
+                              aria-controls={
+                                open ? "admin-fade-menu" : undefined
+                              }
+                              aria-haspopup="true"
+                              aria-expanded={open ? "true" : undefined}
+                              onClick={handleClick}
+                              sx={{ color: "#8C1AFF" }}
+                            >
+                              Administrator
+                            </Button>
+                            <Menu
+                              id="admin-fade-menu"
+                              MenuListProps={{
+                                "aria-labelledby": "administrator-fade-button",
+                              }}
+                              anchorEl={anchorEl}
+                              open={open}
+                              onClose={handleClose}
+                              TransitionComponent={Fade}
+                              PaperProps={{
+                                sx: {
+                                  backgroundColor: "#FAD5A5",
+                                },
+                              }}
+                            >
+                              <MenuItem onClick={handleClose}>
+                                <Link
+                                  to="/profile"
+                                  style={{ textDecoration: "none" }}
+                                >
+                                  <Typography sx={{ color: "black" }}>
+                                    My Profile
+                                  </Typography>
+                                </Link>
+                              </MenuItem>
+                              <MenuItem onClick={handleClose}>
+                                <Typography
+                                  sx={{ color: "black", cursor: "pointer" }}
+                                  onClick={logout}
+                                >
+                                  Logout
+                                </Typography>
+                              </MenuItem>
+                              {/* Add more menu items as needed */}
+                            </Menu>
+                          </div>
+                        )}
+                      </>
+                    )}
 
-              <Route path={"/Voucher/add"} element={<VoucherAdd />} />
-              <Route path={"/Voucher"} element={<VoucherList />} />
-              <Route path={"/Voucher/update/:id"} element={<VoucherEdit />} />
-              <Route path={"/Voucher/uservoucher/:id"} element={<VoucherListUser />} />
+                    {!user && (
+                      <>
+                        <Link to="/register">
+                          <Typography>Register</Typography>
+                        </Link>
+                        <Link to="/login">
+                          <Typography>Login</Typography>
+                        </Link>
+                      </>
+                    )}
+                  </Toolbar>
+                </Container>
+              </AppBar>
 
-              <Route path={"/edittutorial/:id"} element={<EditTutorial />} />
-              <Route path={"/register"} element={<Register />} />
-              <Route path={"/login"} element={<Login />} />
-              <Route path={"/form"} element={<MyForm />} />
+              <Container>
+                <Routes>
+                  <Route path={"/"} element={<HomePage />} />
+                  <Route path={"/tutorials"} element={<Tutorials />} />
+                  <Route path={"/addtutorial"} element={<AddTutorial />} />
 
-              <Route path="/password_current" element={<Password_Current />} />
-              <Route path="/password_change" element={<Password_Change />} />
-              <Route path="/userProfile" element={<Userprofile />} />
-              <Route path="/memberpurchase" element={<MemberPurchase />} />
+                  <Route path={"/Voucher/add"} element={<VoucherAdd />} />
+                  <Route path={"/Voucher"} element={<VoucherList />} />
+                  <Route
+                    path={"/Voucher/update/:id"}
+                    element={<VoucherEdit />}
+                  />
+                  <Route
+                    path={"/Voucher/uservoucher/:id"}
+                    element={<VoucherListUser />}
+                  />
 
-              <Route path={"/profile"} element={<Profile />} />
-              <Route path={"/Event/add_event"} element={<EventAdd />} />
-              <Route path={"/Event"} element={<EventList />} />
-              <Route path={"/Event/editevent/:id"} element={<EventEdit />} />
-              <Route path={"/Event/getEvent/:id"} element={<EventDetail />} />
+                  <Route
+                    path={"/edittutorial/:id"}
+                    element={<EditTutorial />}
+                  />
+                  <Route path={"/register"} element={<Register />} />
+                  <Route path={"/login"} element={<Login />} />
+                  <Route path={"/form"} element={<MyForm />} />
 
-              <Route
-                path={"/Event/EventClientSide"}
-                element={<EventClientSide />}
-              />
+                  <Route
+                    path="/password_current"
+                    element={<Password_Current />}
+                  />
+                  <Route
+                    path="/password_change"
+                    element={<Password_Change />}
+                  />
+                  <Route path="/userProfile" element={<Userprofile />} />
+                  <Route path="/memberpurchase" element={<MemberPurchase />} />
 
-              <Route path={"/profile"} element={<Profile />} />
-              <Route path={"/buymember"} element={<BuyMember />} />
-              <Route path={"/userlist"} element={<UserList />} />
-              <Route path={"/reviewlist"} element={<ReviewList />} />
-              <Route path={"/Cart/add"} element={<CartAdd />} />
-              <Route path={"/Cart/addcart"} element={<CartAddUser />} />
-              <Route path={"/Cart"} element={<CartList />} />
-              <Route path={"/Cart/update/:id"} element={<CartEdit />} />
-              <Route path={"/Cart/updatecart/:id"} element={<CartUserEdit />} />
-              <Route path={"/Cart/getcart/:id"} element={<CartUser />} />
-              <Route path={"/Order/getorder/:id"} element={<OrderUser />} />
-              <Route path={"/Order"} element={<OrderList />} />
-              <Route path={"/Order/update/:id"} element={<OrderEdit />} />
-              <Route path={"/Order/add"} element={<OrderAdd />} />
-            </Routes>
-          </Container>
-        </ThemeProvider>
-      </Router>
-      </UserContext.Provider>
+                  <Route path={"/profile"} element={<Profile />} />
+                  <Route path={"/Event/add_event"} element={<EventAdd />} />
+                  <Route path={"/Event"} element={<EventList />} />
+                  <Route
+                    path={"/Event/editevent/:id"}
+                    element={<EventEdit />}
+                  />
+                  <Route
+                    path={"/Event/getEvent/:id"}
+                    element={<EventDetail />}
+                  />
 
-        </GoogleReCaptchaProvider>
-  );
+                  <Route
+                    path={"/Event/EventClientSide"}
+                    element={<EventClientSide />}
+                  />
+
+                  <Route path={"/profile"} element={<Profile />} />
+                  <Route path={"/buymember"} element={<BuyMember />} />
+                  <Route path={"/userlist"} element={<UserList />} />
+                  <Route path={"/reviewlist"} element={<ReviewList />} />
+                  <Route path={"/Cart/add"} element={<CartAdd />} />
+                  <Route path={"/Cart/addcart"} element={<CartAddUser />} />
+                  <Route path={"/Cart"} element={<CartList />} />
+                  <Route path={"/Cart/update/:id"} element={<CartEdit />} />
+                  <Route
+                    path={"/Cart/updatecart/:id"}
+                    element={<CartUserEdit />}
+                  />
+                  <Route path={"/Cart/getcart/:id"} element={<CartUser />} />
+                  <Route path={"/Order/getorder/:id"} element={<OrderUser />} />
+                  <Route path={"/Order"} element={<OrderList />} />
+                  <Route path={"/Order/update/:id"} element={<OrderEdit />} />
+                  <Route path={"/Order/add"} element={<OrderAdd />} />
+                  <Route path={"/success"} element={<Success />} />
+                  <Route path={"/cancel"} element={<Cancel />} />
+                </Routes>
+              </Container>
+            </ThemeProvider>
+          </Router>
+        </UserContext.Provider>
+      </GoogleReCaptchaProvider>
+    );
 
 }
 

@@ -145,6 +145,7 @@ function CartUser() {
       .post("/Cart/checkout")
       .then((res) => {
         console.log("Success");
+        window.location.href = res.data.redirectUrl
       })
       .catch(function (err) {
         console.log(err.response.data);
